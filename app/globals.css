@@ -13,6 +13,20 @@
   --accent: #c2401a;
   --card: #fbf9f4;
 
+  /* One accent per word in the hero's FlipWord cycle (components/FlipWord.tsx,
+     components/Hero.tsx) — distinct hues, each tuned dark enough to read on
+     --paper in light mode (see the [data-theme="dark"] block below for the
+     lightened dark-mode counterparts). */
+  --flip-1: #b8452e; /* Money */
+  --flip-2: #2f7a4a; /* Inventory */
+  --flip-3: #2a5d9f; /* Operations */
+  --flip-4: #7a4fa8; /* Internal Admin Tools */
+  --flip-5: #a13d6b; /* Customer Support */
+  --flip-6: #97711b; /* Internal Analytics */
+  --flip-7: #1f7a72; /* Billing & Invoicing */
+  --flip-8: #3c4fa0; /* Vendor & Supply Portals */
+  --flip-9: #55606e; /* Messaging Pipelines */
+
   --inv-paper: #171310;
   --inv-ink: #faf7f1;
   --inv-body: #b8afa3;
@@ -35,6 +49,18 @@
   --wash: #1b1714;
   --accent: #e4653c;
   --card: #191512;
+
+  /* Lightened counterparts of the light-mode --flip-* hues above, tuned to
+     read on --paper in dark mode. */
+  --flip-1: #e2734f;
+  --flip-2: #6fcf8f;
+  --flip-3: #6ea8e6;
+  --flip-4: #b98ce8;
+  --flip-5: #e585ac;
+  --flip-6: #d6b24a;
+  --flip-7: #5ccdc0;
+  --flip-8: #93a3ea;
+  --flip-9: #a9b4c2;
 
   --inv-paper: #1c1815;
   --inv-ink: #f8f4ec;
