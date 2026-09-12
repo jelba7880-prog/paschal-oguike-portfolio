@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
+import { GlassScrim } from "@/components/ui/GlassScrim";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 
 interface Project {
@@ -73,42 +74,45 @@ export function Projects() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-[18px] sm:grid-cols-2 xl:grid-cols-4">
-        {PROJECTS.map((project) => (
-          <Card key={project.number} href="#work" interactive>
-            <div className="flex items-center justify-between gap-3">
-              <span className="text-[11px]" style={{ color: "var(--accent)" }}>
-                {project.number}
-              </span>
-              <Badge tone={project.tone}>{project.status}</Badge>
-            </div>
+      <div className="relative z-[21] p-[18px]">
+        <GlassScrim />
+        <div className="relative grid grid-cols-1 gap-[18px] sm:grid-cols-2 xl:grid-cols-4">
+          {PROJECTS.map((project) => (
+            <Card key={project.number} href="#work" interactive>
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-[11px]" style={{ color: "var(--accent)" }}>
+                  {project.number}
+                </span>
+                <Badge tone={project.tone}>{project.status}</Badge>
+              </div>
 
-            <h3 className="font-display mt-5 mb-2 text-[25px] leading-[1.15] font-normal tracking-[-0.01em]">
-              {project.title}
-            </h3>
+              <h3 className="font-display mt-5 mb-2 text-[25px] leading-[1.15] font-normal tracking-[-0.01em]">
+                {project.title}
+              </h3>
 
-            <p className="mb-[22px] text-[13.5px] leading-[1.5] text-pretty" style={{ color: "var(--muted)" }}>
-              {project.description}
-            </p>
+              <p className="mb-[22px] text-[13.5px] leading-[1.5] text-pretty" style={{ color: "var(--muted)" }}>
+                {project.description}
+              </p>
 
-            <div className="flex-1" />
+              <div className="flex-1" />
 
-            <div className="mb-4 flex flex-wrap gap-1.5">
-              {project.tags.map((tag) => (
-                <Badge key={tag} variant="tag">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
+              <div className="mb-4 flex flex-wrap gap-1.5">
+                {project.tags.map((tag) => (
+                  <Badge key={tag} variant="tag">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
 
-            <div
-              className="border-t pt-3.5 text-[10px] uppercase tracking-[0.16em]"
-              style={{ borderColor: "var(--rule)", color: "var(--accent)" }}
-            >
-              Read →
-            </div>
-          </Card>
-        ))}
+              <div
+                className="border-t pt-3.5 text-[10px] uppercase tracking-[0.16em]"
+                style={{ borderColor: "var(--rule)", color: "var(--accent)" }}
+              >
+                Read →
+              </div>
+            </Card>
+          ))}
+        </div>
       </div>
     </section>
   );
