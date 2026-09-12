@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useAnimationFrame, useMotionValue, useSpring, type MotionValue } from "framer-motion";
 
 export interface CursorFieldItem {
@@ -40,25 +40,56 @@ function FieldIcon({
   const y = useSpring(0, SPRING);
   const scale = useSpring(1, SPRING);
   const opacity = useSpring(0.22 + item.depth * 0.5, SPRING);
+  const dockingRef = useRef(false);
 
   useAnimationFrame(() => {
     const vw = window.innerWidth;
     const vh = window.innerHeight;
     const slot = document.getElementById(`skill-slot-${item.id}`);
     const rect = slot?.getBoundingClientRect();
-    const docking = rect ? rect.top < vh * 0.92 && rect.bottom > vh * 0.08 : false;
+
+    // Hysteresis: entering docking uses a tight band, but once docked it
+    // takes a wider band to leave again, so scroll position sitting right on
+    // the boundary doesn't flip between the two branches every frame.
+    const docking = rect
+      ? dockingRef.current
+        ? rect.top < vh * 0.97 && rect.bottom > vh * 0.03
+        : rect.top < vh * 0.92 && rect.bottom > vh * 0.08
+      : false;
+
+    // The grid's own icon (rendered by SkillsMatrix) starts hidden and only
+    // reveals itself once this field icon docks — flip that shared signal
+    // here, on the same slot element this effect already reads via its DOM
+    // id, rather than introducing React state between the two components.
+    if (slot && docking !== dockingRef.current) {
+      slot.dataset.docked = docking ? "true" : "false";
+    }
+    dockingRef.current = docking;
+
+    const baseOpacity = 0.22 + item.depth * 0.5;
 
     if (rect && docking) {
-      x.set(rect.left + rect.width / 2 - vw / 2);
-      y.set(rect.top + rect.height / 2 - vh / 2);
+      const targetX = rect.left + rect.width / 2 - vw / 2;
+      const targetY = rect.top + rect.height / 2 - vh / 2;
+
+      // Fade only in the final approach to the slot, measured by actual
+      // on-screen distance rather than tied to the x/y/scale springs'
+      // own timing — otherwise opacity (a short path to 0) settles long
+      // before position/scale (a long path to the slot) do, and the icon
+      // vanishes mid-flight instead of visibly arriving.
+      const dist = Math.hypot(x.get() - targetX, y.get() - targetY);
+      const fadeRadius = Math.max(item.size * 1.5, 48);
+      opacity.set(baseOpacity * Math.min(dist / fadeRadius, 1));
+
+      x.set(targetX);
+      y.set(targetY);
       scale.set(rect.width / item.size);
-      opacity.set(0);
     } else {
       const influence = 0.16 + item.depth * 0.6;
       x.set(item.x * vw - vw / 2 + pointerX.get() * influence);
       y.set(item.y * vh - vh / 2 + pointerY.get() * influence);
       scale.set(1);
-      opacity.set(0.22 + item.depth * 0.5);
+      opacity.set(baseOpacity);
     }
   });
 
@@ -103,7 +134,17 @@ export function CursorField({ items = [] }: { items?: CursorFieldItem[] }) {
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const coarsePointer = window.matchMedia("(hover: none), (pointer: coarse)").matches;
-    if (reduced || coarsePointer) return;
+    if (reduced || coarsePointer) {
+      // No field ever mounts for these visitors, so no FieldIcon will ever
+      // dock and flip a slot's data-docked attribute. Mark every slot
+      // revealed up front instead, reusing the same attribute SkillsMatrix
+      // already reads, so the grid icons just show immediately.
+      for (const item of items) {
+        const slot = document.getElementById(`skill-slot-${item.id}`);
+        if (slot) slot.dataset.docked = "true";
+      }
+      return;
+    }
 
     // matchMedia is only available client-side, so whether the field renders
     // at all can only be decided once mounted, not during render.
@@ -117,7 +158,7 @@ export function CursorField({ items = [] }: { items?: CursorFieldItem[] }) {
 
     window.addEventListener("pointermove", handlePointerMove, { passive: true });
     return () => window.removeEventListener("pointermove", handlePointerMove);
-  }, [items.length, pointerX, pointerY]);
+  }, [items, pointerX, pointerY]);
 
   if (!enabled || items.length === 0) return null;
 

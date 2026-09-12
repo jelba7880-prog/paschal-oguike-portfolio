@@ -8,15 +8,21 @@ function SkillCell({ skill }: { skill: Skill }) {
       className="flex flex-col items-center gap-2.5 border p-[14px_6px] text-center"
       style={{ borderColor: "var(--rule)" }}
     >
-      {/* Dock slot for the matching CursorField item — see components/CursorField.tsx. */}
-      <div id={`skill-slot-${skill.id}`} className="flex h-[34px] w-[34px] items-center justify-center">
+      {/* Dock slot for the matching CursorField item — see components/CursorField.tsx.
+          CursorField flips this element's data-docked attribute the moment its
+          floating icon arrives; the img below stays hidden until then. */}
+      <div
+        id={`skill-slot-${skill.id}`}
+        data-docked="false"
+        className="group flex h-[34px] w-[34px] items-center justify-center"
+      >
         <img
           src={skill.src}
           alt={skill.label}
           data-mono={skill.mono ? "" : undefined}
           width={24}
           height={24}
-          className="h-6 w-6 object-contain"
+          className="h-6 w-6 object-contain opacity-0 transition-opacity duration-500 group-data-[docked=true]:opacity-100"
         />
       </div>
       <span className="text-[9px] uppercase tracking-[0.08em]" style={{ color: "var(--muted)" }}>
