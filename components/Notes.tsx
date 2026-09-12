@@ -61,7 +61,7 @@ export function Notes() {
             style={{ borderColor: "var(--rule)" }}
           >
             <span className="text-[11px] lg:col-start-1 lg:col-span-1" style={{ color: "var(--accent)" }}>
-              {note.number}
+              —
             </span>
             <span className="text-[clamp(20px,1.9vw,26px)] leading-[1.25] font-normal lg:col-start-2 lg:col-span-6">
               {note.title}

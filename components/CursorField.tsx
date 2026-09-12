@@ -26,14 +26,19 @@ export interface CursorFieldItem {
 }
 
 /**
- * idle   — pointer hasn't entered the page yet, or has left it: icons rest at
- *          their own spots and wobble.
- * swarm  — pointer is on the page but outside the skills section: icons cluster
- *          loosely around it.
- * docked — pointer is inside the skills section: every icon flies home to its
- *          slot in the grid.
+ * idle    — pointer hasn't entered the page yet, or has left it: icons rest at
+ *           their own spots and wobble.
+ * swarm   — pointer is on the page but outside the skills section: icons cluster
+ *           loosely around it.
+ * docked  — pointer is inside the skills section: every icon flies home to its
+ *           slot in the grid.
+ * resting — the page has scrolled to the Notes section or beyond: the swarm
+ *           mechanic is suspended entirely (no cursor-following, no docking)
+ *           so it never covers the notes' text or clutters the footer — icons
+ *           just sit still, dim, at their spread-out resting spots, fading to
+ *           fully invisible by the time the footer arrives.
  */
-type FieldMode = "idle" | "swarm" | "docked";
+type FieldMode = "idle" | "swarm" | "docked" | "resting";
 
 const FLOAT_SPRING = { stiffness: 90, damping: 20, mass: 0.8 };
 /** Runs on framer's own clock, so the flight home is never tied to pointer or scroll speed.
@@ -49,6 +54,19 @@ const MODE_DEBOUNCE_MS = 140;
 /** Once docked, the cursor has to clear the section by this many px before
  * it's considered "left" — a plain edge-touch no longer flips it back out. */
 const UNDOCK_MARGIN = 32;
+/** Fraction of viewport height the Notes section's top must cross to enter/
+ * leave the "resting" quiet zone — two different thresholds, same hysteresis
+ * idea as UNDOCK_MARGIN, so scrolling back and forth right at the edge of
+ * Notes doesn't flicker the swarm mechanic on and off. */
+const QUIET_ZONE_ENTER = 0.8;
+const QUIET_ZONE_EXIT = 0.95;
+/** Extra margin (px) added on top of the footer's own height when computing
+ * where its fade-to-zero completes — see the frame loop below for why this
+ * has to be measured against the footer's actual height, not a fixed
+ * viewport-height fraction: the footer is the last element on the page, so
+ * its top can never scroll past (viewport height − footer height), and a
+ * fixed fraction lower than that would mean the fade never reaches 0. */
+const FOOTER_FADE_END_MARGIN = 24;
 
 /** Stable pseudo-random 0..1 from an id, so per-icon variance survives re-renders and SSR. */
 function hash01(seed: string, salt: number) {
@@ -71,11 +89,15 @@ function FieldIcon({
   mode,
   pointerX,
   pointerY,
+  restOpacity,
 }: {
   item: CursorFieldItem;
   mode: FieldMode;
   pointerX: MotionValue<number>;
   pointerY: MotionValue<number>;
+  /** 1 while resting icons should show at their (already dim) rest opacity,
+   * easing to 0 as the footer approaches — see CursorField's frame loop. */
+  restOpacity: MotionValue<number>;
 }) {
   const wobbleSeconds = useMemo(() => 4 + hash01(item.id, 3) * 3, [item.id]);
   // Genuinely randomized (Math.random, not a deterministic hash) and re-rolled
@@ -93,6 +115,11 @@ function FieldIcon({
 
   const x = useSpring(0, FLOAT_SPRING);
   const y = useSpring(0, FLOAT_SPRING);
+  // Its own spring rather than a plain per-render ternary, because "resting"
+  // opacity also depends on restOpacity — a continuously-changing value tied
+  // to scroll, not a discrete mode switch — so it needs a per-frame target,
+  // not a one-shot `animate` prop.
+  const opacity = useSpring(0.22 + item.depth * 0.5, { stiffness: 120, damping: 24 });
   const [slot, setSlot] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
@@ -108,6 +135,17 @@ function FieldIcon({
   useAnimationFrame((t) => {
     const vw = window.innerWidth;
     const vh = window.innerHeight;
+
+    if (mode === "docked") {
+      opacity.set(1);
+    } else if (mode === "resting") {
+      opacity.set((0.1 + item.depth * 0.12) * restOpacity.get());
+    } else if (mode === "swarm") {
+      opacity.set(0.55 + item.depth * 0.35);
+    } else {
+      opacity.set(0.22 + item.depth * 0.5);
+    }
+
     if (mode === "swarm") {
       const c = cluster.current;
       if (c.rerollAt < 0) {
@@ -146,7 +184,7 @@ function FieldIcon({
   });
 
   const docked = mode === "docked" && slot !== null;
-  const opacity = docked ? 1 : mode === "swarm" ? 0.55 + item.depth * 0.35 : 0.22 + item.depth * 0.5;
+  const still = docked || mode === "resting"; // no wobble — settled in the grid, or deliberately static while resting
 
   // layoutId lives here and nothing else animates this element's transform —
   // framer's layout projection owns it. The wobble sits on the child img
@@ -155,11 +193,11 @@ function FieldIcon({
     <motion.div
       layoutId={`swarm-${item.id}`}
       aria-hidden
-      animate={{ opacity }}
-      transition={{ layout: DOCK_TRANSITION, opacity: { duration: 0.35 } }}
+      transition={{ layout: DOCK_TRANSITION }}
       style={{
         width: docked ? DOCKED_SIZE : item.size,
         height: docked ? DOCKED_SIZE : item.size,
+        opacity,
       }}
     >
       <motion.img
@@ -167,11 +205,9 @@ function FieldIcon({
         alt=""
         draggable={false}
         data-mono={item.mono ? "" : undefined}
-        animate={docked ? { rotate: 0 } : { rotate: [0, 10, -10, 0] }}
+        animate={still ? { rotate: 0 } : { rotate: [0, 10, -10, 0] }}
         transition={
-          docked
-            ? { duration: 0.4 }
-            : { duration: wobbleSeconds, repeat: Infinity, ease: "easeInOut" }
+          still ? { duration: 0.4 } : { duration: wobbleSeconds, repeat: Infinity, ease: "easeInOut" }
         }
         style={{ display: "block", width: "100%", height: "100%", objectFit: "contain" }}
       />
@@ -200,17 +236,22 @@ function FieldIcon({
 /**
  * Persistent field layer, mounted once at the root layout so it spans every
  * section. Docking is driven purely by where the pointer is — when it enters
- * the skills section every icon flies into its grid slot, and when it leaves
- * they all come back out. Nothing here reads scroll position.
+ * the skills section every icon flies home to its grid slot, and when it
+ * leaves they all come back out. The one scroll-driven exception is the
+ * "resting" quiet zone from Notes onward (see FieldMode), which overrides
+ * pointer-driven behavior entirely so the swarm never covers that section's
+ * text or clutters the footer.
  */
 export function CursorField({ items = [] }: { items?: CursorFieldItem[] }) {
   const pointerX = useMotionValue(0);
   const pointerY = useMotionValue(0);
+  const restOpacity = useMotionValue(1);
   const pointer = useRef({ x: 0, y: 0, onPage: false });
   const [enabled, setEnabled] = useState(false);
   const [mode, setMode] = useState<FieldMode>("idle");
   const modeRef = useRef<FieldMode>("idle");
   const pendingRef = useRef<{ mode: FieldMode; since: number }>({ mode: "idle", since: 0 });
+  const quietZoneRef = useRef(false);
 
   useEffect(() => {
     if (items.length === 0) return;
@@ -246,30 +287,65 @@ export function CursorField({ items = [] }: { items?: CursorFieldItem[] }) {
 
   useAnimationFrame((t) => {
     if (!enabled) return;
-    const section = document.getElementById("stack");
-    if (!section) return;
+    const vh = window.innerHeight;
+    const notes = document.getElementById("notes");
 
-    const { x, y, onPage } = pointer.current;
-    let next: FieldMode = "idle";
-    if (onPage) {
-      const r = section.getBoundingClientRect();
-      // Hysteresis: once docked, the cursor must clear the section by
-      // UNDOCK_MARGIN before it counts as "left" — a bare edge-touch no
-      // longer flips it back out.
-      const margin = modeRef.current === "docked" ? UNDOCK_MARGIN : 0;
-      const inside = x >= r.left - margin && x <= r.right + margin && y >= r.top - margin && y <= r.bottom + margin;
-      next = inside ? "docked" : "swarm";
+    // Once the page has scrolled to Notes or beyond, the swarm mechanic is
+    // suspended outright — regardless of pointer position — so it can never
+    // cover the notes' text or clutter the footer. Hysteresis (two different
+    // thresholds) keeps scrolling back and forth right at that edge from
+    // flickering the whole mechanic on and off.
+    const quietZone = notes
+      ? quietZoneRef.current
+        ? notes.getBoundingClientRect().top < vh * QUIET_ZONE_EXIT
+        : notes.getBoundingClientRect().top < vh * QUIET_ZONE_ENTER
+      : quietZoneRef.current;
+    quietZoneRef.current = quietZone;
+
+    let next: FieldMode;
+    if (quietZone) {
+      next = "resting";
+    } else {
+      const section = document.getElementById("stack");
+      const { x, y, onPage } = pointer.current;
+      next = "idle";
+      if (section && onPage) {
+        const r = section.getBoundingClientRect();
+        // Hysteresis: once docked, the cursor must clear the section by
+        // UNDOCK_MARGIN before it counts as "left" — a bare edge-touch no
+        // longer flips it back out.
+        const margin = modeRef.current === "docked" ? UNDOCK_MARGIN : 0;
+        const inside =
+          x >= r.left - margin && x <= r.right + margin && y >= r.top - margin && y <= r.bottom + margin;
+        next = inside ? "docked" : "swarm";
+      }
     }
 
     // Debounce: only commit a mode change once it's held steady for
-    // MODE_DEBOUNCE_MS, so momentary flicker right at the boundary (real
-    // mouse movement, or scrolling the section past a stationary cursor)
-    // can't restart the dock/undock animation mid-flight over and over.
+    // MODE_DEBOUNCE_MS, so momentary flicker right at a boundary (real mouse
+    // movement, or scrolling a section past a stationary cursor) can't
+    // restart an in-flight animation over and over.
     if (next !== pendingRef.current.mode) {
       pendingRef.current = { mode: next, since: t };
     } else if (next !== modeRef.current && t - pendingRef.current.since >= MODE_DEBOUNCE_MS) {
       modeRef.current = next;
       setMode(next);
+    }
+
+    // Independent of the mode debounce above: fades resting icons the rest of
+    // the way to fully invisible as the footer approaches, so "no icons at
+    // all in the footer" holds regardless of exactly when "resting" commits.
+    // Measured against the footer's own height (see FOOTER_FADE_END_MARGIN) —
+    // it's the last element on the page, so its top can never scroll past
+    // (vh − its height), which a fixed viewport-height fraction can't account
+    // for on a short footer or a short viewport.
+    const footer = document.getElementById("site-footer");
+    if (footer) {
+      const footerRect = footer.getBoundingClientRect();
+      const fadeStart = vh;
+      const fadeEnd = vh - footerRect.height + FOOTER_FADE_END_MARGIN;
+      const fade = Math.min(1, Math.max(0, (footerRect.top - fadeEnd) / (fadeStart - fadeEnd)));
+      restOpacity.set(fade);
     }
   });
 
@@ -279,7 +355,14 @@ export function CursorField({ items = [] }: { items?: CursorFieldItem[] }) {
     <LayoutGroup>
       <div aria-hidden className="pointer-events-none fixed inset-0 z-20 overflow-hidden">
         {items.map((item) => (
-          <FieldIcon key={item.id} item={item} mode={mode} pointerX={pointerX} pointerY={pointerY} />
+          <FieldIcon
+            key={item.id}
+            item={item}
+            mode={mode}
+            pointerX={pointerX}
+            pointerY={pointerY}
+            restOpacity={restOpacity}
+          />
         ))}
       </div>
     </LayoutGroup>
