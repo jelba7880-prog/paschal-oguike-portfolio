@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #faf7f1; --ink: #171310; --body: #3c362e; --muted: #71695e;
+    --faint: #8a8177; --rule: #e4ddd1; --wash: #f2ece1; --accent: #c2401a; --card: #fbf9f4;
+  }
+  body { margin: 0; background: var(--paper); color: var(--ink); -webkit-font-smoothing: antialiased; }
+  a { color: var(--ink); text-decoration: none; }
+  a:hover { color: var(--accent); }
+  ::selection { background: #c2401a; color: #fff8ee; }
+</style>
+</helmet>
+<div ref="{{ setRoot }}" style="position:relative; font-family:'Newsreader', Georgia, serif; background:var(--paper); color:var(--ink); overflow-x:clip">
+
+  <!-- FIELD LAYER — the 37 objects. Same nodes float, dock, and undock. -->
+  <div data-field="" aria-hidden="true" style="position:fixed; inset:0; z-index:4; pointer-events:none; contain:layout style">
+    <div data-logo="" data-dock="java" data-fx="0.05" data-fy="0.185" data-d="0.38" data-size="36" data-rot="-8" style="position:absolute; left:0; top:0; width:36px; height:36px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/openjdk" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="javascript" data-fx="0.19" data-fy="0.185" data-d="0.62" data-size="46" data-rot="6" style="position:absolute; left:0; top:0; width:46px; height:46px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/javascript" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="python" data-fx="0.33" data-fy="0.185" data-d="0.22" data-size="32" data-rot="-4" style="position:absolute; left:0; top:0; width:32px; height:32px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/python" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="c" data-fx="0.47" data-fy="0.20" data-d="0.50" data-size="40" data-rot="9" style="position:absolute; left:0; top:0; width:40px; height:40px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/c" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="cpp" data-fx="0.615" data-fy="0.225" data-d="0.16" data-size="28" data-rot="-6" style="position:absolute; left:0; top:0; width:28px; height:28px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/cplusplus" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="typescript" data-fx="0.755" data-fy="0.19" data-d="0.70" data-size="48" data-rot="5" style="position:absolute; left:0; top:0; width:48px; height:48px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/typescript" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="html5" data-fx="0.905" data-fy="0.225" data-d="0.30" data-size="34" data-rot="-9" style="position:absolute; left:0; top:0; width:34px; height:34px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/html5" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="react" data-fx="0.085" data-fy="0.295" data-d="0.78" data-size="52" data-rot="7" style="position:absolute; left:0; top:0; width:52px; height:52px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/react" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="next" data-fx="0.205" data-fy="0.32" data-d="0.20" data-size="30" data-rot="-5" style="position:absolute; left:0; top:0; width:30px; height:30px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/nextdotjs" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="tailwind" data-fx="0.335" data-fy="0.28" data-d="0.44" data-size="38" data-rot="8" style="position:absolute; left:0; top:0; width:38px; height:38px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/tailwindcss" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="figma" data-fx="0.665" data-fy="0.30" data-d="0.34" data-size="36" data-rot="-7" style="position:absolute; left:0; top:0; width:36px; height:36px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/figma" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="vite" data-fx="0.80" data-fy="0.255" data-d="0.58" data-size="44" data-rot="4" style="position:absolute; left:0; top:0; width:44px; height:44px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/vite" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="css" data-fx="0.935" data-fy="0.315" data-d="0.13" data-size="27" data-rot="-3" style="position:absolute; left:0; top:0; width:27px; height:27px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/css" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="node" data-fx="0.115" data-fy="0.355" data-d="0.50" data-size="42" data-rot="-6" style="position:absolute; left:0; top:0; width:42px; height:42px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/nodedotjs" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="express" data-fx="0.235" data-fy="0.455" data-d="0.26" data-size="32" data-rot="7" style="position:absolute; left:0; top:0; width:32px; height:32px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/express" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="graphql" data-fx="0.265" data-fy="0.205" data-d="0.12" data-size="26" data-rot="-8" style="position:absolute; left:0; top:0; width:26px; height:26px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/graphql" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="fastapi" data-fx="0.86" data-fy="0.445" data-d="0.66" data-size="46" data-rot="-4" style="position:absolute; left:0; top:0; width:46px; height:46px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/fastapi" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="flask" data-fx="0.955" data-fy="0.49" data-d="0.18" data-size="29" data-rot="6" style="position:absolute; left:0; top:0; width:29px; height:29px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/flask" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="postgresql" data-fx="0.06" data-fy="0.60" data-d="0.72" data-size="50" data-rot="5" style="position:absolute; left:0; top:0; width:50px; height:50px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/postgresql" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="mongodb" data-fx="0.165" data-fy="0.645" data-d="0.30" data-size="33" data-rot="-7" style="position:absolute; left:0; top:0; width:33px; height:33px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/mongodb" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="mysql" data-fx="0.775" data-fy="0.555" data-d="0.15" data-size="28" data-rot="4" style="position:absolute; left:0; top:0; width:28px; height:28px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/mysql" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="redis" data-fx="0.845" data-fy="0.60" data-d="0.40" data-size="38" data-rot="8" style="position:absolute; left:0; top:0; width:38px; height:38px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/redis" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="supabase" data-fx="0.945" data-fy="0.655" data-d="0.62" data-size="45" data-rot="-5" style="position:absolute; left:0; top:0; width:45px; height:45px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/supabase" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="docker" data-fx="0.09" data-fy="0.76" data-d="0.55" data-size="44" data-rot="-6" style="position:absolute; left:0; top:0; width:44px; height:44px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/docker" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="git" data-fx="0.22" data-fy="0.72" data-d="0.24" data-size="31" data-rot="8" style="position:absolute; left:0; top:0; width:31px; height:31px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/git" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="github" data-fx="0.36" data-fy="0.78" data-d="0.68" data-size="47" data-rot="-4" style="position:absolute; left:0; top:0; width:47px; height:47px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/github" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="linux" data-fx="0.51" data-fy="0.73" data-d="0.14" data-size="27" data-rot="5" style="position:absolute; left:0; top:0; width:27px; height:27px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/linux" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="vercel" data-fx="0.65" data-fy="0.785" data-d="0.46" data-size="39" data-rot="-8" style="position:absolute; left:0; top:0; width:39px; height:39px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/vercel" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="bash" data-fx="0.79" data-fy="0.72" data-d="0.32" data-size="34" data-rot="6" style="position:absolute; left:0; top:0; width:34px; height:34px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/gnubash" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="aws" data-fx="0.92" data-fy="0.775" data-d="0.60" data-size="48" data-rot="-5" style="position:absolute; left:0; top:0; width:48px; height:48px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="vscode" data-fx="0.045" data-fy="0.90" data-d="0.36" data-size="36" data-rot="7" style="position:absolute; left:0; top:0; width:36px; height:36px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/vscodium/1f9cf0" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="pytorch" data-fx="0.18" data-fy="0.945" data-d="0.58" data-size="44" data-rot="-6" style="position:absolute; left:0; top:0; width:44px; height:44px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/pytorch" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="opencv" data-fx="0.325" data-fy="0.89" data-d="0.20" data-size="30" data-rot="9" style="position:absolute; left:0; top:0; width:30px; height:30px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/opencv" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="sklearn" data-fx="0.475" data-fy="0.935" data-d="0.50" data-size="41" data-rot="-7" style="position:absolute; left:0; top:0; width:41px; height:41px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/scikitlearn" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="chatgpt" data-fx="0.62" data-fy="0.885" data-d="0.74" data-size="50" data-rot="4" style="position:absolute; left:0; top:0; width:50px; height:50px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.jsdelivr.net/npm/simple-icons@11.14.0/icons/openai.svg" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="claude" data-fx="0.765" data-fy="0.94" data-d="0.28" data-size="33" data-rot="-9" style="position:absolute; left:0; top:0; width:33px; height:33px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/claude" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+    <div data-logo="" data-dock="gemini" data-fx="0.90" data-fy="0.895" data-d="0.42" data-size="38" data-rot="6" style="position:absolute; left:0; top:0; width:38px; height:38px; opacity:0; will-change:transform, opacity; backface-visibility:hidden"><img src="https://cdn.simpleicons.org/googlegemini" alt="" draggable="false" style="width:100%; height:100%; object-fit:contain; display:block"></div>
+  </div>
+
+  <!-- HUD -->
+  <div data-hud="" style="position:fixed; left:clamp(16px, 3vw, 28px); bottom:clamp(16px, 3vw, 28px); z-index:9; display:flex; flex-direction:column; gap:9px; width:214px; padding:13px 14px 14px; background:rgba(250,247,241,0.82); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border:1px solid var(--rule); font-family:'Space Mono', monospace; font-size:9px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted)">
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:10px">
+      <span>Dock progress</span><span data-hud-val="" style="color:var(--accent)">0%</span>
+    </div>
+    <div style="position:relative; height:3px; background:var(--rule)">
+      <div data-hud-fill="" style="position:absolute; left:0; top:0; bottom:0; width:0%; background:var(--accent)"></div>
+    </div>
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; color:var(--faint)">
+      <span data-hud-state="">Floating</span><span data-hud-fps="">— fps</span>
+    </div>
+  </div>
+
+  <header data-screen-label="Masthead" style="position:relative; z-index:5; background:var(--paper); display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:12px 32px; padding:24px clamp(24px, 4.5vw, 64px); border-bottom:1px solid var(--rule)">
+    <div style="font-size:19px; font-style:italic; font-weight:500">Paschal</div>
+    <div style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted)"><span style="color:var(--accent)">Proto</span>&nbsp;/&nbsp;floating technology field</div>
+  </header>
+
+  <section data-screen-label="Hero" style="position:relative; z-index:5; display:grid; grid-template-columns:repeat(12, 1fr); column-gap:24px; align-content:center; min-height:82vh; padding:clamp(56px, 9vw, 108px) clamp(24px, 4.5vw, 64px)">
+    <div style="grid-column:1 / 3; font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); padding-top:12px"><span style="color:var(--accent)">01</span>&nbsp;&nbsp;System</div>
+    <h1 style="grid-column:3 / 12; margin:0; font-weight:300; font-size:clamp(38px, 5.4vw, 82px); line-height:1.06; letter-spacing:-0.015em; text-wrap:balance">Thirty-seven objects,<br><em style="font-style:italic">one spatial system.</em></h1>
+    <p style="grid-column:3 / 8; margin:clamp(14px, 3.4vw, 30px) -16px 0; padding:14px 16px 16px; background:rgba(250,247,241,0.74); backdrop-filter:blur(7px); -webkit-backdrop-filter:blur(7px); font-size:clamp(17px, 1.5vw, 21px); line-height:1.55; color:var(--body); text-wrap:pretty">Every logo on this page is a single object with its own depth, mass and lag. The cursor displaces them; springs carry them back. Scroll and the same objects travel into the skills grid and lock. Scroll past and they leave again.</p>
+    <div style="grid-column:9 / 13; align-self:end; display:flex; flex-direction:column; gap:10px; margin-top:clamp(28px, 3.4vw, 44px); padding:16px 14px 14px; background:rgba(250,247,241,0.74); backdrop-filter:blur(7px); -webkit-backdrop-filter:blur(7px); border-top:1px solid var(--rule); font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--faint)">
+      <div style="display:flex; justify-content:space-between; gap:12px"><span>Pointer</span><span style="color:var(--body)">Displacement</span></div>
+      <div style="display:flex; justify-content:space-between; gap:12px"><span>Depth</span><span style="color:var(--body)">0.12 — 0.78</span></div>
+      <div style="display:flex; justify-content:space-between; gap:12px"><span>Response</span><span style="color:var(--body)">Spring + inertia</span></div>
+      <div style="display:flex; justify-content:space-between; gap:12px"><span>Docking</span><span style="color:var(--accent)">Scroll-linked</span></div>
+    </div>
+  </section>
+
+  <section data-screen-label="Behavior" style="position:relative; z-index:5; padding:clamp(48px, 7vw, 96px) clamp(24px, 4.5vw, 64px)">
+    <div style="display:grid; grid-template-columns:repeat(12, 1fr); column-gap:24px; row-gap:28px; padding-top:20px; border-top:1px solid var(--ink)">
+      <div style="grid-column:1 / 3; font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted)"><span style="color:var(--accent)">02</span>&nbsp;&nbsp;Behavior</div>
+      <div style="grid-column:3 / 13; display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap:clamp(24px, 3vw, 44px)">
+        <div>
+          <div style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); padding-bottom:11px; border-bottom:1px solid var(--rule)">Depth</div>
+          <p style="margin:13px 0 0; font-size:17px; line-height:1.5; color:var(--body); text-wrap:pretty">Deep objects are smaller, softer and barely move. Foreground objects are larger, sharper and travel furthest. Nothing is blurred enough to read as an effect.</p>
+        </div>
+        <div>
+          <div style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); padding-bottom:11px; border-bottom:1px solid var(--rule)">Inertia</div>
+          <p style="margin:13px 0 0; font-size:17px; line-height:1.5; color:var(--body); text-wrap:pretty">Each object chases a target rather than holding one. Move fast and you can see the field trail, overshoot slightly, then settle.</p>
+        </div>
+        <div>
+          <div style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); padding-bottom:11px; border-bottom:1px solid var(--rule)">Docking</div>
+          <p style="margin:13px 0 0; font-size:17px; line-height:1.5; color:var(--body); text-wrap:pretty">Scroll position drives one progress value. Cursor influence fades out, rotation settles to zero, scale resolves to the slot — staggered by depth.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-skills="" data-screen-label="Technical skills" style="position:relative; z-index:1; padding:clamp(40px, 5vw, 72px) clamp(24px, 4.5vw, 64px) clamp(64px, 9vw, 120px)">
+    <div style="display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:12px 24px; padding-bottom:22px; margin-bottom:clamp(24px, 3vw, 36px); border-bottom:1px solid var(--ink)">
+      <div style="display:flex; align-items:baseline; gap:clamp(16px, 4vw, 48px); flex-wrap:wrap">
+        <div style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted)"><span style="color:var(--accent)">03</span>&nbsp;&nbsp;Technical skills</div>
+        <h2 style="margin:0; font-weight:300; font-size:clamp(26px, 2.6vw, 38px); letter-spacing:-0.01em">Every object has a home.</h2>
+      </div>
+      <div style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--faint)">37 slots · docked on approach</div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 296px), 1fr)); gap:clamp(14px, 1.6vw, 22px)">
+      <div style="background:var(--card); border:1px solid var(--rule); border-radius:14px; padding:20px">
+        <div style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); padding-bottom:13px; border-bottom:1px solid var(--rule)">Languages</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(76px, 1fr)); gap:10px; margin-top:16px; font-family:'Space Mono', monospace; font-size:9px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); text-align:center">
+          <div data-slot="java" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>Java</div>
+          <div data-slot="javascript" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>JavaScript</div>
+          <div data-slot="python" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>Python</div>
+          <div data-slot="c" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>C</div>
+          <div data-slot="cpp" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>C++</div>
+          <div data-slot="typescript" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>TypeScript</div>
+          <div data-slot="html5" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>HTML5</div>
+        </div>
+      </div>
+
+      <div style="background:var(--card); border:1px solid var(--rule); border-radius:14px; padding:20px">
+        <div style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); padding-bottom:13px; border-bottom:1px solid var(--rule)">Frontend</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(76px, 1fr)); gap:10px; margin-top:16px; font-family:'Space Mono', monospace; font-size:9px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); text-align:center">
+          <div data-slot="react" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>React</div>
+          <div data-slot="next" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>Next.js</div>
+          <div data-slot="tailwind" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>Tailwind CSS</div>
+          <div data-slot="figma" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>Figma</div>
+          <div data-slot="vite" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>Vite</div>
+          <div data-slot="css" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>CSS</div>
+        </div>
+      </div>
+
+      <div style="background:var(--card); border:1px solid var(--rule); border-radius:14px; padding:20px">
+        <div style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); padding-bottom:13px; border-bottom:1px solid var(--rule)">Backend</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(76px, 1fr)); gap:10px; margin-top:16px; font-family:'Space Mono', monospace; font-size:9px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); text-align:center">
+          <div data-slot="node" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>Node.js</div>
+          <div data-slot="express" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>Express.js</div>
+          <div data-slot="fastapi" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>FastAPI</div>
+          <div data-slot="flask" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>Flask</div>
+          <div data-slot="graphql" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>GraphQL</div>
+        </div>
+      </div>
+
+      <div style="background:var(--card); border:1px solid var(--rule); border-radius:14px; padding:20px">
+        <div style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); padding-bottom:13px; border-bottom:1px solid var(--rule)">Database &amp; cloud</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(76px, 1fr)); gap:10px; margin-top:16px; font-family:'Space Mono', monospace; font-size:9px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); text-align:center">
+          <div data-slot="postgresql" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>PostgreSQL</div>
+          <div data-slot="mongodb" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>MongoDB</div>
+          <div data-slot="redis" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>Redis</div>
+          <div data-slot="supabase" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>Supabase</div>
+          <div data-slot="mysql" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>MySQL</div>
+        </div>
+      </div>
+
+      <div style="background:var(--card); border:1px solid var(--rule); border-radius:14px; padding:20px">
+        <div style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); padding-bottom:13px; border-bottom:1px solid var(--rule)">DevOps &amp; tools</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(76px, 1fr)); gap:10px; margin-top:16px; font-family:'Space Mono', monospace; font-size:9px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); text-align:center">
+          <div data-slot="docker" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>Docker</div>
+          <div data-slot="git" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>Git</div>
+          <div data-slot="github" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>GitHub</div>
+          <div data-slot="linux" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>Linux</div>
+          <div data-slot="vercel" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>Vercel</div>
+          <div data-slot="bash" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>Bash</div>
+          <div data-slot="aws" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>AWS</div>
+          <div data-slot="vscode" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>VS Code</div>
+        </div>
+      </div>
+
+      <div style="background:var(--card); border:1px solid var(--rule); border-radius:14px; padding:20px">
+        <div style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); padding-bottom:13px; border-bottom:1px solid var(--rule)">AI &amp; core</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(76px, 1fr)); gap:10px; margin-top:16px; font-family:'Space Mono', monospace; font-size:9px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); text-align:center">
+          <div data-slot="pytorch" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>PyTorch</div>
+          <div data-slot="opencv" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>OpenCV</div>
+          <div data-slot="sklearn" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>scikit-learn</div>
+          <div data-slot="chatgpt" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>ChatGPT</div>
+          <div data-slot="claude" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>Claude</div>
+          <div data-slot="gemini" style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px 12px; border:1px solid var(--rule); border-radius:10px"><div data-slot-icon="" style="width:34px; height:34px; border-radius:9px; background:var(--wash)"></div>Gemini</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-screen-label="Undock" style="position:relative; z-index:5; display:grid; grid-template-columns:repeat(12, 1fr); column-gap:24px; row-gap:20px; align-content:center; min-height:72vh; padding:clamp(48px, 7vw, 96px) clamp(24px, 4.5vw, 64px)">
+    <div style="grid-column:1 / 3; font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted)"><span style="color:var(--accent)">04</span>&nbsp;&nbsp;Undocked</div>
+    <h2 style="grid-column:3 / 11; margin:0; font-weight:300; font-size:clamp(30px, 3.6vw, 52px); line-height:1.12; letter-spacing:-0.015em; text-wrap:balance">Past the grid, the field takes them back — <em style="font-style:italic">same objects, reversed.</em></h2>
+    <p style="grid-column:3 / 8; margin:8px 0 0; font-size:17px; line-height:1.55; color:var(--body); text-wrap:pretty">Nothing was destroyed or faded out. The docking value simply ran back to zero, cursor influence returned, and the springs picked up where they left off. Scroll up to reverse it again.</p>
+  </section>
+
+  <footer style="position:relative; z-index:5; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px 24px; padding:22px clamp(24px, 4.5vw, 64px) 30px; border-top:1px solid var(--rule); font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--faint)">
+    <span>Prototype 01 · motion study</span>
+    <span>Spring · depth · scroll-linked docking</span>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;strength&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:0.6,&quot;min&quot;:0.2,&quot;max&quot;:1.8,&quot;step&quot;:0.05,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Cursor parallax&quot;},&quot;rotation&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:16,&quot;min&quot;:0,&quot;max&quot;:16,&quot;step&quot;:0.5,&quot;unit&quot;:&quot;°&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Cursor parallax&quot;},&quot;stiffness&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:40,&quot;min&quot;:40,&quot;max&quot;:360,&quot;step&quot;:5,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Spring&quot;},&quot;damping&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:30,&quot;min&quot;:6,&quot;max&quot;:32,&quot;step&quot;:0.5,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Spring&quot;},&quot;idle&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:0.5,&quot;min&quot;:0,&quot;max&quot;:2,&quot;step&quot;:0.05,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Spring&quot;},&quot;showHud&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Debug&quot;}}">
+const clamp01 = (v) => v < 0 ? 0 : v > 1 ? 1 : v;
+const smooth = (t) => t * t * (3 - 2 * t);
+
+class Component extends DCLogic {
+  renderVals() {
+    return { setRoot: (el) => { if (el) this.el = el; } };
+  }
+
+  componentDidMount() {
+    const root = this.el || document;
+    this.field = root.querySelector('[data-field]');
+    this.section = root.querySelector('[data-skills]');
+    this.hud = { box: root.querySelector('[data-hud]'), val: root.querySelector('[data-hud-val]'), fill: root.querySelector('[data-hud-fill]'), state: root.querySelector('[data-hud-state]'), fps: root.querySelector('[data-hud-fps]') };
+
+    this.reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    this.touch = matchMedia('(hover: none), (pointer: coarse)').matches;
+    this.ptr = { x: null, y: null };
+    this.measured = false;
+    this.last = 0;
+    this.frames = 0;
+    this.fpsT = 0;
+    this.hudP = -1;
+
+    this.items = Array.from(root.querySelectorAll('[data-logo]')).map((el, i) => {
+      const d = parseFloat(el.dataset.d);
+      const size = parseFloat(el.dataset.size);
+      const slot = root.querySelector('[data-slot="' + el.dataset.dock + '"] [data-slot-icon]');
+      return {
+        el, slot, size, depth: d,
+        fx: parseFloat(el.dataset.fx), fy: parseFloat(el.dataset.fy),
+        rot: parseFloat(el.dataset.rot),
+        op: 0.22 + d * 0.50,
+        blur: Math.max(0, (0.44 - d) * 3.4),
+        delay: Math.min(0.34, 0.04 + 0.24 * (1 - d) + ((i * 13) % 7) / 110),
+        freq: 0.26 + ((i * 7) % 11) / 26,
+        phase: (i * 2.399) % 6.283,
+        x: 0, y: 0, vx: 0, vy: 0, r: parseFloat(el.dataset.rot), vr: 0,
+        dockX: 0, dockY: 0, dockScale: 1,
+        lastOp: -1, lastBlur: -1, lastSlotOp: -1
+      };
+    });
+    this.items.forEach((it) => {
+      it.x = it.fx * innerWidth;
+      it.y = it.fy * innerHeight;
+      it.el.style.zIndex = String(Math.round(it.depth * 20));
+    });
+
+    this.rawV = { x: 0, y: 0 };
+    this.vsX = 0; this.vsY = 0;
+    this.onMove = (e) => {
+      if (this.ptr.x != null) { this.rawV.x += e.clientX - this.ptr.x; this.rawV.y += e.clientY - this.ptr.y; }
+      this.ptr.x = e.clientX; this.ptr.y = e.clientY;
+    };
+    this.onLeave = () => { this.ptr.x = null; this.ptr.y = null; };
+    this.onResize = () => { this.measure(); };
+    if (!this.touch && !this.reduced) {
+      addEventListener('pointermove', this.onMove, { passive: true });
+      addEventListener('pointerout', this.onLeave, { passive: true });
+    }
+    addEventListener('resize', this.onResize);
+    if (window.ResizeObserver && this.section) {
+      this.ro = new ResizeObserver(() => this.measure());
+      this.ro.observe(this.section);
+    }
+    this.measure();
+    this.t0 = [setTimeout(this.onResize, 160), setTimeout(this.onResize, 700), setTimeout(this.onResize, 1800)];
+    this.tick = this.tick.bind(this);
+    this.raf = requestAnimationFrame(this.tick);
+  }
+
+  componentWillUnmount() {
+    cancelAnimationFrame(this.raf);
+    removeEventListener('pointermove', this.onMove);
+    removeEventListener('pointerout', this.onLeave);
+    removeEventListener('resize', this.onResize);
+    if (this.ro) this.ro.disconnect();
+    (this.t0 || []).forEach(clearTimeout);
+  }
+
+  measure() {
+    if (!this.section) return;
+    const sx = scrollX, sy = scrollY;
+    for (const it of this.items) {
+      if (!it.slot) continue;
+      const r = it.slot.getBoundingClientRect();
+      it.dockX = r.left + sx + r.width / 2;
+      it.dockY = r.top + sy + r.height / 2;
+      it.dockScale = r.width / it.size;
+    }
+    const s = this.section.getBoundingClientRect();
+    this.secTop = s.top + sy;
+    this.secH = s.height;
+    this.measured = true;
+  }
+
+  progress(sy, vh) {
+    if (!this.measured) return 0;
+    const inA = this.secTop - vh * 0.94;
+    let inB = this.secTop - vh * 0.10;
+    let outA = this.secTop + this.secH - vh * 0.62;
+    const outB = this.secTop + this.secH - vh * 0.02;
+    if (outA < inB) { const m = (inB + outA) / 2; inB = m; outA = m; }
+    if (sy <= inB) return smooth(clamp01((sy - inA) / Math.max(1, inB - inA)));
+    if (sy >= outA) return 1 - smooth(clamp01((sy - outA) / Math.max(1, outB - outA)));
+    return 1;
+  }
+
+  tick(ts) {
+    this.raf = requestAnimationFrame(this.tick);
+    const dtRaw = this.last ? (ts - this.last) / 1000 : 0.016;
+    this.last = ts;
+    const dt = Math.min(0.034, Math.max(0.004, dtRaw));
+
+    const vw = innerWidth, vh = innerHeight, sy = scrollY;
+    const P = this.props || {};
+    const pull = P.strength ?? 1;
+    const stiff = P.stiffness ?? 190;
+    const damp = P.damping ?? 17;
+    const rotK = P.rotation ?? 7;
+    const idle = this.reduced ? 0 : (P.idle ?? 1);
+
+    const p = this.progress(sy, vh);
+    // raw pixel offset from viewport centre — the field is displaced by real cursor distance, not a normalised nudge
+    const offX = this.ptr.x == null ? 0 : this.ptr.x - vw / 2;
+    const offY = this.ptr.y == null ? 0 : this.ptr.y - vh / 2;
+    this.vsX = this.vsX * 0.84 + this.rawV.x * 0.16;
+    this.vsY = this.vsY * 0.84 + this.rawV.y * 0.16;
+    this.rawV.x = 0; this.rawV.y = 0;
+    const limX = vw * 0.46, limY = vh * 0.42;
+    const dSy = this.lastSy == null ? 0 : sy - this.lastSy;
+    this.lastSy = sy;
+    const kDock = 170, cDock = 2 * Math.sqrt(170) * 1.14;
+    const t = ts / 1000;
+    const steps = dt > 0.019 ? 2 : 1;
+    const sdt = dt / steps;
+
+    for (const it of this.items) {
+      const pe = smooth(clamp01((p - it.delay) / (1 - it.delay)));
+      const w = pe * pe * (3 - 2 * pe);   // dock authority — eased again so the last third decelerates
+      const infl = (1 - pe) * (1 - pe);   // cursor + idle influence, gone well before the slot
+      const str = pull * (0.24 + it.depth * 1.05);
+      const dispX = limX * Math.tanh((offX * str + this.vsX * (1.6 + it.depth * 5)) / limX);
+      const dispY = limY * Math.tanh((offY * str * 0.82 + this.vsY * (1.2 + it.depth * 4)) / limY);
+      const fX = it.fx * vw + dispX * infl + idle * (1.1 + it.depth * 3) * Math.cos(t * it.freq * 0.78 + it.phase) * infl;
+      const fY = it.fy * vh + dispY * infl + idle * (1.6 + it.depth * 4) * Math.sin(t * it.freq + it.phase) * infl;
+      const tx = fX + (it.dockX - fX) * w;
+      const ty = fY + ((it.dockY - sy) - fY) * w;
+      // ride the grid's scroll frame in proportion to dock authority, so the spring never chases scroll
+      if (w > 0.0005) it.y -= dSy * w;
+      const spin = it.rot + (dispX / limX) * rotK * (0.5 + it.depth * 1.3) + this.vsX * 0.22 * it.depth;
+      const tr = Math.max(-14, Math.min(14, spin)) * infl;
+
+      if (this.reduced) {
+        it.x = tx; it.y = ty; it.r = tr;
+      } else {
+        const kf = stiff * (0.46 + it.depth * 1.25);
+        const cf = damp * (0.9 + it.depth * 0.26);
+        // crossfade the float spring into an overdamped docking spring; bell adds transient drag
+        // mid-handoff to absorb leftover floating momentum without ever zeroing velocity
+        const bell = 4 * pe * (1 - pe);
+        const k = kf + (kDock - kf) * w;
+        const c = cf + (cDock - cf) * w + damp * 1.5 * bell;
+        for (let s = 0; s < steps; s++) {
+          it.vx += (tx - it.x) * k * sdt - it.vx * c * sdt;
+          it.vy += (ty - it.y) * k * sdt - it.vy * c * sdt;
+          it.x += it.vx * sdt;
+          it.y += it.vy * sdt;
+          it.vr += (tr - it.r) * (k * 0.5) * sdt - it.vr * (c * 1.2) * sdt;
+          it.r += it.vr * sdt;
+        }
+      }
+
+      const sc = 1 + (it.dockScale - 1) * w;
+      it.el.style.transform = 'translate3d(' + (it.x - it.size / 2).toFixed(2) + 'px,' + (it.y - it.size / 2).toFixed(2) + 'px,0) rotate(' + it.r.toFixed(2) + 'deg) scale(' + sc.toFixed(3) + ')';
+
+      const op = it.op + (1 - it.op) * w;
+      if (Math.abs(op - it.lastOp) > 0.004) { it.el.style.opacity = op.toFixed(3); it.lastOp = op; }
+      const bl = it.blur * (1 - w);
+      if (Math.abs(bl - it.lastBlur) > 0.03) { it.el.style.filter = bl > 0.05 ? 'blur(' + bl.toFixed(2) + 'px)' : 'none'; it.lastBlur = bl; }
+      if (it.slot) {
+        const so = 1 - pe;
+        if (Math.abs(so - it.lastSlotOp) > 0.01) { it.slot.style.opacity = so.toFixed(3); it.lastSlotOp = so; }
+      }
+    }
+
+    this.frames++;
+    if (ts - this.fpsT > 500) { this.fps = Math.round((this.frames * 1000) / (ts - this.fpsT)); this.frames = 0; this.fpsT = ts; }
+    const showHud = P.showHud ?? true;
+    if (this.hud.box) {
+      const want = showHud ? 'flex' : 'none';
+      if (this.hud.box.style.display !== want) this.hud.box.style.display = want;
+    }
+    if (showHud && Math.abs(p - this.hudP) > 0.004) {
+      this.hudP = p;
+      const pct = Math.round(p * 100);
+      this.hud.val.textContent = pct + '%';
+      this.hud.fill.style.width = pct + '%';
+      this.hud.state.textContent = pct === 0 ? 'Floating' : pct === 100 ? 'Docked' : 'Docking';
+      this.hud.fps.textContent = (this.fps || 60) + ' fps';
+    } else if (showHud && this.hud.fps && this.frames === 0) {
+      this.hud.fps.textContent = (this.fps || 60) + ' fps';
+    }
+  }
+}
+</script>
+</body>
+</html>

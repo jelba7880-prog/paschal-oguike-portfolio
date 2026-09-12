@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400;1,6..72,500&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;1,6..96,400;1,6..96,500&amp;family=Archivo:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+  :root, [data-theme="light"] {
+    --paper: #faf7f1; --ink: #171310; --body: #3c362e; --muted: #71695e;
+    --faint: #8a8177; --rule: #e4ddd1; --chip: #dcd4c7; --wash: #f2ece1; --accent: #c2401a; --card: #fbf9f4;
+    --inv-paper: #171310; --inv-ink: #faf7f1; --inv-body: #b8afa3; --inv-muted: #a79e92;
+    --inv-faint: #a79e92; --inv-rule: #332e28; --inv-chip: #3a342d; --inv-wash: #221d19; --inv-accent: #e4653c;
+  }
+  [data-theme="dark"] {
+    --paper: #100e0c; --ink: #f4efe6; --body: #bdb5a9; --muted: #948b7e;
+    --faint: #857c70; --rule: #2a2521; --chip: #35302a; --wash: #1b1714; --accent: #e4653c; --card: #191512;
+    --inv-paper: #1c1815; --inv-ink: #f8f4ec; --inv-body: #c6bdb1; --inv-muted: #9a9185;
+    --inv-faint: #a79e92; --inv-rule: #35302a; --inv-chip: #3d3730; --inv-wash: #262019; --inv-accent: #e4653c;
+  }
+  [data-inverse] {
+    --paper: var(--inv-paper); --ink: var(--inv-ink); --body: var(--inv-body); --muted: var(--inv-muted);
+    --faint: var(--inv-faint); --rule: var(--inv-rule); --chip: var(--inv-chip); --wash: var(--inv-wash); --accent: var(--inv-accent);
+  }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--paper); color: var(--ink); -webkit-font-smoothing: antialiased; transition: background .45s ease, color .45s ease; }
+  a { color: var(--ink); text-decoration: none; }
+  a:hover { color: var(--accent); }
+  ::selection { background: #c2401a; color: #fff8ee; }
+  image-slot { --slot-bg: var(--wash); }
+  [data-theme="dark"] img[data-mono] { filter: invert(1); }
+  @keyframes omVeilIn {
+    from { opacity: 0; backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px); }
+    to   { opacity: 1; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+  }
+  @keyframes omPopSpring {
+    0%   { opacity: 0; transform: scale(.82) translateY(14px); }
+    42%  { opacity: 1; transform: scale(1.028) translateY(0); }
+    68%  { transform: scale(.992); }
+    84%  { transform: scale(1.004); }
+    100% { transform: scale(1); }
+  }
+  @keyframes omPopRise {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-pop-veil], [data-pop-panel], [data-pop-panel] > * { animation: none !important; }
+  }
+</style>
+</helmet>
+<div style="font-family:'Newsreader', Georgia, serif; background:var(--paper); color:var(--ink); min-height:100vh; transition:background .45s ease, color .45s ease">
+
+  <!-- Masthead -->
+  <header data-screen-label="Masthead" style="display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:16px 32px; padding:26px clamp(24px, 4.5vw, 64px); border-bottom:1px solid var(--rule)">
+    <a href="#top" style="font-size:20px; font-style:italic; font-weight:500; letter-spacing:0.01em">Paschal</a>
+    <nav style="display:flex; flex-wrap:wrap; gap:12px 30px; font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase">
+      <a href="#work" style="display:inline-flex; gap:7px; background-image:linear-gradient(currentColor,currentColor); background-size:0% 1px; background-repeat:no-repeat; background-position:0 100%; transition:background-size .3s ease" style-hover="background-size:100% 1px"><sc-if value="{{ navNumbers }}" hint-placeholder-val="{{ true }}"><span style="color:var(--accent)">02</span></sc-if>Work</a>
+      <a href="#process" style="display:inline-flex; gap:7px; background-image:linear-gradient(currentColor,currentColor); background-size:0% 1px; background-repeat:no-repeat; background-position:0 100%; transition:background-size .3s ease" style-hover="background-size:100% 1px"><sc-if value="{{ navNumbers }}" hint-placeholder-val="{{ true }}"><span style="color:var(--accent)">03</span></sc-if>Process</a>
+      <a href="#stack" style="display:inline-flex; gap:7px; background-image:linear-gradient(currentColor,currentColor); background-size:0% 1px; background-repeat:no-repeat; background-position:0 100%; transition:background-size .3s ease" style-hover="background-size:100% 1px"><sc-if value="{{ navNumbers }}" hint-placeholder-val="{{ true }}"><span style="color:var(--accent)">04</span></sc-if>Stack</a>
+      <a href="#record" style="display:inline-flex; gap:7px; background-image:linear-gradient(currentColor,currentColor); background-size:0% 1px; background-repeat:no-repeat; background-position:0 100%; transition:background-size .3s ease" style-hover="background-size:100% 1px"><sc-if value="{{ navNumbers }}" hint-placeholder-val="{{ true }}"><span style="color:var(--accent)">05</span></sc-if>Record</a>
+      <sc-if value="{{ showUses }}" hint-placeholder-val="{{ true }}">
+        <a href="#uses" style="display:inline-flex; gap:7px; background-image:linear-gradient(currentColor,currentColor); background-size:0% 1px; background-repeat:no-repeat; background-position:0 100%; transition:background-size .3s ease" style-hover="background-size:100% 1px"><sc-if value="{{ navNumbers }}" hint-placeholder-val="{{ true }}"><span style="color:var(--accent)">06</span></sc-if>Uses</a>
+      </sc-if>
+      <a href="#notes" style="display:inline-flex; gap:7px; background-image:linear-gradient(currentColor,currentColor); background-size:0% 1px; background-repeat:no-repeat; background-position:0 100%; transition:background-size .3s ease" style-hover="background-size:100% 1px"><sc-if value="{{ navNumbers }}" hint-placeholder-val="{{ true }}"><span style="color:var(--accent)">07</span></sc-if>Notes</a>
+      <a href="#contact" style="display:inline-flex; gap:7px; background-image:linear-gradient(currentColor,currentColor); background-size:0% 1px; background-repeat:no-repeat; background-position:0 100%; transition:background-size .3s ease" style-hover="background-size:100% 1px"><sc-if value="{{ navNumbers }}" hint-placeholder-val="{{ true }}"><span style="color:var(--accent)">08</span></sc-if>Contact</a>
+    </nav>
+    <div style="display:flex; align-items:center; gap:18px">
+      <sc-if value="{{ available }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex; align-items:center; gap:8px; font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); white-space:nowrap">
+          <span style="width:7px; height:7px; border-radius:50%; background:var(--accent)"></span>
+          Online — 2 project slots open
+        </div>
+      </sc-if>
+      <sc-if value="{{ showClock }}" hint-placeholder-val="{{ true }}">
+        <div style="font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--faint); white-space:nowrap">Lagos · {{ clock }}</div>
+      </sc-if>
+      <button type="button" onClick="{{ toggleTheme }}" aria-label="{{ themeAria }}" title="{{ themeAria }}" style="display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; padding:0; background:transparent; border:1px solid var(--rule); cursor:pointer; color:var(--muted); transition:border-color .3s ease, color .3s ease" style-hover="border-color:var(--ink); color:var(--ink)">
+        {{ themeIcon }}
+      </button>
+    </div>
+  </header>
+
+  <!-- Positioning -->
+  <section id="top" data-screen-label="Positioning" style="display:grid; grid-template-columns:repeat(12, 1fr); column-gap:24px; padding:clamp(64px, 10vw, 128px) clamp(24px, 4.5vw, 64px) clamp(64px, 9.5vw, 136px)">
+    <div data-reveal="" style="grid-column: 1 / 3; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); padding-top: 14px"><span style="color:var(--accent)">01</span>&nbsp;&nbsp;Positioning<sc-if value="{{ showSrc }}" hint-placeholder-val="{{ true }}"><div style="margin-top:10px; font-size:10px; letter-spacing:0.1em; text-transform:none; color:var(--faint)">src: static</div></sc-if></div>
+    <a data-reveal="" href="#work" style="grid-column:3 / 13; display:inline-flex; align-self:start; justify-self:start; align-items:center; gap:12px; margin-bottom:clamp(28px, 3vw, 44px); padding:7px 14px 7px 12px; border:1px solid var(--chip); font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--body); transition:border-color .3s ease, background .3s ease" style-hover="border-color:var(--ink); background:var(--wash); color:var(--ink)"><span style="width:6px; height:6px; border-radius:50%; background:var(--accent)"></span>Currently building — PZ Autos</a>
+    <h1 data-reveal="" style="grid-column:3 / 13; margin:0; font-weight:300; font-size:clamp(44px, 6.4vw, 96px); line-height:1.04; letter-spacing:-0.015em; text-wrap:balance">I architect the system.<br><em style="font-weight:400">The agents type the code.</em></h1>
+    <div data-reveal="" style="grid-column: 1 / 5; margin-top: clamp(32px, 4vw, 56px)">
+      <div style="width:100%; aspect-ratio:4/5">
+        <image-slot id="portrait" shape="rect" placeholder="Portrait — Paschal"></image-slot>
+      </div>
+      <div style="margin-top:10px; font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--faint)">PO / 2026</div>
+    </div>
+    <p data-reveal="" style="grid-column:6 / 12; margin:clamp(32px, 4vw, 56px) 0 0; font-size:clamp(18px, 1.6vw, 22px); line-height:1.55; color:var(--body); text-wrap:pretty">I'm a full-stack developer working across React, TypeScript, Node, and Postgres — end to end, from data model to UI. I like systems with real constraints: money that has to reconcile, inventory that has to stay accurate, forms that have to survive a non-technical user. Most of what's here came out of solving an actual operational problem for a business, not a tutorial.</p>
+    <sc-if value="{{ showIdentity }}" hint-placeholder-val="{{ true }}">
+      
+    </sc-if>
+  </section>
+
+  <!-- Metrics -->
+  
+
+  <!-- Now -->
+  <sc-if value="{{ showNow }}" hint-placeholder-val="{{ true }}">
+    <section id="now" data-screen-label="Now" style="background:var(--wash); margin-bottom:clamp(24px, 3vw, 56px); padding:clamp(28px, 3.5vw, 48px) clamp(24px, 4.5vw, 64px) clamp(40px, 5vw, 72px)">
+      <div data-reveal="" style="display:grid; grid-template-columns:repeat(12, 1fr); column-gap:24px; row-gap:32px">
+        <div style="grid-column:1 / 4; display:flex; flex-direction:column; gap:8px">
+          <div style="font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted)"><span style="color:var(--accent)">/</span>now</div>
+          <div style="font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.1em; color:var(--faint)">Updated Sept 2026</div>
+        </div>
+        <dl style="grid-column:4 / 13; margin:0; display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:32px">
+          <div>
+            <dt style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); padding-bottom:12px; border-bottom:1px solid var(--rule)">Building</dt>
+            <dd style="margin:14px 0 0; font-size:18px; line-height:1.5; color:var(--body); text-wrap:pretty">PZ Autos — my own dealership platform, and the one build with no deadline. Every pass makes it a little less of a private tool and a little more of something other dealers could run on.</dd>
+          </div>
+          <div>
+            <dt style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); padding-bottom:12px; border-bottom:1px solid var(--rule)">Thinking about</dt>
+            <dd style="margin:14px 0 0; font-size:18px; line-height:1.5; color:var(--body); text-wrap:pretty">How much of a spec an agent actually needs before more detail starts to hurt.</dd>
+          </div>
+          <div>
+            <dt style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); padding-bottom:12px; border-bottom:1px solid var(--rule)">Reading</dt>
+            <dd style="margin:14px 0 0; font-size:18px; line-height:1.5; color:var(--body); text-wrap:pretty">Designing Data-Intensive Applications — second pass, this time for the failure modes.</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- Selected work -->
+  <section id="work" data-screen-label="Selected Work" style="padding: 0 clamp(24px, 4.5vw, 64px) clamp(40px, 4.5vw, 72px); padding-top: clamp(40px, 4.5vw, 72px)">
+    <div data-reveal="" style="display:grid; grid-template-columns:repeat(12, 1fr); column-gap:24px; row-gap:20px; padding:20px 0 clamp(40px, 5vw, 64px); border-top:1px solid var(--ink)">
+      <div style="grid-column:1 / 3; font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted)"><span style="color:var(--accent)">02</span>&nbsp;&nbsp;Projects<sc-if value="{{ showSrc }}" hint-placeholder-val="{{ true }}"><div style="margin-top:10px; font-size:10px; letter-spacing:0.1em; text-transform:none; color:var(--faint)">src: static · vercel · supabase</div></sc-if></div>
+      
+      <p style="grid-column:10 / 13; margin:0; align-self:end; font-size:16px; line-height:1.6; color:var(--muted); text-wrap:pretty">Click any card for the technical detail: the problem, the decisions, the parts that broke.</p>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:18px">
+      <div data-reveal="" role="button" tabIndex="0" onClick="{{ openP1 }}" style="cursor:pointer; display:flex; flex-direction:column; background:var(--card); border:1px solid var(--rule); padding:22px 22px 20px; transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease" style-hover="transform:translateY(-6px); box-shadow:0 22px 44px -26px rgba(23,19,16,.5); border-color:var(--ink)">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+          <span style="font-family:'Space Mono', monospace; font-size:11px; color:var(--accent)">01</span>
+          <span style="font-family:'Space Mono', monospace; font-size:9px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); border:1px solid var(--accent); padding:3px 8px; white-space:nowrap">Live</span>
+        </div>
+        <h3 style="font-family:'Bodoni Moda', 'Newsreader', serif; margin:20px 0 8px; font-size:25px; font-weight:400; line-height:1.15; letter-spacing:-0.01em">Sterling Capital Exchange</h3>
+        <p style="font-family:'Archivo', system-ui, sans-serif; margin:0 0 22px; font-size:13.5px; line-height:1.5; color:var(--muted); text-wrap:pretty">A simulated trading platform built to actually hold up.</p>
+        <div style="flex:1"></div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; font-family:'Archivo', system-ui, sans-serif; font-size:10.5px; letter-spacing:0.04em; color:var(--body)">
+          <span style="border:1px solid var(--rule); padding:3px 7px">Next.js</span><span style="border:1px solid var(--rule); padding:3px 7px">Supabase</span><span style="border:1px solid var(--rule); padding:3px 7px">Vercel</span>
+        </div>
+        <div style="padding-top:14px; border-top:1px solid var(--rule); font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent)">Read&nbsp;&nbsp;→</div>
+      </div>
+      <div data-reveal="" role="button" tabIndex="0" onClick="{{ openP2 }}" style="cursor:pointer; display:flex; flex-direction:column; background:var(--card); border:1px solid var(--rule); padding:22px 22px 20px; transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease" style-hover="transform:translateY(-6px); box-shadow:0 22px 44px -26px rgba(23,19,16,.5); border-color:var(--ink)">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+          <span style="font-family:'Space Mono', monospace; font-size:11px; color:var(--accent)">02</span>
+          <span style="font-family:'Space Mono', monospace; font-size:9px; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); border:1px solid var(--rule); padding:3px 8px; white-space:nowrap">In progress</span>
+        </div>
+        <h3 style="font-family:'Bodoni Moda', 'Newsreader', serif; margin:20px 0 8px; font-size:25px; font-weight:400; line-height:1.15; letter-spacing:-0.01em">Freight &amp; Logistics Platform</h3>
+        <p style="font-family:'Archivo', system-ui, sans-serif; margin:0 0 22px; font-size:13.5px; line-height:1.5; color:var(--muted); text-wrap:pretty">Three apps, one shared backend, kept in sync.</p>
+        <div style="flex:1"></div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; font-family:'Archivo', system-ui, sans-serif; font-size:10.5px; letter-spacing:0.04em; color:var(--body)">
+          <span style="border:1px solid var(--rule); padding:3px 7px">Turborepo</span><span style="border:1px solid var(--rule); padding:3px 7px">Next.js</span><span style="border:1px solid var(--rule); padding:3px 7px">Postgres</span>
+        </div>
+        <div style="padding-top:14px; border-top:1px solid var(--rule); font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent)">Read&nbsp;&nbsp;→</div>
+      </div>
+      <div data-reveal="" role="button" tabIndex="0" onClick="{{ openP3 }}" style="cursor:pointer; display:flex; flex-direction:column; background:var(--card); border:1px solid var(--rule); padding:22px 22px 20px; transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease" style-hover="transform:translateY(-6px); box-shadow:0 22px 44px -26px rgba(23,19,16,.5); border-color:var(--ink)">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+          <span style="font-family:'Space Mono', monospace; font-size:11px; color:var(--accent)">03</span>
+          <span style="font-family:'Space Mono', monospace; font-size:9px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); border:1px solid var(--accent); padding:3px 8px; white-space:nowrap">In active use</span>
+        </div>
+        <h3 style="font-family:'Bodoni Moda', 'Newsreader', serif; margin:20px 0 8px; font-size:25px; font-weight:400; line-height:1.15; letter-spacing:-0.01em">Dealership Operations Platform</h3>
+        <p style="font-family:'Archivo', system-ui, sans-serif; margin:0 0 22px; font-size:13.5px; line-height:1.5; color:var(--muted); text-wrap:pretty">Inventory and CRM built around how the team already works.</p>
+        <div style="flex:1"></div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; font-family:'Archivo', system-ui, sans-serif; font-size:10.5px; letter-spacing:0.04em; color:var(--body)">
+          <span style="border:1px solid var(--rule); padding:3px 7px">React</span><span style="border:1px solid var(--rule); padding:3px 7px">Node</span><span style="border:1px solid var(--rule); padding:3px 7px">WhatsApp API</span>
+        </div>
+        <div style="padding-top:14px; border-top:1px solid var(--rule); font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent)">Read&nbsp;&nbsp;→</div>
+      </div>
+      <div data-reveal="" role="button" tabIndex="0" onClick="{{ openP4 }}" style="cursor:pointer; display:flex; flex-direction:column; background:var(--card); border:1px solid var(--rule); padding:22px 22px 20px; transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease" style-hover="transform:translateY(-6px); box-shadow:0 22px 44px -26px rgba(23,19,16,.5); border-color:var(--ink)">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px">
+          <span style="font-family:'Space Mono', monospace; font-size:11px; color:var(--accent)">04</span>
+          <span style="font-family:'Space Mono', monospace; font-size:9px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent); border:1px solid var(--accent); padding:3px 8px; white-space:nowrap">Live</span>
+        </div>
+        <h3 style="font-family:'Bodoni Moda', 'Newsreader', serif; margin:20px 0 8px; font-size:25px; font-weight:400; line-height:1.15; letter-spacing:-0.01em">Stonebridge Builders</h3>
+        <p style="font-family:'Archivo', system-ui, sans-serif; margin:0 0 22px; font-size:13.5px; line-height:1.5; color:var(--muted); text-wrap:pretty">A CMS that lives in git, not a subscription.</p>
+        <div style="flex:1"></div>
+        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; font-family:'Archivo', system-ui, sans-serif; font-size:10.5px; letter-spacing:0.04em; color:var(--body)">
+          <span style="border:1px solid var(--rule); padding:3px 7px">Next.js</span><span style="border:1px solid var(--rule); padding:3px 7px">Markdown</span><span style="border:1px solid var(--rule); padding:3px 7px">Netlify</span>
+        </div>
+        <div style="padding-top:14px; border-top:1px solid var(--rule); font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent)">Read&nbsp;&nbsp;→</div>
+      </div>
+    </div>
+
+    <sc-if value="{{ workOpen }}" hint-placeholder-val="{{ false }}">
+      <div data-pop-veil="" onClick="{{ closeWork }}" style="position:fixed; inset:0; z-index:90; display:flex; align-items:flex-start; justify-content:center; padding:clamp(16px, 4vh, 56px) clamp(12px, 3vw, 40px); background:rgba(23,19,16,.42); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); overflow:auto; animation:omVeilIn .34s cubic-bezier(.32,.72,0,1) both">
+        <div data-pop-panel="" onClick="{{ stopClick }}" style="width:100%; max-width:920px; background:var(--card); border:1px solid var(--rule); box-shadow:0 40px 90px -40px rgba(23,19,16,.6); transform-origin:center top; animation:omPopSpring .62s cubic-bezier(.2,.9,.24,1.02) both">
+
+          <div style="position:relative; border-bottom:1px solid var(--rule); animation:omPopRise .45s cubic-bezier(.32,.72,0,1) .06s both">
+            <sc-if value="{{ isP1 }}" hint-placeholder-val="{{ false }}"><image-slot id="work-shot-sterling" placeholder="Sterling Capital Exchange — trading dashboard screenshot" style="display: block; width: 100%; height: 100%"></image-slot></sc-if>
+            <sc-if value="{{ isP2 }}" hint-placeholder-val="{{ false }}"><image-slot id="work-shot-freight" placeholder="Freight platform — customer portal screenshot" style="display:block; width:100%; height:clamp(190px, 27vw, 330px)"></image-slot></sc-if>
+            <sc-if value="{{ isP3 }}" hint-placeholder-val="{{ false }}"><image-slot id="work-shot-dealership" placeholder="Dealership ops — mobile inventory screenshot" style="display: block; width: 100%; height: 100%"></image-slot></sc-if>
+            <sc-if value="{{ isP4 }}" hint-placeholder-val="{{ false }}"><image-slot id="work-shot-stonebridge" placeholder="Stonebridge Builders — marketing site screenshot" style="display: block; width: 100%; height: 100%"></image-slot></sc-if>
+            <button onClick="{{ closeWork }}" aria-label="Close" style="position:absolute; top:14px; right:14px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; background:var(--card); color:var(--ink); border:1px solid var(--rule); font-family:'Space Mono', monospace; font-size:14px; line-height:1; cursor:pointer; transition:background .25s ease, color .25s ease" style-hover="background:var(--ink); color:var(--card)">✕</button>
+          </div>
+
+          <sc-if value="{{ isP1 }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:clamp(24px, 3.4vw, 44px); animation:omPopRise .5s cubic-bezier(.32,.72,0,1) .14s both">
+              <div style="display: flex; align-items: center; gap: 14px; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); justify-content: flex-start"><span style="color:var(--accent)">01</span><span>Live</span><span style="flex:1; height:1px; background:var(--rule)"></span></div>
+              <h3 style="font-family: 'Bodoni Moda', 'Newsreader', serif; margin: 14px 0 20px; font-size: clamp(28px, 3.4vw, 44px); font-weight: 400; line-height: 1.1; letter-spacing: -0.015em; text-align: center">Sterling Capital Exchange</h3>
+              <p style="font-family: Archivo; margin: 0 0 clamp(28px, 3.4vw, 40px); font-size: clamp(17px, 1.7vw, 22px); font-style: italic; line-height: 1.5; color: var(--ink); text-wrap: pretty">Spot, forex, and binary options, all simulated but functioning like the real thing. The interface was the easy part. Getting price feeds, order matching, and multi-currency wallets to behave correctly under load took most of the work.</p>
+              <div style="display: flex; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: clamp(24px, 3vw, 40px); padding-top: 26px; border-top: 1px solid var(--rule); font-family: 'Archivo', system-ui, sans-serif; flex-direction: column">
+                <div>
+                  <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; text-align: center">The problem</div>
+                  <p style="margin:0; font-size:14.5px; line-height:1.65; color:var(--body); text-wrap:pretty">Most trading demos fake the numbers. I wanted the math to actually hold, so a forex position and a binary option settle against the same price feed without drifting apart.</p>
+                </div>
+                <div>
+                  <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; text-align: center">What broke</div>
+                  <ul style="margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:12px; font-size:14.5px; line-height:1.6; color:var(--body)">
+                    <li>Four separate wallet mutation bugs shared one root cause: balance updates weren't wrapped in database transactions, so a failure partway through left a wallet mutated with no rollback. Fixed once at the architecture level instead of patching each symptom.</li>
+                    <li>A debugging pass flagged old options-trading code as an active bug. It was dead code left over from a feature removal, reachable through live routes but never executed. Pattern-matching without checking reachability delayed the real fix.</li>
+                    <li>Cron settlement returned 401 errors for days. Three unrelated causes stacked: environment variables set for Development but not Production, a missing 'Bearer' prefix expected by the auth check, and a Sentry config flag silently interfering with the request.</li>
+                    <li>All exchange price fetches (Bybit, Binance, CoinGecko) get blocked outright by the hosting environment, so everything routes through a Cloudflare Worker relay instead of calling those APIs directly.</li>
+                  </ul>
+                </div>
+              </div>
+              <div style="margin-top:clamp(26px, 3vw, 36px); padding-top:26px; border-top:1px solid var(--rule); font-family:'Archivo', system-ui, sans-serif">
+                <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; text-align: center">Decisions</div>
+                <ul style="margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:10px; font-size:14.5px; line-height:1.6; color:var(--body)">
+                  <li>Used Supabase instead of a custom backend to keep auth, realtime, and Postgres in one place. Gave up some flexibility for faster iteration.</li>
+                  <li>Built the wallet as an append-only transaction log instead of mutable balances, so every position stays auditable.</li>
+                  <li>Currency handling became its own subsystem. Supporting multiple locales without breaking settlement precision took more care than expected.</li>
+                </ul>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; margin-top:clamp(26px, 3vw, 36px); padding-top:22px; border-top:1px solid var(--rule)">
+                <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px">
+                  <span title="Next.js" style="display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border:1px solid var(--rule)"><img data-mono="" src="https://cdn.simpleicons.org/nextdotjs" alt="Next.js" width="17" height="17" style="display:block"></span>
+                  <span title="Supabase" style="display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/supabase" alt="Supabase" width="17" height="17" style="display:block"></span>
+                  <span title="Vercel" style="display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border:1px solid var(--rule)"><img data-mono="" src="https://cdn.simpleicons.org/vercel" alt="Vercel" width="17" height="17" style="display:block"></span>
+                </div>
+                <div style="display:flex; align-items:center; flex-wrap:wrap; gap:12px 20px">
+                  <span style="display:inline-flex; align-items:center; gap:8px; font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted)"><img src="https://cdn.simpleicons.org/github/8a8177" alt="GitHub" width="13" height="13" style="display:block">Codebase is private</span>
+                  <a href="#" style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent)">View live site&nbsp;&nbsp;→</a>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isP2 }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:clamp(24px, 3.4vw, 44px); animation:omPopRise .5s cubic-bezier(.32,.72,0,1) .14s both">
+              <div style="display:flex; align-items:center; gap:14px; font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted)"><span style="color:var(--accent)">02</span><span>In progress</span><span style="flex:1; height:1px; background:var(--rule)"></span></div>
+              <h3 style="font-family:'Bodoni Moda', 'Newsreader', serif; margin:14px 0 20px; font-size:clamp(28px, 3.4vw, 44px); font-weight:400; line-height:1.1; letter-spacing:-0.015em">Meridian Freight<br></h3>
+              <p style="font-family: Archivo; margin: 0 0 clamp(28px, 3.4vw, 40px); font-size: clamp(17px, 1.7vw, 22px); font-style: italic; line-height: 1.5; color: var(--ink); text-wrap: pretty">A freight-forwarding platform built from scratch, modeled on enterprise players in the space. Split into a public marketing site, a customer portal, and an internal admin app, all sharing one monorepo and one data layer.</p>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:clamp(24px, 3vw, 40px); padding-top:26px; border-top:1px solid var(--rule); font-family:'Archivo', system-ui, sans-serif">
+                <div>
+                  <div style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); margin-bottom:12px">The problem</div>
+                  <p style="margin:0; font-size:14.5px; line-height:1.65; color:var(--body); text-wrap:pretty">Freight software has to serve prospects, shipping customers, and internal ops at once, without the three surfaces drifting into separate codebases.</p>
+                </div>
+                <div>
+                  <div style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); margin-bottom:12px">What broke</div>
+                  <ul style="margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:12px; font-size:14.5px; line-height:1.6; color:var(--body)">
+                    <li>Preview deployments started failing consistently once the database's preview-branch count hit its plan limit. Production was unaffected, but every feature branch broke until old branches were cleaned up manually. Still a recurring maintenance task.</li>
+                    <li>An automated attribution-suppression config looked correct in review but silently failed, because two keys were the wrong type: booleans instead of empty strings. A manual check caught it, which led to a second independent safeguard rather than trusting the config alone.</li>
+                    <li>Trusting a coding agent's summary of a pull request almost let through a change built on an outdated base, which would have deleted unrelated content on merge. Every diff now gets checked directly against main before approval.</li>
+                    <li>Google Fonts' next/font integration kept failing during CI builds, since it fetches fonts at build time and CI environments don't always have reliable access. Switched to locally bundled fonts, trading setup convenience for build reliability.</li>
+                  </ul>
+                </div>
+              </div>
+              <div style="margin-top:clamp(26px, 3vw, 36px); padding-top:26px; border-top:1px solid var(--rule); font-family:'Archivo', system-ui, sans-serif">
+                <div style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); margin-bottom:12px">Decisions</div>
+                <ul style="margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:10px; font-size:14.5px; line-height:1.6; color:var(--body)">
+                  <li>Turborepo monorepo with shared UI and type packages, so all three apps stay consistent without copy-pasting components.</li>
+                  <li>Schema decisions made early and carefully. Freight data like shipments, containers, and customs records is hard to restructure later.</li>
+                  <li>Architecture reviewed before implementation each time, rather than worked out live in the codebase.</li>
+                </ul>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; margin-top:clamp(26px, 3vw, 36px); padding-top:22px; border-top:1px solid var(--rule)">
+                <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px">
+                  <span title="Turborepo" style="display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/turborepo" alt="Turborepo" width="17" height="17" style="display:block"></span>
+                  <span title="Next.js" style="display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border:1px solid var(--rule)"><img data-mono="" src="https://cdn.simpleicons.org/nextdotjs" alt="Next.js" width="17" height="17" style="display:block"></span>
+                  <span title="Postgres" style="display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/postgresql" alt="Postgres" width="17" height="17" style="display:block"></span>
+                </div>
+                <div style="display:flex; align-items:center; flex-wrap:wrap; gap:12px 20px">
+                  <span style="display:inline-flex; align-items:center; gap:8px; font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted)"><img src="https://cdn.simpleicons.org/github/8a8177" alt="GitHub" width="13" height="13" style="display:block">Codebase is private</span>
+                  <a href="#" style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent)">View live site&nbsp;&nbsp;→</a>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isP3 }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:clamp(24px, 3.4vw, 44px); animation:omPopRise .5s cubic-bezier(.32,.72,0,1) .14s both">
+              <div style="display:flex; align-items:center; gap:14px; font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted)"><span style="color:var(--accent)">03</span><span>In active use</span><span style="flex:1; height:1px; background:var(--rule)"></span></div>
+              <h3 style="font-family: 'Bodoni Moda', 'Newsreader', serif; margin: 14px 0 20px; font-size: clamp(28px, 3.4vw, 44px); font-weight: 400; line-height: 1.1; letter-spacing: -0.015em; text-align: center">Dealership Operations Platform</h3>
+              <p style="font-family: Archivo; margin: 0 0 clamp(28px, 3.4vw, 40px); font-size: clamp(17px, 1.7vw, 22px); font-style: italic; line-height: 1.5; color: var(--ink); text-wrap: pretty">A mobile-first operations hub for a Lagos luxury car dealership, built as an embedded part of the team rather than a freelance project. Inventory tracking, a CRM built around WhatsApp, and deal sheets generated automatically.</p>
+              <div style="display: flex; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: clamp(24px, 3vw, 40px); padding-top: 26px; border-top: 1px solid var(--rule); font-family: 'Archivo', system-ui, sans-serif; flex-direction: column; justify-content: flex-start; align-items: stretch">
+                <div>
+                  <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; text-align: center">The problem</div>
+                  <p style="margin:0; font-size:14.5px; line-height:1.65; color:var(--body); text-wrap:pretty">The dealership's real workflow lived in WhatsApp threads and paper deal sheets. Software that ignored that would just sit unused.</p>
+                </div>
+                <div>
+                  <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; text-align: center">What broke</div>
+                  <ul style="margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:12px; font-size:14.5px; line-height:1.6; color:var(--body)">
+                    <li>A code audit turned up a silent exchange-rate bug that could put ₦0 or NaN into deal sheet PDFs with no visible error. It had been sitting in production undetected, since nothing was actually crashing.</li>
+                    <li>The offline and installable app layer broke completely after a framework upgrade. Two popular PWA libraries were both incompatible with the new default build system, so the fix meant switching to a different build approach entirely.</li>
+                    <li>Car creation wasn't atomic, so a failure partway through could leave a partial record in the database. Same root cause as the Sterling wallet bugs: a write that needed to be all-or-nothing wasn't. Recognizing the pattern the second time meant fixing it faster.</li>
+                    <li>Deleted or hidden cars were still reachable through a public image URL, meaning inventory that was supposed to be private stayed viewable to anyone with the link.</li>
+                  </ul>
+                </div>
+              </div>
+              <div style="margin-top:clamp(26px, 3vw, 36px); padding-top:26px; border-top:1px solid var(--rule); font-family:'Archivo', system-ui, sans-serif">
+                <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; text-align: center">Decisions</div>
+                <ul style="margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:10px; font-size:14.5px; line-height:1.6; color:var(--body)">
+                  <li>Built the CRM around WhatsApp instead of a conventional inbox, matching the channel the sales team already relied on.</li>
+                  <li>Chose a PWA over a native app, since install friction on the team's phones mattered more than native features.</li>
+                  <li>Deal sheets now pull directly from live inventory, removing a manual step that used to cause errors.</li>
+                </ul>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; margin-top:clamp(26px, 3vw, 36px); padding-top:22px; border-top:1px solid var(--rule)">
+                <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px">
+                  <span title="React" style="display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/react" alt="React" width="17" height="17" style="display:block"></span>
+                  <span title="Node" style="display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/nodedotjs" alt="Node" width="17" height="17" style="display:block"></span>
+                  <span title="WhatsApp API" style="display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/whatsapp" alt="WhatsApp API" width="17" height="17" style="display:block"></span>
+                </div>
+                <div style="display:flex; align-items:center; flex-wrap:wrap; gap:12px 20px">
+                  <span style="display:inline-flex; align-items:center; gap:8px; font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted)"><img src="https://cdn.simpleicons.org/github/8a8177" alt="GitHub" width="13" height="13" style="display:block">Codebase is private</span>
+                  <a href="#" style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent)">View live site&nbsp;&nbsp;→</a>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ isP4 }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:clamp(24px, 3.4vw, 44px); animation:omPopRise .5s cubic-bezier(.32,.72,0,1) .14s both">
+              <div style="display:flex; align-items:center; gap:14px; font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted)"><span style="color:var(--accent)">04</span><span>Live</span><span style="flex:1; height:1px; background:var(--rule)"></span></div>
+              <h3 style="font-family: 'Bodoni Moda', 'Newsreader', serif; margin: 14px 0 20px; font-size: clamp(28px, 3.4vw, 44px); font-weight: 400; line-height: 1.1; letter-spacing: -0.015em; text-align: center">Stonebridge Builders</h3>
+              <p style="font-family: Archivo; margin: 0 0 clamp(28px, 3.4vw, 40px); font-size: clamp(17px, 1.7vw, 22px); font-style: italic; line-height: 1.5; color: var(--ink); text-wrap: pretty">Marketing site, recruiting pipeline, and content management for a general contracting company operating across Pennsylvania, North Carolina, and Illinois. Content lives in the repo, with no database and no monthly CMS cost.</p>
+              <div style="display: flex; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: clamp(24px, 3vw, 40px); padding-top: 26px; border-top: 1px solid var(--rule); font-family: 'Archivo', system-ui, sans-serif; flex-direction: column">
+                <div>
+                  <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; text-align: center">The problem</div>
+                  <p style="margin:0; font-size:14.5px; line-height:1.65; color:var(--body); text-wrap:pretty">A small contracting company editing a few pages a month doesn't need a headless CMS subscription to do it.</p>
+                </div>
+                <div>
+                  <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; text-align: center">What broke</div>
+                  <ul style="margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:12px; font-size:14.5px; line-height:1.6; color:var(--body)">
+                    <li>SSL certificate renewal failed, and the certificate settings looked completely correct. The real cause was a nameserver mismatch between the hosting provider and the domain registrar, which meant the certificate authority couldn't verify the domain at all.</li>
+                  </ul>
+                </div>
+              </div>
+              <div style="margin-top:clamp(26px, 3vw, 36px); padding-top:26px; border-top:1px solid var(--rule); font-family:'Archivo', system-ui, sans-serif">
+                <div style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); margin-bottom:12px">Decisions</div>
+                <ul style="margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:10px; font-size:14.5px; line-height:1.6; color:var(--body)">
+                  <li>Content stored as markdown in the repo, edited directly or through a lightweight git-based editor, with no database dependency.</li>
+                  <li>Static generation for speed and zero server cost on a site that's mostly marketing pages.</li>
+                  <li>Recruiting and hiring documents pull from the same content pipeline, keeping job postings and the site in sync.</li>
+                </ul>
+              </div>
+              <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:16px; margin-top:clamp(26px, 3vw, 36px); padding-top:22px; border-top:1px solid var(--rule)">
+                <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px">
+                  <span title="Next.js" style="display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border:1px solid var(--rule)"><img data-mono="" src="https://cdn.simpleicons.org/nextdotjs" alt="Next.js" width="17" height="17" style="display:block"></span>
+                  <span title="Markdown" style="display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border:1px solid var(--rule)"><img data-mono="" src="https://cdn.simpleicons.org/markdown" alt="Markdown" width="17" height="17" style="display:block"></span>
+                  <span title="Netlify" style="display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/netlify" alt="Netlify" width="17" height="17" style="display:block"></span>
+                </div>
+                <div style="display:flex; align-items:center; flex-wrap:wrap; gap:12px 20px">
+                  <span style="display:inline-flex; align-items:center; gap:8px; font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted)"><img src="https://cdn.simpleicons.org/github/8a8177" alt="GitHub" width="13" height="13" style="display:block">Codebase is private</span>
+                  <a href="#" style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent)">View live site&nbsp;&nbsp;→</a>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+        </div>
+      </div>
+    </sc-if>
+
+  </section>
+
+  <!-- Process -->
+  <section id="process" data-screen-label="Process" style="background:var(--wash); margin-bottom:clamp(24px, 3vw, 56px); padding:clamp(28px, 3.5vw, 48px) clamp(24px, 4.5vw, 64px) clamp(40px, 5vw, 72px)">
+    <div data-reveal="" style="display:grid; grid-template-columns:repeat(12, 1fr); column-gap:24px; row-gap:20px; padding:20px 0 clamp(48px, 6vw, 72px); border-top:1px solid var(--ink)">
+      <div style="grid-column:1 / 3; font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted)"><span style="color:var(--accent)">03</span>&nbsp;&nbsp;How I work<sc-if value="{{ showSrc }}" hint-placeholder-val="{{ true }}"><div style="margin-top:10px; font-size:10px; letter-spacing:0.1em; text-transform:none; color:var(--faint)">src: static</div></sc-if></div>
+      <h2 style="grid-column:3 / 10; margin:0; font-weight:300; font-size:clamp(30px, 3.4vw, 50px); line-height:1.12; letter-spacing:-0.01em">Three convictions the whole method rests on.</h2>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(12, 1fr); column-gap:24px; row-gap:48px">
+      <p data-reveal="" style="grid-column:1 / 6; margin:0; font-size:clamp(24px, 2.4vw, 34px); line-height:1.3; font-weight:300; text-wrap:balance">Typing was never the bottleneck. <em>Judgment is.</em> The work is deciding what to build, constraining how it's built, and refusing what isn't good enough.</p>
+      <ol style="grid-column:7 / 13; margin:0; padding:0; list-style:none; display:flex; flex-direction:column">
+        <li data-reveal="" style="display:grid; grid-template-columns:56px 1fr; gap:20px; padding:26px 0; border-top:1px solid var(--rule)">
+          <span style="font-family:'Space Mono', monospace; font-size:12px; color:var(--accent); padding-top:7px">01</span>
+          <div><h3 style="margin:0 0 10px; font-size:22px; font-weight:400; font-style:italic; line-height:1.25">Find the real cause.</h3><p style="margin:0; font-size:15px; line-height:1.6; color:var(--body); text-wrap:pretty">If a bug shows up once, I check whether the same pattern is quietly breaking something else before I touch code — not just patch what's in front of me.</p></div>
+        </li>
+        <li data-reveal="" style="display:grid; grid-template-columns:56px 1fr; gap:20px; padding:26px 0; border-top:1px solid var(--rule)">
+          <span style="font-family:'Space Mono', monospace; font-size:12px; color:var(--accent); padding-top:7px">02</span>
+          <div><h3 style="margin:0 0 10px; font-size:22px; font-weight:400; font-style:italic; line-height:1.25">Design for the business, not the template.</h3><p style="margin:0; font-size:15px; line-height:1.6; color:var(--body); text-wrap:pretty">On Sterling Capital Exchange that meant getting settlement and currency handling right before adding anything on top of it. On Stonebridge and Polanco, it meant building around how the business actually runs day to day, not how a generic CRUD app assumes it should.</p></div>
+        </li>
+        <li data-reveal="" style="display:grid; grid-template-columns:56px 1fr; gap:20px; padding:26px 0; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule)">
+          <span style="font-family:'Space Mono', monospace; font-size:12px; color:var(--accent); padding-top:7px">03</span>
+          <div><h3 style="margin:0 0 10px; font-size:22px; font-weight:400; font-style:italic; line-height:1.25">Simple first, robust when it's earned.</h3><p style="margin:0; font-size:15px; line-height:1.6; color:var(--body); text-wrap:pretty">I'd rather ship the maintainable version and harden it later than reach for a clever abstraction before the problem asks for it.</p></div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Technical skills -->
+  <section id="stack" data-screen-label="Technical Skills" style="padding:0 clamp(24px, 4.5vw, 64px) clamp(64px, 9.5vw, 136px)">
+    <div data-reveal="" style="display:grid; grid-template-columns:repeat(12, 1fr); column-gap:24px; row-gap:20px; padding:20px 0 clamp(40px, 5vw, 64px); border-top:1px solid var(--ink)">
+      <div style="grid-column:1 / 3; font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted)"><span style="color:var(--accent)">04</span>&nbsp;&nbsp;Technical skills</div>
+      
+      <p style="grid-column:10 / 13; margin:0; align-self:end; font-size:16px; line-height:1.6; color:var(--muted); text-wrap:pretty">A bunch of things I know&nbsp;</p>
+    </div>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(290px, 1fr)); gap:18px">
+
+      <div data-reveal="" style="background:var(--card); border:1px solid var(--rule); padding:22px">
+        <div style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); padding-bottom:14px; border-bottom:1px solid var(--rule)">Languages</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(76px, 1fr)); gap:10px; margin-top:16px; font-family:'Space Mono', monospace; font-size:9px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); text-align:center">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/javascript" alt="" width="24" height="24" style="display:block">JavaScript</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/typescript" alt="" width="24" height="24" style="display:block">TypeScript</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/python" alt="" width="24" height="24" style="display:block">Python</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/c" alt="" width="24" height="24" style="display:block">C</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/cplusplus" alt="" width="24" height="24" style="display:block">C++</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img data-mono="" src="https://cdn.simpleicons.org/openjdk" alt="" width="24" height="24" style="display:block">Java</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/html5" alt="" width="24" height="24" style="display:block">HTML5</div>
+        </div>
+      </div>
+
+      <div data-reveal="" style="background:var(--card); border:1px solid var(--rule); padding:22px">
+        <div style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); padding-bottom:14px; border-bottom:1px solid var(--rule)">Frontend</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(76px, 1fr)); gap:10px; margin-top:16px; font-family:'Space Mono', monospace; font-size:9px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); text-align:center">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/react" alt="" width="24" height="24" style="display:block">React</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img data-mono="" src="https://cdn.simpleicons.org/nextdotjs" alt="" width="24" height="24" style="display:block">Next.js</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/tailwindcss" alt="" width="24" height="24" style="display:block">Tailwind</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/vite" alt="" width="24" height="24" style="display:block">Vite</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/css" alt="" width="24" height="24" style="display:block">CSS</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/figma" alt="" width="24" height="24" style="display:block">Figma</div>
+        </div>
+      </div>
+
+      <div data-reveal="" style="background:var(--card); border:1px solid var(--rule); padding:22px">
+        <div style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); padding-bottom:14px; border-bottom:1px solid var(--rule)">Backend</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(76px, 1fr)); gap:10px; margin-top:16px; font-family:'Space Mono', monospace; font-size:9px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); text-align:center">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/nodedotjs" alt="" width="24" height="24" style="display:block">Node.js</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img data-mono="" src="https://cdn.simpleicons.org/express" alt="" width="24" height="24" style="display:block">Express</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/fastapi" alt="" width="24" height="24" style="display:block">FastAPI</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img data-mono="" src="https://cdn.simpleicons.org/flask" alt="" width="24" height="24" style="display:block">Flask</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/graphql" alt="" width="24" height="24" style="display:block">GraphQL</div>
+        </div>
+      </div>
+
+      <div data-reveal="" style="background:var(--card); border:1px solid var(--rule); padding:22px">
+        <div style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); padding-bottom:14px; border-bottom:1px solid var(--rule)">Database &amp; cloud</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(76px, 1fr)); gap:10px; margin-top:16px; font-family:'Space Mono', monospace; font-size:9px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); text-align:center">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/postgresql" alt="" width="24" height="24" style="display:block">Postgres</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/mongodb" alt="" width="24" height="24" style="display:block">MongoDB</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/redis" alt="" width="24" height="24" style="display:block">Redis</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/supabase" alt="" width="24" height="24" style="display:block">Supabase</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/mysql" alt="" width="24" height="24" style="display:block">MySQL</div>
+        </div>
+      </div>
+
+      <div data-reveal="" style="background:var(--card); border:1px solid var(--rule); padding:22px">
+        <div style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); padding-bottom:14px; border-bottom:1px solid var(--rule)">DevOps &amp; tools</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(76px, 1fr)); gap:10px; margin-top:16px; font-family:'Space Mono', monospace; font-size:9px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); text-align:center">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/docker" alt="" width="24" height="24" style="display:block">Docker</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/git" alt="" width="24" height="24" style="display:block">Git</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img data-mono="" src="https://cdn.simpleicons.org/github" alt="" width="24" height="24" style="display:block">GitHub</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img data-mono="" src="https://cdn.simpleicons.org/linux" alt="" width="24" height="24" style="display:block">Linux</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img data-mono="" src="https://cdn.simpleicons.org/vercel" alt="" width="24" height="24" style="display:block">Vercel</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img data-mono="" src="https://cdn.simpleicons.org/gnubash" alt="" width="24" height="24" style="display:block">Bash</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg" alt="" width="24" height="24" style="display:block">AWS</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/vscodium/1f9cf0" alt="" width="24" height="24" style="display:block">VS Code</div>
+        </div>
+      </div>
+
+      <div data-reveal="" style="background:var(--card); border:1px solid var(--rule); padding:22px">
+        <div style="font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--accent); padding-bottom:14px; border-bottom:1px solid var(--rule)">AI &amp; core</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(76px, 1fr)); gap:10px; margin-top:16px; font-family:'Space Mono', monospace; font-size:9px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); text-align:center">
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/pytorch" alt="" width="24" height="24" style="display:block">PyTorch</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/opencv" alt="" width="24" height="24" style="display:block">OpenCV</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/scikitlearn" alt="" width="24" height="24" style="display:block">scikit-learn</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img data-mono="" src="https://cdn.jsdelivr.net/npm/simple-icons@11.14.0/icons/openai.svg" alt="" width="24" height="24" style="display:block">ChatGPT</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/claude" alt="" width="24" height="24" style="display:block">Claude</div>
+          <div style="display:flex; flex-direction:column; align-items:center; gap:9px; padding:14px 6px; border:1px solid var(--rule)"><img src="https://cdn.simpleicons.org/googlegemini" alt="" width="24" height="24" style="display:block">Gemini</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Track record -->
+  <section id="record" data-screen-label="Track Record" style="padding:0 clamp(24px, 4.5vw, 64px) clamp(40px, 4.5vw, 72px)">
+    <div data-reveal="" style="display:grid; grid-template-columns:repeat(12, 1fr); column-gap:24px; row-gap:20px; padding:20px 0 clamp(40px, 5vw, 64px); border-top:1px solid var(--ink)">
+      <div style="grid-column:1 / 3; font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted)"><span style="color:var(--accent)">05</span>&nbsp;&nbsp;Track record<sc-if value="{{ showSrc }}" hint-placeholder-val="{{ true }}"><div style="margin-top:10px; font-size:10px; letter-spacing:0.1em; text-transform:none; color:var(--faint)">src: static · api.github.com</div></sc-if></div>
+      <h2 style="grid-column:3 / 10; margin:0; font-weight:300; font-size:clamp(30px, 3.4vw, 50px); line-height:1.12; letter-spacing:-0.01em">The work behind the work.</h2>
+      <p style="grid-column:10 / 13; margin:0; align-self:end; font-size:16px; line-height:1.6; color:var(--muted); text-wrap:pretty">A plain record of where the practice came from.</p>
+    </div>
+    <ol style="margin:0; padding:0; list-style:none">
+      <li data-reveal="" style="display:grid; grid-template-columns:repeat(12, 1fr); column-gap:24px; row-gap:12px; padding:26px 0; border-top:1px solid var(--rule)">
+        <div style="grid-column:1 / 3; font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.12em; color:var(--muted)">2025 —</div>
+        <div style="grid-column:3 / 8">
+          <h3 style="margin:0 0 6px; font-size:22px; font-weight:500">Independent — full-stack &amp; systems architect</h3>
+          <p style="margin:0; font-size:15px; line-height:1.6; color:var(--body); text-wrap:pretty">Building products for small businesses and founders who need the whole thing, not a ticket queue: schema, app, deploy, handover.</p>
+        </div>
+        <div style="grid-column:9 / 13; display:flex; flex-wrap:wrap; gap:8px; align-content:start; font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted)">
+          <span style="padding:5px 10px; border:1px solid var(--chip)">Product engineering</span>
+          <span style="padding:5px 10px; border:1px solid var(--chip)">Next.js</span>
+          <span style="padding:5px 10px; border:1px solid var(--chip)">Supabase</span>
+        </div>
+      </li>
+      <li data-reveal="" style="display:grid; grid-template-columns:repeat(12, 1fr); column-gap:24px; row-gap:12px; padding:26px 0; border-top:1px solid var(--rule)">
+        <div style="grid-column:1 / 3; font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.12em; color:var(--muted)">2026</div>
+        <div style="grid-column:3 / 8">
+          <h3 style="margin:0 0 6px; font-size:22px; font-weight:500">PZ Autos — ongoing</h3>
+          <p style="margin:0; font-size:15px; line-height:1.6; color:var(--body); text-wrap:pretty">The dealership platform I keep extending — inventory, listings and showcase links — with an eye on opening it to other dealers beyond my own lot.</p>
+        </div>
+        <div style="grid-column:9 / 13; display:flex; flex-wrap:wrap; gap:8px; align-content:start; font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted)">
+          <span style="padding:5px 10px; border:1px solid var(--chip)">Local-first</span>
+          <span style="padding:5px 10px; border:1px solid var(--chip)">Postgres</span>
+          <span style="padding:5px 10px; border:1px solid var(--chip)">TypeScript</span>
+        </div>
+      </li>
+      <li data-reveal="" style="display:grid; grid-template-columns:repeat(12, 1fr); column-gap:24px; row-gap:12px; padding:26px 0; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule)">
+        <div style="grid-column:1 / 3; font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.12em; color:var(--muted)">2023 — 2025</div>
+        <div style="grid-column:3 / 8">
+          <h3 style="margin:0 0 6px; font-size:22px; font-weight:500">Agency &amp; contract work</h3>
+          <p style="margin:0; font-size:15px; line-height:1.6; color:var(--body); text-wrap:pretty">Marketing sites, dashboards, and integrations under real deadlines — where the habit of specifying before building started paying for itself.</p>
+        </div>
+        <div style="grid-column:9 / 13; display:flex; flex-wrap:wrap; gap:8px; align-content:start; font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted)">
+          <span style="padding:5px 10px; border:1px solid var(--chip)">React</span>
+          <span style="padding:5px 10px; border:1px solid var(--chip)">Node</span>
+          <span style="padding:5px 10px; border:1px solid var(--chip)">Client delivery</span>
+        </div>
+      </li>
+    </ol>
+    <sc-if value="{{ showGithub }}" hint-placeholder-val="{{ true }}">
+      <div data-reveal="" style="display:grid; grid-template-columns:repeat(12, 1fr); column-gap:24px; row-gap:20px; padding-top:clamp(40px, 5vw, 56px)">
+        <div style="grid-column:1 / 3; font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted)">Commit rhythm<div style="margin-top:8px; font-size:10px; letter-spacing:0.1em; text-transform:none; color:var(--faint)">last 13 weeks</div></div>
+        <div style="grid-column:3 / 11">
+          <div style="display:grid; grid-auto-flow:column; grid-template-rows:repeat(7, 1fr); gap:3px">
+            <sc-for list="{{ ghCells }}" as="cell" hint-placeholder-count="91">
+              <div title="{{ cell.label }}" style="{{ cell.style }}"></div>
+            </sc-for>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-top:10px; font-family:'Space Mono', monospace; font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--faint)">
+            <sc-for list="{{ ghMonths }}" as="m" hint-placeholder-count="3">
+              <span>{{ m }}</span>
+            </sc-for>
+          </div>
+        </div>
+        <div style="grid-column:11 / 13; align-self:end; text-align:right; font-family:'Space Mono', monospace; font-size:11px; color:var(--muted)">{{ ghTotal }} commits</div>
+      </div>
+    </sc-if>
+  </section>
+
+  <!-- Uses -->
+  <sc-if value="{{ showUses }}" hint-placeholder-val="{{ true }}">
+    <section id="uses" data-screen-label="Uses" style="padding:0 clamp(24px, 4.5vw, 64px) clamp(64px, 9.5vw, 136px)">
+      <div data-reveal="" style="display:grid; grid-template-columns:repeat(12, 1fr); column-gap:24px; row-gap:20px; padding:20px 0 clamp(40px, 5vw, 64px); border-top:1px solid var(--ink)">
+        <div style="grid-column:1 / 3; font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted)"><span style="color:var(--accent)">06</span>&nbsp;&nbsp;Uses<sc-if value="{{ showSrc }}" hint-placeholder-val="{{ true }}"><div style="margin-top:10px; font-size:10px; letter-spacing:0.1em; text-transform:none; color:var(--faint)">src: static · /etc</div></sc-if></div>
+        <h2 style="grid-column:3 / 10; margin:0; font-weight:300; font-size:clamp(30px, 3.4vw, 50px); line-height:1.12; letter-spacing:-0.01em">The rig, kept boring on purpose.</h2>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:clamp(24px, 4vw, 56px)">
+        <div data-reveal="">
+          <div style="display:flex; align-items:baseline; justify-content:space-between; gap:12px; padding-bottom:14px; border-bottom:1px solid var(--ink); font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted)"><span>Hardware</span><span style="color:var(--accent)">5</span></div>
+          <dl style="margin:0">
+            <div style="display:flex; justify-content:space-between; gap:16px; padding:14px 0; border-bottom:1px solid var(--rule)"><dt style="font-size:16px">MacBook Pro M3</dt><dd style="margin:0; font-family:'Space Mono', monospace; font-size:11px; color:var(--muted)">36GB</dd></div>
+            <div style="display:flex; justify-content:space-between; gap:16px; padding:14px 0; border-bottom:1px solid var(--rule)"><dt style="font-size:16px">LG UltraFine</dt><dd style="margin:0; font-family:'Space Mono', monospace; font-size:11px; color:var(--muted)">27" 4K</dd></div>
+            <div style="display:flex; justify-content:space-between; gap:16px; padding:14px 0; border-bottom:1px solid var(--rule)"><dt style="font-size:16px">Keychron K3</dt><dd style="margin:0; font-family:'Space Mono', monospace; font-size:11px; color:var(--muted)">Low profile</dd></div>
+            <div style="display:flex; justify-content:space-between; gap:16px; padding:14px 0; border-bottom:1px solid var(--rule)"><dt style="font-size:16px">iPhone 15</dt><dd style="margin:0; font-family:'Space Mono', monospace; font-size:11px; color:var(--muted)">Test device</dd></div>
+            <div style="display:flex; justify-content:space-between; gap:16px; padding:14px 0; border-bottom:1px solid var(--rule)"><dt style="font-size:16px">Anker UPS</dt><dd style="margin:0; font-family:'Space Mono', monospace; font-size:11px; color:var(--muted)">Lagos tax</dd></div>
+          </dl>
+        </div>
+        <div data-reveal="">
+          <div style="display:flex; align-items:baseline; justify-content:space-between; gap:12px; padding-bottom:14px; border-bottom:1px solid var(--ink); font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted)"><span>Software</span><span style="color:var(--accent)">4</span></div>
+          <dl style="margin:0">
+            <div style="display:flex; justify-content:space-between; gap:16px; padding:14px 0; border-bottom:1px solid var(--rule)"><dt style="font-size:16px">Cursor</dt><dd style="margin:0; font-family:'Space Mono', monospace; font-size:11px; color:var(--muted)">Editor</dd></div>
+            <div style="display:flex; justify-content:space-between; gap:16px; padding:14px 0; border-bottom:1px solid var(--rule)"><dt style="font-size:16px">Claude Code</dt><dd style="margin:0; font-family:'Space Mono', monospace; font-size:11px; color:var(--muted)">Agent</dd></div>
+            <div style="display:flex; justify-content:space-between; gap:16px; padding:14px 0; border-bottom:1px solid var(--rule)"><dt style="font-size:16px">Linear</dt><dd style="margin:0; font-family:'Space Mono', monospace; font-size:11px; color:var(--muted)">Specs &amp; queue</dd></div>
+            <div style="display:flex; justify-content:space-between; gap:16px; padding:14px 0; border-bottom:1px solid var(--rule)"><dt style="font-size:16px">TablePlus</dt><dd style="margin:0; font-family:'Space Mono', monospace; font-size:11px; color:var(--muted)">Postgres</dd></div>
+          </dl>
+        </div>
+        <div data-reveal="">
+          <div style="display:flex; align-items:baseline; justify-content:space-between; gap:12px; padding-bottom:14px; border-bottom:1px solid var(--ink); font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted)"><span>Runtime</span><span style="color:var(--accent)">3</span></div>
+          <dl style="margin:0">
+            <div style="display:flex; justify-content:space-between; gap:16px; padding:14px 0; border-bottom:1px solid var(--rule)"><dt style="font-size:16px">Node 22</dt><dd style="margin:0; font-family:'Space Mono', monospace; font-size:11px; color:var(--muted)">Primary</dd></div>
+            <div style="display:flex; justify-content:space-between; gap:16px; padding:14px 0; border-bottom:1px solid var(--rule)"><dt style="font-size:16px">Supabase</dt><dd style="margin:0; font-family:'Space Mono', monospace; font-size:11px; color:var(--muted)">Postgres · auth</dd></div>
+            <div style="display:flex; justify-content:space-between; gap:16px; padding:14px 0; border-bottom:1px solid var(--rule)"><dt style="font-size:16px">Vercel</dt><dd style="margin:0; font-family:'Space Mono', monospace; font-size:11px; color:var(--muted)">Edge deploys</dd></div>
+          </dl>
+        </div>
+      </div>
+    </section>
+  </sc-if>
+
+  <!-- Notes -->
+  <section id="notes" data-screen-label="Notes" style="padding: clamp(28px, 3.5vw, 48px) clamp(24px, 4.5vw, 64px) clamp(40px, 5vw, 72px); background-color: #171310">
+    <div data-reveal="" style="display:grid; grid-template-columns:repeat(12, 1fr); column-gap:24px; row-gap:20px; padding:20px 0 clamp(40px, 5vw, 64px); border-top:1px solid var(--ink)">
+      <div style="grid-column:1 / 3; font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted)"><span style="color:var(--accent)">07</span>&nbsp;&nbsp;Notes<sc-if value="{{ showSrc }}" hint-placeholder-val="{{ true }}"><div style="margin-top:10px; font-size:10px; letter-spacing:0.1em; text-transform:none; color:var(--faint)">src: static · markdown</div></sc-if></div>
+      <h2 style="grid-column: 3 / 10; margin: 0; font-weight: 300; font-size: clamp(30px, 3.4vw, 50px); line-height: 1.12; letter-spacing: -0.01em; color: #B8AFA3; text-decoration-line: none; font-style: italic">Written from inside the work.</h2>
+    </div>
+    <div style="display:flex; flex-direction:column">
+      <a data-reveal="" href="#notes" style="display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; row-gap: 8px; align-items: baseline; padding: 24px 0; border-top: 1px solid var(--rule); transition: background .3s ease, padding .3s ease" style-hover="background:var(--wash)">
+        <span style="grid-column:1 / 2; font-family:'Space Mono', monospace; font-size:11px; color:var(--accent)">01</span>
+        <span style="grid-column: 2 / 8; font-size: clamp(20px, 1.9vw, 26px); font-weight: 400; line-height: 1.25; color: #FAF7F1">Specs are the new source code</span>
+        <span style="grid-column:8 / 12; font-size:15px; line-height:1.55; color:var(--muted); text-wrap:pretty">If an agent can't build it from the doc, the doc was never finished.</span>
+        <span style="grid-column:12 / 13; text-align:right; font-family:'Space Mono', monospace; font-size:11px; color:var(--muted)"><sc-if value="{{ showNoteMeta }}" hint-placeholder-val="{{ true }}"><span style="display:block; color:var(--faint)">Aug 2026 · own site</span></sc-if>4 min</span>
+      </a>
+      <a data-reveal="" href="#notes" style="display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; row-gap: 8px; align-items: baseline; padding: 24px 0; border-top: 1px solid var(--rule); transition: background .3s ease" style-hover="background:var(--wash)">
+        <span style="grid-column:1 / 2; font-family:'Space Mono', monospace; font-size:11px; color:var(--accent)">02</span>
+        <span style="grid-column: 2 / 8; font-size: clamp(20px, 1.9vw, 26px); font-weight: 400; line-height: 1.25; color: #FAF7F1">Row-level security is a design decision</span>
+        <span style="grid-column:8 / 12; font-size:15px; line-height:1.55; color:var(--muted); text-wrap:pretty">Why I model Supabase permissions before I model screens.</span>
+        <span style="grid-column:12 / 13; text-align:right; font-family:'Space Mono', monospace; font-size:11px; color:var(--muted)"><sc-if value="{{ showNoteMeta }}" hint-placeholder-val="{{ true }}"><span style="display:block; color:var(--faint)">Jun 2026 · own site</span></sc-if>6 min</span>
+      </a>
+      <a data-reveal="" href="#notes" style="display: grid; grid-template-columns: repeat(12, 1fr); column-gap: 24px; row-gap: 8px; align-items: baseline; padding: 24px 0; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); transition: background .3s ease" style-hover="background:var(--wash)">
+        <span style="grid-column:1 / 2; font-family:'Space Mono', monospace; font-size:11px; color:var(--accent)">03</span>
+        <span style="grid-column: 2 / 8; font-size: clamp(20px, 1.9vw, 26px); font-weight: 400; line-height: 1.25; color: #FAF7F1">Reviewing code you didn't type</span>
+        <span style="grid-column:8 / 12; font-size:15px; line-height:1.55; color:var(--muted); text-wrap:pretty">The reading discipline that keeps generated work honest.</span>
+        <span style="grid-column:12 / 13; text-align:right; font-family:'Space Mono', monospace; font-size:11px; color:var(--muted)"><sc-if value="{{ showNoteMeta }}" hint-placeholder-val="{{ true }}"><span style="display:block; color:var(--faint)">Apr 2026 · GitHub</span></sc-if>3 min</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" data-inverse="" data-screen-label="Contact" style="color: var(--ink); padding: clamp(56px, 7vw, 96px) clamp(24px, 4.5vw, 64px) 40px; background-color: #171310">
+    <div style="display:grid; grid-template-columns:repeat(12, 1fr); column-gap:24px">
+      <div data-reveal="" style="grid-column:1 / 3; font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--faint)"><span style="color:var(--accent)">08</span>&nbsp;&nbsp;Contact<sc-if value="{{ showSrc }}" hint-placeholder-val="{{ true }}"><div style="margin-top:10px; font-size:10px; letter-spacing:0.1em; text-transform:none; color:var(--faint)">src: mailto ·&nbsp;<br></div></sc-if></div>
+      <div data-reveal="" style="grid-column:3 / 13">
+        <p style="margin:0 0 28px; font-size:clamp(20px, 1.8vw, 24px); line-height:1.5; color:var(--body); max-width:34em; text-wrap:pretty">Have a product that needs to exist, or a codebase that needs a spine? I take on a small number of projects at a time.</p>
+        <a href="mailto:paschaloguike@gmail.com" style="display: inline-block; font-style: italic; font-weight: 300; font-size: clamp(28px, 4.2vw, 60px); line-height: 1.15; overflow-wrap: anywhere; color: #FAF7F1; background-image: linear-gradient(var(--accent),var(--accent)); background-size: 0% 2px; background-repeat: no-repeat; background-position: 0 96%; transition: background-size .4s ease" style-hover="background-size:100% 2px; color:var(--ink)">paschaloguike@gmail.com</a>
+        <sc-if value="{{ showReply }}" hint-placeholder-val="{{ true }}">
+          <div style="margin-top:22px; font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:var(--faint)">Replies within 1–2 working days · Lagos hours, GMT+1</div>
+        </sc-if>
+      </div>
+    </div>
+    
+    <div style="display:flex; justify-content:space-between; align-items:baseline; gap:24px; flex-wrap:wrap; margin-top:clamp(32px, 4vw, 48px); padding-top:24px; border-top:1px solid var(--rule)">
+      <div style="display:flex; gap:32px; font-family:'Space Mono', monospace; font-size:11px; letter-spacing:0.14em; text-transform:uppercase">
+        <a href="https://github.com" style="color:var(--faint)" style-hover="color:var(--ink)">GitHub</a>
+        <a href="https://linkedin.com" style="color:var(--faint)" style-hover="color:var(--ink)">LinkedIn</a>
+        <a href="mailto:paschaloguike@gmail.com" style="color:var(--faint)" style-hover="color:var(--ink)">Email</a>
+        <a href="https://www.google.com/maps/contrib/108760833902033858252" target="_blank" rel="noopener noreferrer" style="display:inline-flex; align-items:center; gap:7px; color:var(--faint)" style-hover="color:var(--ink)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"></path><circle cx="12" cy="10" r="2.4"></circle></svg>Local Guide · Level 5</a>
+        <a href="#top" style="color:var(--faint)" style-hover="color:var(--ink)">Back to top</a>
+      </div>
+      
+    </div>
+    <sc-if value="{{ showColophon }}" hint-placeholder-val="{{ true }}">
+      <div data-reveal="" style="display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:24px; margin-top:clamp(40px, 5vw, 64px); padding-top:24px; border-top:1px solid var(--rule); font-family:'Space Mono', monospace; font-size:11px; line-height:1.7; color:var(--body)">
+        <div><div style="color:var(--muted); font-size:10px; letter-spacing:0.16em; text-transform:uppercase; margin-bottom:8px">Type</div>Newsreader, display<br>Space Mono, labels</div>
+        <div><div style="color:var(--muted); font-size:10px; letter-spacing:0.16em; text-transform:uppercase; margin-bottom:8px">Accent</div><span style="display:inline-flex; align-items:center; gap:8px"><span style="width:9px; height:9px; background:var(--accent)"></span>#C2401A</span><br>dark: #E4653C</div>
+        <div><div style="color:var(--muted); font-size:10px; letter-spacing:0.16em; text-transform:uppercase; margin-bottom:8px">Built with</div>Next.js · TypeScript<br>deployed on Vercel</div>
+        <div><div style="color:var(--muted); font-size:10px; letter-spacing:0.16em; text-transform:uppercase; margin-bottom:8px">Version</div>v3.0 — Sept 2026<br>© 2026 Paschal Oguike</div>
+      </div>
+    </sc-if>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;system&quot;,&quot;light&quot;,&quot;dark&quot;],&quot;default&quot;:&quot;system&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Theme&quot;},&quot;revealAnimations&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Motion&quot;},&quot;featClock&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Features&quot;,&quot;label&quot;:&quot;01 · Local clock in masthead&quot;},&quot;featSrcLabels&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Features&quot;,&quot;label&quot;:&quot;03 · Section source labels&quot;},&quot;featNow&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Features&quot;,&quot;label&quot;:&quot;04 · /now block&quot;},&quot;featIdentityGrid&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Features&quot;,&quot;label&quot;:&quot;05 · Identity key-value grid&quot;},&quot;featUses&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Features&quot;,&quot;label&quot;:&quot;06 · Uses / rig section&quot;},&quot;featGithubStrip&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Features&quot;,&quot;label&quot;:&quot;07 · Commit strip (13 weeks)&quot;},&quot;featLiveStatus&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Features&quot;,&quot;label&quot;:&quot;08 · Live status indicator&quot;},&quot;featColophon&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Features&quot;,&quot;label&quot;:&quot;09 · Footer colophon&quot;},&quot;featNavNumbers&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Features&quot;,&quot;label&quot;:&quot;12 · Numbered nav&quot;},&quot;featReplyTime&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Features&quot;,&quot;label&quot;:&quot;13 · Reply-time promise&quot;},&quot;featNoteMeta&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Features&quot;,&quot;label&quot;:&quot;14 · Note dates &amp; venue&quot;}}">
+class Component extends DCLogic {
+  state = { theme: null, clock: '' };
+
+  tickClock() {
+    const t = new Date().toLocaleTimeString('en-GB', {
+      timeZone: 'Africa/Lagos', hour: '2-digit', minute: '2-digit'
+    });
+    if (t !== this.state.clock) this.setState({ clock: t });
+  }
+
+  moonIcon() {
+    return React.createElement('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.5, strokeLinecap: 'round', strokeLinejoin: 'round', 'aria-hidden': 'true' },
+      React.createElement('path', { key: 'm', d: 'M20.5 14.6A8.6 8.6 0 1 1 9.4 3.5a6.9 6.9 0 0 0 11.1 11.1z' }));
+  }
+
+  sunIcon() {
+    const rays = [[12,2,12,4.4],[12,19.6,12,22],[2,12,4.4,12],[19.6,12,22,12],[4.9,4.9,6.6,6.6],[17.4,17.4,19.1,19.1],[4.9,19.1,6.6,17.4],[17.4,6.6,19.1,4.9]];
+    return React.createElement('svg', { width: 15, height: 15, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.5, strokeLinecap: 'round', 'aria-hidden': 'true' },
+      [React.createElement('circle', { key: 'c', cx: 12, cy: 12, r: 4.2 })].concat(
+        rays.map((r, i) => React.createElement('line', { key: i, x1: r[0], y1: r[1], x2: r[2], y2: r[3] }))));
+  }
+
+  applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    try { localStorage.setItem('paschal-theme', theme); } catch (e) {}
+    this.setState({ theme });
+  }
+
+  buildGithub() {
+    const days = 91, out = [], months = [];
+    const now = new Date();
+    let seed = 20260908, total = 0;
+    const rnd = () => { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; };
+    const shades = [0, 0.28, 0.5, 0.72, 1];
+    for (let i = days - 1; i >= 0; i--) {
+      const d = new Date(now.getTime() - i * 86400000);
+      const weekend = d.getDay() === 0 || d.getDay() === 6;
+      const r = rnd();
+      let lvl = r > 0.82 ? 4 : r > 0.62 ? 3 : r > 0.4 ? 2 : r > 0.2 ? 1 : 0;
+      if (weekend && r < 0.75) lvl = Math.max(0, lvl - 2);
+      const count = lvl === 0 ? 0 : lvl * 2 + Math.floor(rnd() * 3);
+      total += count;
+      const bg = lvl === 0 ? 'background:var(--rule)' : 'background:var(--accent); opacity:' + shades[lvl];
+      out.push({
+        style: 'width:100%; aspect-ratio:1; ' + bg,
+        label: d.toDateString() + ' — ' + count + ' commits'
+      });
+      if (d.getDate() === 1 || i === days - 1) months.push(d.toLocaleString('en', { month: 'short' }));
+    }
+    return { ghCells: out, ghMonths: months.slice(0, 4), ghTotal: total };
+  }
+
+  renderVals() {
+    const theme = this.state.theme || 'light';
+    const gh = this._gh || (this._gh = this.buildGithub());
+    const on = (name) => this.props[name] ?? true;
+    return {
+      showClock: on('featClock'),
+      showSrc: on('featSrcLabels'),
+      showNow: on('featNow'),
+      showIdentity: on('featIdentityGrid'),
+      showUses: on('featUses'),
+      showGithub: on('featGithubStrip'),
+      showColophon: on('featColophon'),
+      navNumbers: on('featNavNumbers'),
+      showReply: on('featReplyTime'),
+      showNoteMeta: on('featNoteMeta'),
+      clock: this.state.clock || '',
+      ghCells: gh.ghCells,
+      ghMonths: gh.ghMonths,
+      ghTotal: gh.ghTotal,
+      available: on('featLiveStatus'),
+      workOpen: !!this.state.work,
+      isP1: this.state.work === 1,
+      isP2: this.state.work === 2,
+      isP3: this.state.work === 3,
+      isP4: this.state.work === 4,
+      openP1: () => this.openWork(1),
+      openP2: () => this.openWork(2),
+      openP3: () => this.openWork(3),
+      openP4: () => this.openWork(4),
+      closeWork: () => this.closeWork(),
+      stopClick: (e) => e.stopPropagation(),
+      themeAria: theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
+      themeIcon: theme === 'dark' ? this.sunIcon() : this.moonIcon(),
+      toggleTheme: () => this.applyTheme(theme === 'dark' ? 'light' : 'dark')
+    };
+  }
+  openWork(n) {
+    this.setState({ work: n });
+    try { document.body.style.overflow = 'hidden'; } catch (e) {}
+  }
+  closeWork() {
+    this.setState({ work: null });
+    try { document.body.style.overflow = ''; } catch (e) {}
+  }
+  componentWillUnmount() {
+    clearInterval(this._clockTimer);
+    if (this._esc) window.removeEventListener('keydown', this._esc);
+    try { document.body.style.overflow = ''; } catch (e) {}
+    if (this._revealCheck) {
+      window.removeEventListener('scroll', this._revealCheck);
+      window.removeEventListener('resize', this._revealCheck);
+    }
+  }
+  componentDidMount() {
+    this._esc = (e) => { if (e.key === 'Escape' && this.state.work) this.closeWork(); };
+    window.addEventListener('keydown', this._esc);
+    this.tickClock();
+    this._clockTimer = setInterval(() => this.tickClock(), 20000);
+
+    let saved = null;
+    try { saved = localStorage.getItem('paschal-theme'); } catch (e) {}
+    const preferred = this.props.defaultTheme && this.props.defaultTheme !== 'system'
+      ? this.props.defaultTheme
+      : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    this.applyTheme(saved === 'dark' || saved === 'light' ? saved : preferred);
+
+    if (!(this.props.revealAnimations ?? true)) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const els = Array.from(document.querySelectorAll('[data-reveal]'));
+    const hidden = new Set();
+    let stagger = 0;
+    const show = (el) => {
+      if (!hidden.has(el)) return;
+      hidden.delete(el);
+      el.style.transitionDelay = (stagger % 4) * 90 + 'ms';
+      stagger++;
+      el.style.opacity = '1';
+      el.style.transform = 'translateY(0)';
+    };
+    els.forEach(el => {
+      el.style.transition = 'opacity .8s ease, transform .8s ease';
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(16px)';
+      hidden.add(el);
+    });
+    const check = () => {
+      const vh = window.innerHeight;
+      Array.from(hidden).forEach(el => {
+        const r = el.getBoundingClientRect();
+        if (r.top < vh * 0.94) show(el);
+      });
+      if (!hidden.size) {
+        window.removeEventListener('scroll', check);
+        window.removeEventListener('resize', check);
+      }
+    };
+    this._revealCheck = check;
+    window.addEventListener('scroll', check, { passive: true });
+    window.addEventListener('resize', check);
+    requestAnimationFrame(check);
+    // Fail-safe: never strand content invisible
+    setTimeout(() => { check(); }, 800);
+    setTimeout(() => { Array.from(hidden).forEach(el => { if (el.getBoundingClientRect().top < window.innerHeight) show(el); }); }, 2500);
+  }
+}
+</script>
+</body>
+</html>
