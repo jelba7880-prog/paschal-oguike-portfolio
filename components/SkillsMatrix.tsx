@@ -41,7 +41,7 @@ export function SkillsMatrix() {
         className="mb-[clamp(40px,5vw,64px)] grid grid-cols-1 gap-x-6 gap-y-3 border-t pt-8 lg:grid-cols-12"
         style={{ borderColor: "var(--ink)" }}
       >
-        <SectionLabel number="04" className="lg:col-span-2 lg:col-start-1">
+        <SectionLabel number="03" className="lg:col-span-2 lg:col-start-1">
           Technical skills
         </SectionLabel>
         <p

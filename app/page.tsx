@@ -12,8 +12,8 @@ export default function Home() {
     <main>
       <Hero />
       <Projects />
-      <Philosophy />
       <SkillsMatrix />
+      <Philosophy />
       <TrackRecord />
       <Notes />
       <Contact />
