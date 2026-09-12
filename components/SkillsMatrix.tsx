@@ -48,7 +48,7 @@ export function SkillsMatrix() {
           className="text-[16px] leading-[1.6] text-pretty lg:col-start-10 lg:col-span-3 lg:self-end"
           style={{ color: "var(--muted)" }}
         >
-          A bunch of things I know
+          The stack, roughly.
         </p>
       </div>
 
