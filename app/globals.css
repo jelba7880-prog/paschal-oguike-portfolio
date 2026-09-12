@@ -90,6 +90,20 @@ a {
   filter: invert(1);
 }
 
+/* Skills grid slots are empty by design — CursorField flies the only copy of
+   each icon into them. Visitors who never get that field fall back to a static
+   icon in the slot, under exactly the conditions that switch the field off in
+   components/CursorField.tsx. */
+.skill-slot-fallback {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce), (hover: none), (pointer: coarse) {
+  .skill-slot-fallback {
+    display: block;
+  }
+}
+
 /* Bodoni Moda is reserved for display headings; body text stays on the
    sans stack set above. */
 .font-display {
