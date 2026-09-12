@@ -11,7 +11,7 @@ export function Contact() {
       style={{ background: "var(--paper)", color: "var(--ink)" }}
     >
       <div className="grid grid-cols-1 gap-x-6 lg:grid-cols-12">
-        <SectionLabel number="07" className="lg:col-span-2 lg:col-start-1">
+        <SectionLabel className="lg:col-span-2 lg:col-start-1">
           Contact
         </SectionLabel>
 

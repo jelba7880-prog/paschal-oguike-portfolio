@@ -35,7 +35,7 @@ export function Philosophy() {
         className="mb-[clamp(48px,6vw,72px)] grid grid-cols-1 gap-x-6 gap-y-4 border-t pt-8 lg:grid-cols-12"
         style={{ borderColor: "var(--ink)" }}
       >
-        <SectionLabel number="04" className="lg:col-span-2 lg:col-start-1">
+        <SectionLabel className="lg:col-span-2 lg:col-start-1">
           How I work
         </SectionLabel>
         <h2 className="font-display m-0 text-[clamp(30px,3.4vw,50px)] leading-[1.12] font-light tracking-[-0.01em] lg:col-start-3 lg:col-span-7">
