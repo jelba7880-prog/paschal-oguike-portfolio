@@ -7,7 +7,7 @@ export function Contact() {
     <section
       id="contact"
       data-inverse
-      className="px-[clamp(24px,4.5vw,64px)] pt-[clamp(56px,7vw,96px)] pb-10"
+      className="px-[clamp(24px,4.5vw,64px)] pt-[clamp(56px,7vw,96px)] pb-[clamp(40px,5vw,64px)]"
       style={{ background: "var(--paper)", color: "var(--ink)" }}
     >
       <div className="grid grid-cols-1 gap-x-6 lg:grid-cols-12">

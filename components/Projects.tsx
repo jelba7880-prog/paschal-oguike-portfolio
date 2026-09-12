@@ -40,10 +40,10 @@ export function Projects() {
   return (
     <section
       id="work"
-      className="px-[clamp(24px,4.5vw,64px)] pt-[clamp(40px,4.5vw,72px)] pb-[clamp(40px,4.5vw,72px)]"
+      className="px-[clamp(24px,4.5vw,64px)] pt-[clamp(56px,6vw,88px)] pb-[clamp(56px,6vw,88px)]"
     >
       <div
-        className="mb-[clamp(40px,5vw,64px)] grid grid-cols-1 gap-x-6 gap-y-3 border-t pt-5 lg:grid-cols-12"
+        className="mb-[clamp(40px,5vw,64px)] grid grid-cols-1 gap-x-6 gap-y-3 border-t pt-8 lg:grid-cols-12"
         style={{ borderColor: "var(--ink)" }}
       >
         <SectionLabel number="02" className="lg:col-span-2 lg:col-start-1">

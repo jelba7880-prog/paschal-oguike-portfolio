@@ -33,9 +33,12 @@ function SkillCell({ skill }: { skill: Skill }) {
 
 export function SkillsMatrix() {
   return (
-    <section id="stack" className="px-[clamp(24px,4.5vw,64px)] pb-[clamp(64px,9.5vw,136px)]">
+    <section
+      id="stack"
+      className="px-[clamp(24px,4.5vw,64px)] pt-[clamp(56px,6vw,88px)] pb-[clamp(64px,9.5vw,136px)]"
+    >
       <div
-        className="mb-[clamp(40px,5vw,64px)] grid grid-cols-1 gap-x-6 gap-y-3 border-t pt-5 lg:grid-cols-12"
+        className="mb-[clamp(40px,5vw,64px)] grid grid-cols-1 gap-x-6 gap-y-3 border-t pt-8 lg:grid-cols-12"
         style={{ borderColor: "var(--ink)" }}
       >
         <SectionLabel number="04" className="lg:col-span-2 lg:col-start-1">
