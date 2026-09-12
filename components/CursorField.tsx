@@ -36,9 +36,19 @@ export interface CursorFieldItem {
 type FieldMode = "idle" | "swarm" | "docked";
 
 const FLOAT_SPRING = { stiffness: 90, damping: 20, mass: 0.8 };
-/** Runs on framer's own clock, so the flight home is never tied to pointer or scroll speed. */
-const DOCK_TRANSITION = { type: "spring", stiffness: 150, damping: 24, mass: 0.9 } as const;
+/** Runs on framer's own clock, so the flight home is never tied to pointer or scroll speed.
+ *  Overdamped on purpose — no bounce, a slow deliberate glide rather than a snap. */
+const DOCK_TRANSITION = { type: "spring", stiffness: 110, damping: 26, mass: 1 } as const;
 const DOCKED_SIZE = 24;
+/** How long the pointer must consistently sit on one side of the boundary
+ * before mode actually switches — filters out the flicker that real mouse
+ * movement (and scrolling the section past a stationary cursor) produces
+ * right at the edge, which otherwise restarts the dock/undock animation
+ * mid-flight over and over. */
+const MODE_DEBOUNCE_MS = 140;
+/** Once docked, the cursor has to clear the section by this many px before
+ * it's considered "left" — a plain edge-touch no longer flips it back out. */
+const UNDOCK_MARGIN = 32;
 
 /** Stable pseudo-random 0..1 from an id, so per-icon variance survives re-renders and SSR. */
 function hash01(seed: string, salt: number) {
@@ -67,14 +77,19 @@ function FieldIcon({
   pointerX: MotionValue<number>;
   pointerY: MotionValue<number>;
 }) {
-  const variance = useMemo(
-    () => ({
-      clusterX: (hash01(item.id, 1) - 0.5) * 280,
-      clusterY: (hash01(item.id, 2) - 0.5) * 220,
-      wobbleSeconds: 4 + hash01(item.id, 3) * 3,
-    }),
-    [item.id],
-  );
+  const wobbleSeconds = useMemo(() => 4 + hash01(item.id, 3) * 3, [item.id]);
+  // Genuinely randomized (Math.random, not a deterministic hash) and re-rolled
+  // rarely while swarming, so icons don't settle into one fixed spot relative
+  // to the cursor — each one drifts to a new random offset every several
+  // seconds instead of holding a rigid, always-identical formation. Picking a
+  // new target and actually arriving there are deliberately decoupled from the
+  // fast cursor-tracking spring below: x/current drifts toward targetX/Y on
+  // its own slow multi-second ease, so 27 icons independently rerolling every
+  // 5-9s doesn't read as constant flurry, and each individual drift is a
+  // gentle glide rather than a snap. rerollAt starts negative as a sentinel:
+  // Math.random() can't run here (it'd run on every render, which React's
+  // purity rule flags), so the very first roll happens lazily below instead.
+  const cluster = useRef({ x: 0, y: 0, targetX: 0, targetY: 0, rerollAt: -1, lastT: -1 });
 
   const x = useSpring(0, FLOAT_SPRING);
   const y = useSpring(0, FLOAT_SPRING);
@@ -90,13 +105,41 @@ function FieldIcon({
   // Kept running even while docked, so the float position stays current and an
   // icon leaving its slot heads somewhere sensible rather than snapping back to
   // wherever it happened to be when it docked.
-  useAnimationFrame(() => {
+  useAnimationFrame((t) => {
     const vw = window.innerWidth;
     const vh = window.innerHeight;
     if (mode === "swarm") {
-      x.set(pointerX.get() + variance.clusterX);
-      y.set(pointerY.get() + variance.clusterY);
+      const c = cluster.current;
+      if (c.rerollAt < 0) {
+        // First frame of this swarm session: start exactly at the target so
+        // the icon doesn't drift in from (0, 0) relative to the cursor.
+        c.targetX = (Math.random() - 0.5) * 320;
+        c.targetY = (Math.random() - 0.5) * 260;
+        c.x = c.targetX;
+        c.y = c.targetY;
+        c.rerollAt = t + 5000 + Math.random() * 4000;
+        c.lastT = t;
+      } else if (t >= c.rerollAt) {
+        c.targetX = (Math.random() - 0.5) * 320;
+        c.targetY = (Math.random() - 0.5) * 260;
+        c.rerollAt = t + 5000 + Math.random() * 4000;
+      }
+      // Slow, independent glide toward the current target — a ~1.4s time
+      // constant regardless of how responsive FLOAT_SPRING is to the cursor,
+      // so this is the "very slow, gentle drift" and cursor-following stays
+      // exactly as snappy as it already was.
+      const dt = Math.min(Math.max(t - c.lastT, 0), 100) / 1000;
+      c.lastT = t;
+      const ease = 1 - Math.exp(-dt / 1.4);
+      c.x += (c.targetX - c.x) * ease;
+      c.y += (c.targetY - c.y) * ease;
+
+      x.set(pointerX.get() + c.x);
+      y.set(pointerY.get() + c.y);
     } else {
+      // Reset so the next swarm session starts its own fresh reroll timer
+      // instead of comparing against a stale future timestamp.
+      cluster.current.rerollAt = -1;
       x.set(item.x * vw - vw / 2);
       y.set(item.y * vh - vh / 2);
     }
@@ -128,7 +171,7 @@ function FieldIcon({
         transition={
           docked
             ? { duration: 0.4 }
-            : { duration: variance.wobbleSeconds, repeat: Infinity, ease: "easeInOut" }
+            : { duration: wobbleSeconds, repeat: Infinity, ease: "easeInOut" }
         }
         style={{ display: "block", width: "100%", height: "100%", objectFit: "contain" }}
       />
@@ -167,6 +210,7 @@ export function CursorField({ items = [] }: { items?: CursorFieldItem[] }) {
   const [enabled, setEnabled] = useState(false);
   const [mode, setMode] = useState<FieldMode>("idle");
   const modeRef = useRef<FieldMode>("idle");
+  const pendingRef = useRef<{ mode: FieldMode; since: number }>({ mode: "idle", since: 0 });
 
   useEffect(() => {
     if (items.length === 0) return;
@@ -200,7 +244,7 @@ export function CursorField({ items = [] }: { items?: CursorFieldItem[] }) {
     };
   }, [items, pointerX, pointerY]);
 
-  useAnimationFrame(() => {
+  useAnimationFrame((t) => {
     if (!enabled) return;
     const section = document.getElementById("stack");
     if (!section) return;
@@ -209,11 +253,21 @@ export function CursorField({ items = [] }: { items?: CursorFieldItem[] }) {
     let next: FieldMode = "idle";
     if (onPage) {
       const r = section.getBoundingClientRect();
-      const inside = x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+      // Hysteresis: once docked, the cursor must clear the section by
+      // UNDOCK_MARGIN before it counts as "left" — a bare edge-touch no
+      // longer flips it back out.
+      const margin = modeRef.current === "docked" ? UNDOCK_MARGIN : 0;
+      const inside = x >= r.left - margin && x <= r.right + margin && y >= r.top - margin && y <= r.bottom + margin;
       next = inside ? "docked" : "swarm";
     }
 
-    if (next !== modeRef.current) {
+    // Debounce: only commit a mode change once it's held steady for
+    // MODE_DEBOUNCE_MS, so momentary flicker right at the boundary (real
+    // mouse movement, or scrolling the section past a stationary cursor)
+    // can't restart the dock/undock animation mid-flight over and over.
+    if (next !== pendingRef.current.mode) {
+      pendingRef.current = { mode: next, since: t };
+    } else if (next !== modeRef.current && t - pendingRef.current.since >= MODE_DEBOUNCE_MS) {
       modeRef.current = next;
       setMode(next);
     }
