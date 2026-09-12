@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { GlassScrim } from "@/components/ui/GlassScrim";
@@ -8,9 +9,33 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 import { ProjectModal } from "@/components/ProjectModal";
 import { PROJECTS } from "@/lib/projects-data";
 
-export function Projects() {
-  const [openProjectId, setOpenProjectId] = useState<string | null>(null);
+/**
+ * Reads the ?project= query param and resolves the open modal from it.
+ * Isolated behind Suspense because useSearchParams forces client-side
+ * rendering up to the nearest Suspense boundary during static prerendering
+ * — without this, `next build` fails for this otherwise-static page.
+ */
+function ProjectModalGate() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const openProjectId = searchParams.get("project");
   const openProject = PROJECTS.find((project) => project.id === openProjectId) ?? null;
+
+  function close() {
+    router.push(pathname, { scroll: false });
+  }
+
+  return <ProjectModal project={openProject} onClose={close} />;
+}
+
+export function Projects() {
+  const router = useRouter();
+
+  function openProject(id: string) {
+    router.push(`?project=${encodeURIComponent(id)}`, { scroll: false });
+  }
 
   return (
     <section
@@ -42,7 +67,7 @@ export function Projects() {
         <GlassScrim />
         <div className="relative grid grid-cols-1 gap-[18px] sm:grid-cols-2 xl:grid-cols-4">
           {PROJECTS.map((project) => (
-            <Card key={project.id} interactive onClick={() => setOpenProjectId(project.id)}>
+            <Card key={project.id} interactive onClick={() => openProject(project.id)}>
               <div className="flex items-center justify-between gap-3">
                 <span className="text-[11px]" style={{ color: "var(--accent)" }}>
                   {project.number}
@@ -79,7 +104,9 @@ export function Projects() {
         </div>
       </div>
 
-      <ProjectModal project={openProject} onClose={() => setOpenProjectId(null)} />
+      <Suspense fallback={null}>
+        <ProjectModalGate />
+      </Suspense>
     </section>
   );
 }
