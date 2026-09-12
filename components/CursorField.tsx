@@ -141,7 +141,12 @@ function FieldIcon({
     } else if (mode === "resting") {
       opacity.set((0.1 + item.depth * 0.12) * restOpacity.get());
     } else if (mode === "swarm") {
-      opacity.set(0.55 + item.depth * 0.35);
+      // Dim relative to how it used to be (was 0.55-0.90 — vivid enough to
+      // compete with any text it swarmed over). This only matters outside
+      // the skills grid, where there's no GlassScrim to blur it down for
+      // free, so it needs to sit dim on its own: visible enough to read as
+      // "alive," but never so opaque it fights with page copy underneath it.
+      opacity.set(0.25 + item.depth * 0.2);
     } else {
       opacity.set(0.22 + item.depth * 0.5);
     }
