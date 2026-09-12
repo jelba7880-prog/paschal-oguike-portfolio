@@ -2,11 +2,16 @@ import type { ReactNode } from "react";
 
 type BadgeTone = "default" | "accent" | "muted";
 type BadgeSize = "sm" | "md";
+type BadgeVariant = "status" | "tag";
 
 interface BadgeProps {
   children: ReactNode;
   tone?: BadgeTone;
   size?: BadgeSize;
+  /** "status" (LIVE, IN PROGRESS, the hero pill) is uppercase and wide-tracked.
+   * "tag" (tech tags like "Next.js") keeps natural case and ignores tone —
+   * tags are always neutral in the reference. */
+  variant?: BadgeVariant;
   dot?: boolean;
   href?: string;
   className?: string;
@@ -19,9 +24,12 @@ const TONE_STYLES: Record<BadgeTone, { border: string; color: string }> = {
 };
 
 const SIZE_CLASSES: Record<BadgeSize, string> = {
-  sm: "gap-1.5 px-2 py-[3px] text-[9px] tracking-[0.16em]",
-  md: "gap-3 px-3.5 py-[7px] text-[11px] tracking-[0.12em]",
+  sm: "gap-1.5 px-2 py-[3px] text-[9px] uppercase tracking-[0.16em]",
+  md: "gap-3 px-3.5 py-[7px] text-[11px] uppercase tracking-[0.12em]",
 };
+
+const TAG_CLASSES = "gap-0 px-[7px] py-[3px] text-[10.5px] tracking-[0.04em]";
+const TAG_TONE = { border: "var(--rule)", color: "var(--body)" };
 
 /**
  * Shared pill primitive: status pills ("LIVE", "IN PROGRESS"), tech tags
@@ -31,12 +39,15 @@ export function Badge({
   children,
   tone = "default",
   size = "sm",
+  variant = "status",
   dot = false,
   href,
   className = "",
 }: BadgeProps) {
-  const { border, color } = TONE_STYLES[tone];
-  const classes = `inline-flex items-center border font-medium uppercase whitespace-nowrap transition-colors duration-300 ${SIZE_CLASSES[size]} ${
+  const isTag = variant === "tag";
+  const { border, color } = isTag ? TAG_TONE : TONE_STYLES[tone];
+  const sizing = isTag ? TAG_CLASSES : SIZE_CLASSES[size];
+  const classes = `inline-flex items-center border font-medium whitespace-nowrap transition-colors duration-300 ${sizing} ${
     href ? "hover:border-[var(--ink)] hover:bg-[var(--wash)] hover:text-[var(--ink)]" : ""
   } ${className}`;
   const style = { borderColor: border, color };

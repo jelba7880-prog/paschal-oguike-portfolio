@@ -3,6 +3,7 @@ import { Archivo, Bodoni_Moda } from "next/font/google";
 import Script from "next/script";
 import { CursorField } from "@/components/CursorField";
 import { Nav } from "@/components/Nav";
+import { ALL_SKILLS } from "@/lib/skills";
 import "./globals.css";
 
 const bodoniModa = Bodoni_Moda({
@@ -54,7 +55,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }}
         />
-        <CursorField />
+        <CursorField items={ALL_SKILLS} />
         <Nav />
         {children}
       </body>

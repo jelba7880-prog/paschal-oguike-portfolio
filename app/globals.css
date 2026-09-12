@@ -84,6 +84,12 @@ a {
   color: var(--paper);
 }
 
+/* Single-color (near-black) logo marks need inverting to stay visible on a
+   dark background; multi-color brand marks are left alone. */
+[data-theme="dark"] img[data-mono] {
+  filter: invert(1);
+}
+
 /* Bodoni Moda is reserved for display headings; body text stays on the
    sans stack set above. */
 .font-display {
