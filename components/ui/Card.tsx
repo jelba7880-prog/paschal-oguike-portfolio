@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { KeyboardEvent, ReactNode } from "react";
 
 interface CardProps {
   children: ReactNode;
@@ -25,9 +25,17 @@ export function Card({ children, interactive = false, href, onClick, className =
     );
   }
 
+  function handleKeyDown(e: KeyboardEvent<HTMLDivElement>) {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onClick?.();
+    }
+  }
+
   return (
     <div
       onClick={onClick}
+      onKeyDown={interactive && onClick ? handleKeyDown : undefined}
       role={interactive ? "button" : undefined}
       tabIndex={interactive ? 0 : undefined}
       className={classes}

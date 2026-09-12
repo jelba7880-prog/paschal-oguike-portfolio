@@ -1,53 +1,17 @@
+"use client";
+
+import { useState } from "react";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { GlassScrim } from "@/components/ui/GlassScrim";
 import { SectionLabel } from "@/components/ui/SectionLabel";
-
-interface Project {
-  number: string;
-  status: string;
-  tone: "accent" | "muted";
-  title: string;
-  description: string;
-  tags: string[];
-}
-
-const PROJECTS: Project[] = [
-  {
-    number: "01",
-    status: "Live",
-    tone: "accent",
-    title: "Sterling Capital Exchange",
-    description: "A simulated trading platform built to actually hold up.",
-    tags: ["Next.js", "Supabase", "Vercel"],
-  },
-  {
-    number: "02",
-    status: "In progress",
-    tone: "muted",
-    title: "Freight & Logistics Platform",
-    description: "Three apps, one shared backend, kept in sync.",
-    tags: ["Turborepo", "Next.js", "Postgres"],
-  },
-  {
-    number: "03",
-    status: "In active use",
-    tone: "accent",
-    title: "Dealership Operations Platform",
-    description: "Inventory and CRM built around how the team already works.",
-    tags: ["React", "Node", "WhatsApp API"],
-  },
-  {
-    number: "04",
-    status: "Live",
-    tone: "accent",
-    title: "Stonebridge Builders",
-    description: "A CMS that lives in git, not a subscription.",
-    tags: ["Next.js", "Markdown", "Netlify"],
-  },
-];
+import { ProjectModal } from "@/components/ProjectModal";
+import { PROJECTS } from "@/lib/projects-data";
 
 export function Projects() {
+  const [openProjectId, setOpenProjectId] = useState<string | null>(null);
+  const openProject = PROJECTS.find((project) => project.id === openProjectId) ?? null;
+
   return (
     <section
       id="work"
@@ -78,7 +42,7 @@ export function Projects() {
         <GlassScrim />
         <div className="relative grid grid-cols-1 gap-[18px] sm:grid-cols-2 xl:grid-cols-4">
           {PROJECTS.map((project) => (
-            <Card key={project.number} href="#work" interactive>
+            <Card key={project.id} interactive onClick={() => setOpenProjectId(project.id)}>
               <div className="flex items-center justify-between gap-3">
                 <span className="text-[11px]" style={{ color: "var(--accent)" }}>
                   {project.number}
@@ -114,6 +78,8 @@ export function Projects() {
           ))}
         </div>
       </div>
+
+      <ProjectModal project={openProject} onClose={() => setOpenProjectId(null)} />
     </section>
   );
 }
