@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { GlassScrim } from "@/components/ui/GlassScrim";
 import { SectionLabel } from "@/components/ui/SectionLabel";
+import { TechIconRow } from "@/components/ui/TechIconRow";
 import { ProjectModal } from "@/components/ProjectModal";
 import { PROJECTS, type Project } from "@/lib/projects-data";
 
@@ -51,26 +52,33 @@ function ProjectModalGate() {
   return <ProjectModal project={openProject} onClose={close} />;
 }
 
-function ProjectCard({ project, onOpen }: { project: Project; onOpen?: () => void }) {
+/** `flat` is true once the card sits fully spread — either the fan deck has
+ * been opened, or there's no deck at all below the desktop breakpoint — as
+ * opposed to collapsed behind the fanned deck, where only a sliver shows. */
+function ProjectCard({ project, onOpen, flat }: { project: Project; onOpen?: () => void; flat: boolean }) {
   const icon = project.techIcons[0];
 
   return (
     <Card interactive={Boolean(onOpen)} onClick={onOpen} className="h-full">
       <div className="flex items-center justify-between gap-3">
-        <span className="flex items-center gap-2.5">
-          <span className="text-[11px]" style={{ color: "var(--accent)" }}>
+        <span className="flex min-w-0 flex-1 items-center gap-2.5">
+          <span className="shrink-0 text-[11px]" style={{ color: "var(--accent)" }}>
             {project.number}
           </span>
-          {icon && (
-            <img
-              src={icon.src}
-              alt={icon.label}
-              title={icon.label}
-              data-mono={icon.mono ? "" : undefined}
-              width={14}
-              height={14}
-              className="block"
-            />
+          {flat ? (
+            <TechIconRow icons={project.techIcons} />
+          ) : (
+            icon && (
+              <img
+                src={icon.src}
+                alt={icon.label}
+                title={icon.label}
+                data-mono={icon.mono ? "" : undefined}
+                width={14}
+                height={14}
+                className="block shrink-0"
+              />
+            )
           )}
         </span>
         <Badge tone={project.tone}>{project.status}</Badge>
@@ -224,7 +232,11 @@ export function Projects() {
                   className={`relative ${fanned ? "pointer-events-none" : ""}`}
                   style={{ zIndex: i }}
                 >
-                  <ProjectCard project={project} onOpen={fanned ? undefined : () => openProject(project.id)} />
+                  <ProjectCard
+                    project={project}
+                    onOpen={fanned ? undefined : () => openProject(project.id)}
+                    flat={!fanned}
+                  />
                 </motion.div>
               );
             })}
