@@ -95,11 +95,11 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
               </p>
 
               <div
-                className="grid grid-cols-1 gap-[clamp(24px,3vw,40px)] border-t pt-6 sm:grid-cols-2"
+                className="flex flex-col gap-[clamp(24px,3vw,40px)] border-t pt-10 pb-10"
                 style={{ borderColor: "var(--rule)" }}
               >
                 <div>
-                  <div className="mb-3 text-[10px] uppercase tracking-[0.18em]" style={{ color: "var(--accent)" }}>
+                  <div className="mb-3 text-center text-[10px] uppercase tracking-[0.18em]" style={{ color: "var(--accent)" }}>
                     The problem
                   </div>
                   <p className="m-0 text-[14.5px] leading-[1.65] text-pretty" style={{ color: "var(--body)" }}>
@@ -107,7 +107,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                   </p>
                 </div>
                 <div>
-                  <div className="mb-3 text-[10px] uppercase tracking-[0.18em]" style={{ color: "var(--accent)" }}>
+                  <div className="mb-3 text-center text-[10px] uppercase tracking-[0.18em]" style={{ color: "var(--accent)" }}>
                     What broke
                   </div>
                   <ul className="m-0 flex list-none flex-col gap-3 p-0 text-[14.5px] leading-[1.6]" style={{ color: "var(--body)" }}>
@@ -118,8 +118,8 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                 </div>
               </div>
 
-              <div className="mt-7 border-t pt-6" style={{ borderColor: "var(--rule)" }}>
-                <div className="mb-3 text-[10px] uppercase tracking-[0.18em]" style={{ color: "var(--accent)" }}>
+              <div className="border-t pt-10" style={{ borderColor: "var(--rule)" }}>
+                <div className="mb-3 text-center text-[10px] uppercase tracking-[0.18em]" style={{ color: "var(--accent)" }}>
                   Decisions
                 </div>
                 <ul className="m-0 flex list-none flex-col gap-2.5 p-0 text-[14.5px] leading-[1.6]" style={{ color: "var(--body)" }}>
