@@ -47,9 +47,6 @@ export function Notes() {
         <SectionLabel className="lg:col-span-2 lg:col-start-1">
           Notes
         </SectionLabel>
-        <h2 className="font-display m-0 text-[clamp(30px,3.4vw,50px)] leading-[1.12] font-light tracking-[-0.01em] italic lg:col-start-3 lg:col-span-7">
-          Written from inside the work.
-        </h2>
       </div>
 
       <div className="flex flex-col">

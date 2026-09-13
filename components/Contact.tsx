@@ -1,5 +1,3 @@
-import { SectionLabel } from "@/components/ui/SectionLabel";
-
 const EMAIL = "paschaloguike@gmail.com";
 
 export function Contact() {
@@ -10,12 +8,8 @@ export function Contact() {
       className="px-[clamp(24px,4.5vw,64px)] pt-[clamp(56px,7vw,96px)] pb-[clamp(40px,5vw,64px)]"
       style={{ background: "var(--paper)", color: "var(--ink)" }}
     >
-      <div className="grid grid-cols-1 gap-x-6 lg:grid-cols-12">
-        <SectionLabel className="lg:col-span-2 lg:col-start-1">
-          Contact
-        </SectionLabel>
-
-        <div className="mt-6 lg:col-start-3 lg:col-span-10 lg:mt-0">
+      <div>
+        <div className="mt-6">
           <p
             className="m-0 mb-7 max-w-[34em] text-[clamp(20px,1.8vw,24px)] leading-[1.5] text-pretty"
             style={{ color: "var(--body)" }}
@@ -30,10 +24,6 @@ export function Contact() {
           >
             {EMAIL}
           </a>
-
-          <div className="mt-5 text-[11px] uppercase tracking-[0.14em]" style={{ color: "var(--faint)" }}>
-            Replies within 1–2 working days · Lagos hours, GMT+1
-          </div>
         </div>
       </div>
     </section>
