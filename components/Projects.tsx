@@ -11,9 +11,9 @@ import { TechIconRow } from "@/components/ui/TechIconRow";
 import { ProjectModal } from "@/components/ProjectModal";
 import { PROJECTS, type Project } from "@/lib/projects-data";
 
-/** Tailwind's `xl` — the point where the grid is already a single 4-up row,
- * which is exactly the layout the deck spreads out into. */
-const DECK_MEDIA_QUERY = "(min-width: 80rem)";
+/** Tailwind's `lg` — tablet and above. At this size the grid is already a
+ * single 4-up row, which is exactly the layout the deck spreads out into. */
+const DECK_MEDIA_QUERY = "(min-width: 64rem)";
 /** Same overdamped feel as CursorField's dock flight, a touch quicker since
  * the distances here are a card width rather than the whole viewport. */
 const DECK_TRANSITION = { type: "spring", stiffness: 140, damping: 24, mass: 1 } as const;
