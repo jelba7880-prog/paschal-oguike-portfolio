@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Badge } from "@/components/ui/Badge";
 import { FlipWord } from "@/components/FlipWord";
 
@@ -62,8 +63,17 @@ export function Hero() {
           above. Wider than the old 4-col version (5 of 12) since it's now
           the left column's sole visual anchor rather than a small aside
           squeezed under the section label. */}
-      <div className="lg:col-start-1 lg:col-span-5 lg:row-start-2 lg:mt-[clamp(28px,4vw,64px)]">
-        <div className="aspect-[4/5] w-full" style={{ background: "var(--wash)" }} aria-hidden />
+      <div className="mx-auto w-full max-w-[280px] sm:max-w-[340px] lg:mx-0 lg:max-w-none lg:col-start-1 lg:col-span-5 lg:row-start-2 lg:mt-[clamp(28px,4vw,64px)]">
+        <div className="relative aspect-[4/5] w-full overflow-hidden">
+          <Image
+            src="/images/hero-portrait.png"
+            alt="Portrait photo"
+            fill
+            priority
+            sizes="(max-width: 1024px) 340px, 33vw"
+            className="object-cover object-top"
+          />
+        </div>
         <div className="mt-2.5 text-[10px] uppercase tracking-[0.16em]" style={{ color: "var(--faint)" }}>
           PO / 2026
         </div>
