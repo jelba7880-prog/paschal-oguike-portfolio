@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, cubicBezier, motion } from "framer-motion";
 import type { Project } from "@/lib/projects-data";
 
 interface ProjectModalProps {
@@ -59,7 +59,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
             initial={{ opacity: 0, scale: 0.94, y: 14 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 8 }}
-            transition={{ duration: 0.32, ease: [0.2, 0.9, 0.24, 1] }}
+            transition={{ duration: 0.32, ease: cubicBezier(0.2, 0.9, 0.24, 1) }}
             className="relative w-full max-w-[920px]"
             style={{ background: "var(--card)", border: "1px solid var(--rule)", boxShadow: "0 40px 90px -40px rgba(23,19,16,0.6)" }}
           >

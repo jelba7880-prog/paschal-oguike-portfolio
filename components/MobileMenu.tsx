@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, cubicBezier, motion } from "framer-motion";
 import { Clock } from "@/components/Clock";
 
 interface NavLink {
@@ -24,7 +24,7 @@ function MenuIcon({ open }: { open: boolean }) {
   );
 }
 
-const OVERLAY_TRANSITION = { duration: 0.25, ease: [0.4, 0, 0.2, 1] } as const;
+const OVERLAY_TRANSITION = { duration: 0.25, ease: cubicBezier(0.4, 0, 0.2, 1) } as const;
 
 /** Drives the cascade: each row (clock, then one per link) is a step behind
  * the one above it via staggerChildren, so they come down like stairs
@@ -36,7 +36,7 @@ const LIST_VARIANTS = {
 
 const ITEM_VARIANTS = {
   hidden: { opacity: 0, y: -10 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: cubicBezier(0.4, 0, 0.2, 1) } },
 };
 
 /**

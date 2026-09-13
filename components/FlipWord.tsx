@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, cubicBezier, motion } from "framer-motion";
 
 interface FlipWordProps {
   words: string[];
@@ -69,7 +69,7 @@ export function FlipWord({ words, intervalMs = 2200, colors }: FlipWordProps) {
               initial={{ y: "100%", opacity: 0 }}
               animate={{ y: "0%", opacity: 1 }}
               exit={{ y: "-100%", opacity: 0 }}
-              transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+              transition={{ duration: 0.5, ease: cubicBezier(0.4, 0, 0.2, 1) }}
               className="absolute inset-0 flex items-center justify-center whitespace-nowrap"
               style={{ color }}
             >
