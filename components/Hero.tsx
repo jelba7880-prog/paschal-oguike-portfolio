@@ -44,14 +44,14 @@ export function Hero() {
         </Badge>
 
         <h1 className="font-display m-0 text-[clamp(34px,4.6vw,72px)] leading-[1.08] font-light tracking-[-0.015em] text-balance">
-          I build web applications that handle <FlipWord words={HANDLES} colors={HANDLE_COLORS} /> — end to end.
+          I build web applications that handle <FlipWord words={HANDLES} colors={HANDLE_COLORS} /> end to end.
         </h1>
 
         <p
           className="text-[clamp(17px,1.4vw,20px)] leading-[1.6] text-pretty max-w-[46ch]"
           style={{ color: "var(--body)" }}
         >
-          I&apos;m a full-stack developer working across React, TypeScript, Node, and Postgres — end to end, from
+          I&apos;m a full-stack developer working across React, TypeScript, Node, and Postgres end to end, from
           data model to UI. I like systems with real constraints: money that has to reconcile, inventory that has
           to stay accurate, forms that have to survive a non-technical user. Most of what&apos;s here came out of
           solving an actual operational problem for a business, not a tutorial.
@@ -66,7 +66,7 @@ export function Hero() {
       <div className="mx-auto w-full max-w-[280px] sm:max-w-[340px] lg:mx-0 lg:max-w-none lg:col-start-1 lg:col-span-5 lg:row-start-2 lg:mt-[clamp(28px,4vw,64px)]">
         <div className="relative aspect-[4/5] w-full overflow-hidden">
           <Image
-            src="/images/hero-portrait.png"
+            src="/images/hero-portrait-3.png"
             alt="Portrait photo"
             fill
             priority

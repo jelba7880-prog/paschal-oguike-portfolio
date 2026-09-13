@@ -50,10 +50,7 @@ export function FlipWord({ words, intervalMs = 2200, colors }: FlipWordProps) {
   const color = colors?.[activeIndex] ?? "var(--accent)";
 
   return (
-    <span
-      className="inline-flex align-baseline"
-      style={{ padding: "0 0.18em", background: `color-mix(in srgb, ${color} 12%, transparent)` }}
-    >
+    <span className="inline-flex align-baseline" style={{ padding: "0 0.18em" }}>
       <span className="relative inline-block overflow-hidden">
         {/* Sizer: real text, invisible, reserves the slot's width/height via
             normal layout so it can never change when the active word does. */}
