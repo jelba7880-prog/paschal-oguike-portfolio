@@ -40,7 +40,14 @@ export interface CursorFieldItem {
  */
 type FieldMode = "idle" | "swarm" | "docked" | "resting";
 
-const FLOAT_SPRING = { stiffness: 90, damping: 20, mass: 0.8 };
+/** Deliberately sluggish — icons should read as trailing the cursor, not
+ *  locked to it. Per-icon variance (see FOLLOW_SPEED_RANGE below) is layered
+ *  on top of this base so the flock doesn't move as one rigid unit. */
+const FLOAT_SPRING = { stiffness: 45, damping: 22, mass: 1.1 };
+/** Multiplier range applied to FLOAT_SPRING.stiffness per icon (inversely to
+ *  mass), so some icons lag noticeably more than others while all stay in
+ *  the same "lazy" family. */
+const FOLLOW_SPEED_RANGE: [number, number] = [0.55, 1.45];
 /** Runs on framer's own clock, so the flight home is never tied to pointer or scroll speed.
  *  Overdamped on purpose — no bounce, a slow deliberate glide rather than a snap. */
 const DOCK_TRANSITION = { type: "spring", stiffness: 110, damping: 26, mass: 1 } as const;
@@ -113,8 +120,15 @@ function FieldIcon({
   // purity rule flags), so the very first roll happens lazily below instead.
   const cluster = useRef({ x: 0, y: 0, targetX: 0, targetY: 0, rerollAt: -1, lastT: -1 });
 
-  const x = useSpring(0, FLOAT_SPRING);
-  const y = useSpring(0, FLOAT_SPRING);
+  // Stable per-icon speed multiplier so each icon trails the cursor at its
+  // own lazy pace instead of the whole flock moving in lockstep.
+  const followSpring = useMemo(() => {
+    const [min, max] = FOLLOW_SPEED_RANGE;
+    const speed = min + hash01(item.id, 7) * (max - min);
+    return { stiffness: FLOAT_SPRING.stiffness * speed, damping: FLOAT_SPRING.damping, mass: FLOAT_SPRING.mass / speed };
+  }, [item.id]);
+  const x = useSpring(0, followSpring);
+  const y = useSpring(0, followSpring);
   // Its own spring rather than a plain per-render ternary, because "resting"
   // opacity also depends on restOpacity — a continuously-changing value tied
   // to scroll, not a discrete mode switch — so it needs a per-frame target,
@@ -311,10 +325,17 @@ export function CursorField({ items = [] }: { items?: CursorFieldItem[] }) {
     if (quietZone) {
       next = "resting";
     } else {
+      const hero = document.getElementById("top");
       const section = document.getElementById("stack");
       const { x, y, onPage } = pointer.current;
       next = "idle";
-      if (section && onPage) {
+      const heroRect = hero?.getBoundingClientRect();
+      const inHero = !!heroRect && x >= heroRect.left && x <= heroRect.right && y >= heroRect.top && y <= heroRect.bottom;
+      // The hero section is a no-swarm zone: the field stays idle there even
+      // while the pointer is on the page, so it never trails the cursor over
+      // the intro copy/portrait. Leaving hero (in any direction) re-arms
+      // normal swarm/dock behavior immediately.
+      if (section && onPage && !inHero) {
         const r = section.getBoundingClientRect();
         // Hysteresis: once docked, the cursor must clear the section by
         // UNDOCK_MARGIN before it counts as "left" — a bare edge-touch no
