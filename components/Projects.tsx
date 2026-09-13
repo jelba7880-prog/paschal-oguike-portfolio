@@ -162,7 +162,7 @@ export function Projects() {
           className="text-[16px] leading-[1.6] text-pretty lg:col-start-10 lg:col-span-3 lg:self-end"
           style={{ color: "var(--muted)" }}
         >
-          Click any card for the technical detail: the problem, the decisions, the parts that broke.
+          Click any card to see the technical detail: the problem, the decisions, the parts that broke.
         </p>
       </div>
 
