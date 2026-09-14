@@ -26,6 +26,25 @@ const HANDLE_COLORS = [
   "var(--flip-9)",
 ];
 
+/** Rendered twice — under the paragraph on desktop, after the photo on
+ * mobile (see the two call sites below) — since the two spots live in
+ * separate flex/grid containers that a plain `order-*` utility can't
+ * reorder across. `visibility` toggles which instance is on screen at a
+ * given breakpoint; the hidden one is `display:none`, so nothing here
+ * duplicates in the accessibility tree. */
+function ResumeButton({ visibility }: { visibility: string }) {
+  return (
+    <a
+      href="/Oguike_Paschal_Chidera_Resume.pdf"
+      download
+      className={`${visibility} w-fit items-center gap-3 border px-3.5 py-[7px] text-[11px] font-medium uppercase tracking-[0.12em] transition-opacity duration-300 hover:opacity-85`}
+      style={{ background: "var(--accent)", borderColor: "var(--accent)", color: "var(--paper)" }}
+    >
+      Download Résumé ↓
+    </a>
+  );
+}
+
 export function Hero() {
   return (
     <section
@@ -48,7 +67,7 @@ export function Hero() {
         </h1>
 
         <p
-          className="text-[clamp(17px,1.4vw,20px)] leading-[1.6] text-pretty max-w-[46ch]"
+          className="hidden lg:block text-[clamp(17px,1.4vw,20px)] leading-[1.6] text-pretty max-w-[46ch]"
           style={{ color: "var(--body)" }}
         >
           I&apos;m a full-stack developer working across React, TypeScript, Node, and Postgres end to end, from
@@ -56,6 +75,8 @@ export function Hero() {
           to stay accurate, forms that have to survive a non-technical user. Most of what&apos;s here came out of
           solving an actual operational problem for a business, not a tutorial.
         </p>
+
+        <ResumeButton visibility="hidden lg:inline-flex" />
       </div>
 
       {/* Photo column: left side on desktop, starting one row down from the
@@ -78,6 +99,8 @@ export function Hero() {
           PO / 2026
         </div>
       </div>
+
+      <ResumeButton visibility="mx-auto inline-flex lg:hidden" />
     </section>
   );
 }
