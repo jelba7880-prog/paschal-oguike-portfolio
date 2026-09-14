@@ -5,7 +5,6 @@ import { MobileMenu } from "@/components/MobileMenu";
 const NAV_LINKS = [
   { href: "#work", label: "Work" },
   { href: "#stack", label: "Stack" },
-  { href: "#record", label: "Record" },
   { href: "#notes", label: "Notes" },
   { href: "#contact", label: "Contact" },
 ];

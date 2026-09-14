@@ -77,10 +77,7 @@ const UNDOCK_MARGIN = 32;
  * this only suspends the swarm once Notes is genuinely taking over the
  * screen (its top within the this fraction of the viewport, i.e. Notes
  * already fills most of it) — not the moment its top edge merely peeks in
- * from the bottom. TrackRecord, between the skills grid and Notes, is
- * barely shorter than a typical viewport, so a larger threshold here used
- * to swallow almost that entire section into the quiet zone, killing the
- * cursor-follow long before the user was anywhere near Notes. */
+ * from the bottom. */
 const QUIET_ZONE_ENTER = 0.15;
 const QUIET_ZONE_EXIT = 0.3;
 /** How much of the skills section must be in view to trigger the scroll-driven
