@@ -5,11 +5,11 @@ export function Contact() {
     <section
       id="contact"
       data-inverse
-      className="px-[clamp(24px,4.5vw,64px)] pt-[clamp(56px,7vw,96px)] pb-[clamp(40px,5vw,64px)]"
+      className="px-[clamp(24px,4.5vw,64px)] pt-[clamp(96px,10vw,160px)] pb-[clamp(96px,10vw,160px)]"
       style={{ background: "var(--paper)", color: "var(--ink)" }}
     >
       <div>
-        <div className="mt-6">
+        <div className="mt-6 flex flex-col items-end text-right">
           <p
             className="m-0 mb-7 max-w-[34em] text-[clamp(20px,1.8vw,24px)] leading-[1.5] text-pretty"
             style={{ color: "var(--body)" }}
