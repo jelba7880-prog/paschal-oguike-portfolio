@@ -71,7 +71,7 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
       { id: "git", label: "Git", src: `${ICONS}/git`, size: 31, depth: 0.24, x: 0.22, y: 0.72 },
       { id: "github", label: "GitHub", src: `${ICONS}/github`, mono: true, size: 47, depth: 0.68, x: 0.36, y: 0.78 },
       { id: "vercel", label: "Vercel", src: `${ICONS}/vercel`, mono: true, size: 39, depth: 0.46, x: 0.65, y: 0.785 },
-      { id: "vscode", label: "VS Code", src: `${ICONS}/vscodium/1f9cf0`, size: 36, depth: 0.36, x: 0.045, y: 0.9 },
+      { id: "vscode", label: "VS Code", src: "/icons/vscode.svg", size: 36, depth: 0.36, x: 0.045, y: 0.9 },
       { id: "turborepo", label: "Turborepo", src: `${ICONS}/turborepo`, size: 44, depth: 0.55, x: 0.09, y: 0.76 },
       { id: "claude", label: "Claude", src: `${ICONS}/claude`, size: 33, depth: 0.28, x: 0.765, y: 0.94 },
     ],
