@@ -20,7 +20,7 @@ export function Contact() {
 
           <a
             href={`mailto:${EMAIL}`}
-            className="font-display inline-block bg-[linear-gradient(var(--accent),var(--accent))] bg-[length:0%_2px] bg-no-repeat bg-[position:0_96%] text-[clamp(28px,4.2vw,60px)] leading-[1.15] font-light italic break-words transition-[background-size] duration-[400ms] hover:bg-[length:100%_2px]"
+            className="font-display inline-block bg-[linear-gradient(var(--accent),var(--accent))] bg-[length:0%_2px] bg-no-repeat bg-[position:0_96%] text-[clamp(28px,4.2vw,60px)] leading-[1.15] font-medium italic break-words transition-[background-size] duration-[400ms] hover:bg-[length:100%_2px]"
           >
             {EMAIL}
           </a>

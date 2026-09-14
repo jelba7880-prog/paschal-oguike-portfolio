@@ -62,7 +62,7 @@ export function Hero() {
           Currently building — PZ Autos
         </Badge>
 
-        <h1 className="font-display m-0 text-[clamp(34px,4.6vw,72px)] leading-[1.08] font-light tracking-[-0.015em] text-balance">
+        <h1 className="font-display m-0 text-[clamp(34px,4.6vw,72px)] leading-[1.08] font-medium tracking-[-0.015em] text-balance">
           I build web applications that handle <FlipWord words={HANDLES} colors={HANDLE_COLORS} /> end to end.
         </h1>
 
