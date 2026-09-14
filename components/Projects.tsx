@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { MotionConfig, motion } from "framer-motion";
+import { MotionConfig, motion, useReducedMotion } from "framer-motion";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { GlassScrim } from "@/components/ui/GlassScrim";
@@ -117,6 +117,10 @@ export function Projects() {
   const toggleRef = useRef<HTMLButtonElement>(null);
   const [isDesktop, setIsDesktop] = useState(false);
   const [deckOpen, setDeckOpen] = useState(false);
+  // Shakes the toggle to draw a first-time visitor's eye to it; stops for
+  // good the moment they've actually used it once.
+  const [hasToggled, setHasToggled] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
     const query = window.matchMedia(DECK_MEDIA_QUERY);
@@ -153,19 +157,10 @@ export function Projects() {
       id="work"
       className="px-[clamp(24px,4.5vw,64px)] pt-[clamp(56px,6vw,88px)] pb-[clamp(56px,6vw,88px)]"
     >
-      <div
-        className="mb-[clamp(40px,5vw,64px)] grid grid-cols-1 gap-x-6 gap-y-3 border-t pt-8 lg:grid-cols-12"
-        style={{ borderColor: "var(--ink)" }}
-      >
+      <div className="mb-[clamp(40px,5vw,64px)] grid grid-cols-1 gap-x-6 gap-y-3 lg:grid-cols-12">
         <SectionLabel className="lg:col-span-2 lg:col-start-1">
           Projects
         </SectionLabel>
-        <span
-          className="text-[10px] uppercase tracking-[0.16em] lg:col-start-9 lg:col-span-1 lg:justify-self-end"
-          style={{ color: "var(--faint)" }}
-        >
-          PO / 2026
-        </span>
         <p
           className="text-[16px] leading-[1.6] text-pretty lg:col-start-10 lg:col-span-3 lg:self-end"
           style={{ color: "var(--muted)" }}
@@ -176,17 +171,22 @@ export function Projects() {
 
       {isDesktop && (
         <div className="mb-3.5 flex justify-end">
-          <button
+          <motion.button
             ref={toggleRef}
             type="button"
-            onClick={() => setDeckOpen((open) => !open)}
+            onClick={() => {
+              setDeckOpen((open) => !open);
+              setHasToggled(true);
+            }}
             aria-expanded={deckOpen}
             aria-controls="work-deck"
+            animate={!hasToggled && !prefersReducedMotion ? { x: [0, -4, 4, -4, 4, 0] } : { x: 0 }}
+            transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 3.5, ease: "easeInOut" }}
             className="inline-flex items-center border px-3.5 py-[7px] text-[11px] font-medium uppercase tracking-[0.12em] whitespace-nowrap transition-colors duration-300 hover:border-[var(--ink)] hover:bg-[var(--wash)] hover:text-[var(--ink)]"
             style={{ borderColor: "var(--chip)", color: "var(--body)" }}
           >
             {deckOpen ? "Stack cards" : "Spread cards"}
-          </button>
+          </motion.button>
         </div>
       )}
 
