@@ -40,10 +40,7 @@ export function Notes() {
       className="px-[clamp(24px,4.5vw,64px)] pt-[clamp(40px,5vw,64px)] pb-[clamp(56px,6vw,88px)]"
       style={{ background: "var(--paper)", color: "var(--ink)" }}
     >
-      <div
-        className="mb-[clamp(40px,5vw,64px)] grid grid-cols-1 gap-x-6 gap-y-3 border-t pt-8 lg:grid-cols-12"
-        style={{ borderColor: "var(--ink)" }}
-      >
+      <div className="mb-[clamp(40px,5vw,64px)] grid grid-cols-1 gap-x-6 gap-y-3 lg:grid-cols-12">
         <SectionLabel className="lg:col-span-2 lg:col-start-1">
           Notes
         </SectionLabel>

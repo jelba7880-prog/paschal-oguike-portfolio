@@ -31,8 +31,8 @@ export function Footer() {
     <footer
       id="site-footer"
       data-inverse
-      className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t px-[clamp(24px,4.5vw,64px)] pt-9 pb-[clamp(28px,4vw,40px)]"
-      style={{ background: "var(--paper)", borderColor: "var(--rule)" }}
+      className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 px-[clamp(24px,4.5vw,64px)] pt-9 pb-[clamp(28px,4vw,40px)]"
+      style={{ background: "var(--paper)" }}
     >
       <div className="flex flex-wrap gap-8 text-[11px] uppercase tracking-[0.14em]">
         {LINKS.map((link) => (

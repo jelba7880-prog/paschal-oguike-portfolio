@@ -37,10 +37,7 @@ export function SkillsMatrix() {
       id="stack"
       className="px-[clamp(24px,4.5vw,64px)] pt-[clamp(56px,6vw,88px)] pb-[clamp(64px,9.5vw,136px)]"
     >
-      <div
-        className="mb-[clamp(40px,5vw,64px)] grid grid-cols-1 gap-x-6 gap-y-3 border-t pt-8 lg:grid-cols-12"
-        style={{ borderColor: "var(--ink)" }}
-      >
+      <div className="mb-[clamp(40px,5vw,64px)] grid grid-cols-1 gap-x-6 gap-y-3 lg:grid-cols-12">
         <SectionLabel className="lg:col-span-2 lg:col-start-1">
           Technical skills
         </SectionLabel>
@@ -52,8 +49,8 @@ export function SkillsMatrix() {
         </p>
       </div>
 
-      {/* No z-[21] here, unlike Projects/TrackRecord's GlassScrim usage: those
-          sections have no reason for CursorField to render above their cards,
+      {/* No z-[21] here, unlike Projects' GlassScrim usage: that section has
+          no reason for CursorField to render above its cards,
           but this grid is exactly what the floating field flies into and
           docks onto — it must stay visible above the field the whole time,
           not hidden behind glass, so this section is deliberately left at
