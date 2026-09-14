@@ -62,7 +62,7 @@ export const PROJECTS: Project[] = [
     number: "02",
     status: "In progress",
     tone: "muted",
-    title: "Freight & Logistics Platform",
+    title: "Meridian Freight",
     description: "Three apps, one shared backend, kept in sync.",
     tags: ["Turborepo", "Next.js", "Postgres"],
     tagline:
@@ -90,9 +90,9 @@ export const PROJECTS: Project[] = [
   {
     id: "dealership",
     number: "03",
-    status: "In active use",
+    status: "Live",
     tone: "accent",
-    title: "Dealership Operations Platform",
+    title: "Polanco Ops Hub",
     description: "Inventory and CRM built around how the team already works.",
     tags: ["React", "Node", "WhatsApp API"],
     tagline:
