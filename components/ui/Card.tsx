@@ -1,4 +1,4 @@
-import type { KeyboardEvent, ReactNode } from "react";
+import type { CSSProperties, KeyboardEvent, ReactNode } from "react";
 
 interface CardProps {
   children: ReactNode;
@@ -6,16 +6,19 @@ interface CardProps {
   href?: string;
   onClick?: () => void;
   className?: string;
+  /** Overrides the default border/background, e.g. for a resting-state
+   * border+shadow that must apply without a hover. */
+  style?: CSSProperties;
 }
 
 /** Shared surface for the project grid and similar boxed content. */
-export function Card({ children, interactive = false, href, onClick, className = "" }: CardProps) {
+export function Card({ children, interactive = false, href, onClick, className = "", style: styleOverride }: CardProps) {
   const classes = `flex flex-col border p-[22px] transition-all duration-300 ${
     interactive
       ? "cursor-pointer hover:-translate-y-1.5 hover:border-[var(--ink)] hover:shadow-[0_22px_44px_-26px_rgba(23,19,16,0.5)]"
       : ""
   } ${className}`;
-  const style = { background: "var(--card)", borderColor: "var(--rule)" };
+  const style = { background: "var(--card)", borderColor: "var(--rule)", ...styleOverride };
 
   if (href) {
     return (

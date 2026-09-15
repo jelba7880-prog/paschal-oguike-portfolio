@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { MotionConfig, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, MotionConfig, motion, useReducedMotion } from "framer-motion";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { GlassScrim } from "@/components/ui/GlassScrim";
@@ -30,6 +30,12 @@ const FAN_ROTATE_STEP = 2;
 const FAN_RESERVE = 28;
 const FAN_SHADOW = "0px 22px 44px -26px rgba(23,19,16,0.5)";
 const NO_SHADOW = "0px 0px 0px 0px rgba(23,19,16,0)";
+/** Resting-state shadow for a collapsed mobile accordion row — lighter than
+ * FAN_SHADOW's hover-only lift, since this one has to read at rest. Paired
+ * with --accordion-border (globals.css), which is themed separately since a
+ * flat rgba(255,255,255,0.1) reads fine on the dark --card but disappears
+ * against the light theme's near-white one. */
+const ACCORDION_SHADOW = "0px 14px 28px -20px rgba(23,19,16,0.4)";
 
 /**
  * Reads the ?project= query param and resolves the open modal from it.
@@ -54,12 +60,33 @@ function ProjectModalGate() {
 
 /** `flat` is true once the card sits fully spread — either the fan deck has
  * been opened, or there's no deck at all below the desktop breakpoint — as
- * opposed to collapsed behind the fanned deck, where only a sliver shows. */
-function ProjectCard({ project, onOpen, flat }: { project: Project; onOpen?: () => void; flat: boolean }) {
+ * opposed to collapsed behind the fanned deck, where only a sliver shows.
+ *
+ * `expanded` is the separate mobile-only accordion state: when false, the
+ * body (description/tags/read-link) is unmounted rather than just visually
+ * covered, since — unlike the fan deck's peek-behind-the-stack illusion —
+ * a mobile list has nothing to hide a full card behind. Defaults to true so
+ * desktop call sites (which never pass it) are unaffected. */
+function ProjectCard({
+  project,
+  onOpen,
+  flat,
+  expanded = true,
+}: {
+  project: Project;
+  onOpen?: () => void;
+  flat: boolean;
+  expanded?: boolean;
+}) {
   const icon = project.techIcons[0];
 
   return (
-    <Card interactive={Boolean(onOpen)} onClick={onOpen} className="h-full">
+    <Card
+      interactive={Boolean(onOpen)}
+      onClick={onOpen}
+      className="h-full"
+      style={!expanded ? { borderColor: "var(--accordion-border)", boxShadow: ACCORDION_SHADOW } : undefined}
+    >
       <div className="flex items-center justify-between gap-3">
         <span className="flex min-w-0 flex-1 items-center gap-2.5">
           <span className="shrink-0 text-[11px]" style={{ color: "var(--accent)" }}>
@@ -88,26 +115,39 @@ function ProjectCard({ project, onOpen, flat }: { project: Project; onOpen?: () 
         {project.title}
       </h3>
 
-      <p className="mb-[22px] text-[13.5px] leading-[1.5] text-pretty" style={{ color: "var(--muted)" }}>
-        {project.description}
-      </p>
+      <AnimatePresence initial={false}>
+        {expanded && (
+          <motion.div
+            key="body"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="flex flex-1 flex-col overflow-hidden"
+          >
+            <p className="mb-[22px] text-[13.5px] leading-[1.5] text-pretty" style={{ color: "var(--muted)" }}>
+              {project.description}
+            </p>
 
-      <div className="flex-1" />
+            <div className="flex-1" />
 
-      <div className="mb-4 flex flex-wrap gap-1.5">
-        {project.tags.map((tag) => (
-          <Badge key={tag} variant="tag">
-            {tag}
-          </Badge>
-        ))}
-      </div>
+            <div className="mb-4 flex flex-wrap gap-1.5">
+              {project.tags.map((tag) => (
+                <Badge key={tag} variant="tag">
+                  {tag}
+                </Badge>
+              ))}
+            </div>
 
-      <div
-        className="border-t pt-3.5 text-[10px] uppercase tracking-[0.16em]"
-        style={{ borderColor: "var(--rule)", color: "var(--accent)" }}
-      >
-        Read →
-      </div>
+            <div
+              className="border-t pt-3.5 text-[10px] uppercase tracking-[0.16em]"
+              style={{ borderColor: "var(--rule)", color: "var(--accent)" }}
+            >
+              Read →
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </Card>
   );
 }
@@ -117,6 +157,10 @@ export function Projects() {
   const toggleRef = useRef<HTMLButtonElement>(null);
   const [isDesktop, setIsDesktop] = useState(false);
   const [deckOpen, setDeckOpen] = useState(false);
+  // Mobile-only accordion: which card (if any) is expanded. Independent of
+  // deckOpen — the desktop fan/spread state doesn't exist below the
+  // breakpoint, and this doesn't exist above it.
+  const [openCardId, setOpenCardId] = useState<string | null>(null);
   // Shakes the toggle to draw a first-time visitor's eye to it; stops for
   // good the moment they've actually used it once.
   const [hasToggled, setHasToggled] = useState(false);
@@ -142,6 +186,17 @@ export function Projects() {
 
   function openProject(id: string) {
     router.push(`?project=${encodeURIComponent(id)}`, { scroll: false });
+  }
+
+  // Mobile-only tap handler: first tap on a card expands it (collapsing
+  // whatever else was open); tapping the card that's already expanded opens
+  // the detail modal instead of collapsing it back.
+  function handleAccordionTap(id: string) {
+    if (openCardId === id) {
+      openProject(id);
+    } else {
+      setOpenCardId(id);
+    }
   }
 
   function handleDeckKeyDown(e: KeyboardEvent<HTMLDivElement>) {
@@ -212,6 +267,11 @@ export function Projects() {
           >
             {PROJECTS.map((project, i) => {
               const fromCenter = i - (PROJECTS.length - 1) / 2;
+              const mobileExpanded = openCardId === project.id;
+              // Mobile has no fan/spread state of its own — flat mirrors the
+              // desktop spread look when a card is the open accordion row,
+              // and drops to the single-icon sliver style otherwise.
+              const flat = isDesktop ? !fanned : mobileExpanded;
               return (
                 <motion.div
                   key={project.id}
@@ -234,8 +294,15 @@ export function Projects() {
                 >
                   <ProjectCard
                     project={project}
-                    onOpen={fanned ? undefined : () => openProject(project.id)}
-                    flat={!fanned}
+                    onOpen={
+                      fanned
+                        ? undefined
+                        : isDesktop
+                          ? () => openProject(project.id)
+                          : () => handleAccordionTap(project.id)
+                    }
+                    flat={flat}
+                    expanded={isDesktop || mobileExpanded}
                   />
                 </motion.div>
               );
