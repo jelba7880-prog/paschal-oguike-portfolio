@@ -1,8 +1,26 @@
 "use client";
 
-import { Suspense, useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
+import {
+  Suspense,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type KeyboardEvent,
+  type MouseEvent,
+} from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { AnimatePresence, MotionConfig, motion, useReducedMotion } from "framer-motion";
+import {
+  AnimatePresence,
+  MotionConfig,
+  motion,
+  useMotionTemplate,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { GlassScrim } from "@/components/ui/GlassScrim";
@@ -50,6 +68,35 @@ const NO_SHADOW = "0px 0px 0px 0px rgba(23,19,16,0)";
  * and then snapping to the fan-deck. */
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
+/** Spread-card hover tilt. Kept deliberately small: a few degrees reads as
+ * the card catching the light, anything more starts to feel like a toy. */
+const TILT_MAX_DEG = 4;
+const TILT_PERSPECTIVE = 900;
+const HOVER_LIFT_SCALE = 1.02;
+const TILT_SPRING = { stiffness: 220, damping: 22, mass: 0.6 };
+const GLARE_SPRING = { stiffness: 200, damping: 30 };
+/** isDesktop is width-only, and touch laptops/tablets can be that wide —
+ * the tilt also needs a real hovering, fine pointer to make sense. */
+const HOVER_MEDIA_QUERY = "(hover: hover) and (pointer: fine)";
+
+function subscribeToHoverQuery(onChange: () => void) {
+  const query = window.matchMedia(HOVER_MEDIA_QUERY);
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+}
+
+function useCanHover() {
+  return useSyncExternalStore(
+    subscribeToHoverQuery,
+    () => window.matchMedia(HOVER_MEDIA_QUERY).matches,
+    () => false,
+  );
+}
+
+function clamp01(value: number) {
+  return Math.min(1, Math.max(0, value));
+}
+
 /**
  * Reads the ?project= query param and resolves the open modal from it.
  * Isolated behind Suspense because useSearchParams forces client-side
@@ -94,80 +141,140 @@ function ProjectCard({
   isDesktop: boolean;
 }) {
   const icon = project.techIcons[0];
+  const prefersReducedMotion = useReducedMotion();
+  const canHover = useCanHover();
+  // Only a fully spread desktop card tilts — never the fanned deck (its own
+  // x/y/rotate animation lives on the parent) or the mobile accordion.
+  const tiltEnabled = isDesktop && flat && canHover && !prefersReducedMotion;
+
+  // Cursor position within the card, 0–1 on each axis; 0.5/0.5 is neutral.
+  const pointerX = useMotionValue(0.5);
+  const pointerY = useMotionValue(0.5);
+  const hover = useMotionValue(0);
+  const rotateX = useSpring(useTransform(pointerY, [0, 1], [TILT_MAX_DEG, -TILT_MAX_DEG]), TILT_SPRING);
+  const rotateY = useSpring(useTransform(pointerX, [0, 1], [-TILT_MAX_DEG, TILT_MAX_DEG]), TILT_SPRING);
+  const scale = useSpring(useTransform(hover, [0, 1], [1, HOVER_LIFT_SCALE]), TILT_SPRING);
+  const glareOpacity = useSpring(hover, GLARE_SPRING);
+  const glareX = useTransform(pointerX, [0, 1], [0, 100]);
+  const glareY = useTransform(pointerY, [0, 1], [0, 100]);
+  const glare = useMotionTemplate`radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.55), rgba(255,255,255,0) 60%)`;
+
+  function resetTilt() {
+    pointerX.set(0.5);
+    pointerY.set(0.5);
+    hover.set(0);
+  }
+
+  // Restacking the deck (or crossing the breakpoint) mid-hover disables the
+  // tilt without a mouseleave ever firing — settle back to neutral.
+  useEffect(() => {
+    if (tiltEnabled) return;
+    pointerX.set(0.5);
+    pointerY.set(0.5);
+    hover.set(0);
+  }, [tiltEnabled, pointerX, pointerY, hover]);
+
+  function handleMouseMove(e: MouseEvent<HTMLDivElement>) {
+    // Measure the untransformed grid slot rather than this tilting, scaling
+    // element, so the tilt can't feed back into its own cursor math.
+    const rect = (e.currentTarget.parentElement ?? e.currentTarget).getBoundingClientRect();
+    pointerX.set(clamp01((e.clientX - rect.left) / rect.width));
+    pointerY.set(clamp01((e.clientY - rect.top) / rect.height));
+    hover.set(1);
+  }
 
   return (
-    <Card
-      interactive={Boolean(onOpen)}
-      onClick={onOpen}
+    <motion.div
       className="h-full"
-      hoverShadow={CARD_SHADOW}
-      style={{
-        ...(!isDesktop ? { background: "transparent", boxShadow: CARD_SHADOW } : {}),
-        ...(!expanded ? { borderColor: "var(--accordion-border)" } : {}),
-      }}
+      onMouseMove={tiltEnabled ? handleMouseMove : undefined}
+      onMouseLeave={tiltEnabled ? resetTilt : undefined}
+      style={tiltEnabled ? { rotateX, rotateY, scale, transformPerspective: TILT_PERSPECTIVE } : undefined}
     >
-      <div className="flex items-center justify-between gap-3">
-        <span className="flex min-w-0 flex-1 items-center gap-2.5">
-          <span className="shrink-0 text-[11px]" style={{ color: "var(--accent)" }}>
-            {project.number}
+      <Card
+        interactive={Boolean(onOpen)}
+        onClick={onOpen}
+        className="relative h-full"
+        hoverShadow={CARD_SHADOW}
+        style={{
+          ...(!isDesktop ? { background: "transparent", boxShadow: CARD_SHADOW } : {}),
+          ...(!expanded ? { borderColor: "var(--accordion-border)" } : {}),
+        }}
+      >
+        <div className="flex items-center justify-between gap-3">
+          <span className="flex min-w-0 flex-1 items-center gap-2.5">
+            <span className="shrink-0 text-[11px]" style={{ color: "var(--accent)" }}>
+              {project.number}
+            </span>
+            {flat ? (
+              <TechIconRow icons={project.techIcons} />
+            ) : (
+              icon && (
+                <img
+                  src={icon.src}
+                  alt={icon.label}
+                  title={icon.label}
+                  data-mono={icon.mono ? "" : undefined}
+                  width={14}
+                  height={14}
+                  className="block shrink-0"
+                />
+              )
+            )}
           </span>
-          {flat ? (
-            <TechIconRow icons={project.techIcons} />
-          ) : (
-            icon && (
-              <img
-                src={icon.src}
-                alt={icon.label}
-                title={icon.label}
-                data-mono={icon.mono ? "" : undefined}
-                width={14}
-                height={14}
-                className="block shrink-0"
-              />
-            )
-          )}
-        </span>
-        <Badge tone={project.tone}>{project.status}</Badge>
-      </div>
+          <Badge tone={project.tone}>{project.status}</Badge>
+        </div>
 
-      <h3 className="font-display mt-5 mb-2 text-[25px] leading-[1.15] font-normal tracking-[-0.01em]">
-        {project.title}
-      </h3>
+        <h3
+          className={`font-display mt-5 mb-2 text-[25px] leading-[1.15] font-normal tracking-[-0.01em] ${
+            flat ? "text-center" : ""
+          }`}
+        >
+          {project.title}
+        </h3>
 
-      <AnimatePresence initial={false}>
-        {expanded && (
-          <motion.div
-            key="body"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="flex flex-1 flex-col overflow-hidden"
-          >
-            <p className="mb-[22px] text-[13.5px] leading-[1.5] text-pretty" style={{ color: "var(--muted)" }}>
-              {project.description}
-            </p>
-
-            <div className="flex-1" />
-
-            <div className="mb-4 flex flex-wrap gap-1.5">
-              {project.tags.map((tag) => (
-                <Badge key={tag} variant="tag">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-
-            <div
-              className="border-t pt-3.5 text-[10px] uppercase tracking-[0.16em]"
-              style={{ borderColor: "var(--rule)", color: "var(--accent)" }}
+        <AnimatePresence initial={false}>
+          {expanded && (
+            <motion.div
+              key="body"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="flex flex-1 flex-col overflow-hidden"
             >
-              Read →
-            </div>
-          </motion.div>
+              <p className="mb-[22px] text-[13.5px] leading-[1.5] text-pretty" style={{ color: "var(--muted)" }}>
+                {project.description}
+              </p>
+
+              <div className="flex-1" />
+
+              <div className="mb-4 flex flex-wrap gap-1.5">
+                {project.tags.map((tag) => (
+                  <Badge key={tag} variant="tag">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+
+              <div
+                className="border-t pt-3.5 text-[10px] uppercase tracking-[0.16em]"
+                style={{ borderColor: "var(--rule)", color: "var(--accent)" }}
+              >
+                Read →
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {tiltEnabled && (
+          <motion.div
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{ background: glare, opacity: glareOpacity, mixBlendMode: "soft-light" }}
+          />
         )}
-      </AnimatePresence>
-    </Card>
+      </Card>
+    </motion.div>
   );
 }
 
@@ -278,7 +385,10 @@ export function Projects() {
             key={isDesktop ? "deck" : "grid"}
             id="work-deck"
             initial={false}
-            animate={{ paddingBottom: fanned ? FAN_RESERVE : 0 }}
+            // Reserved in both states, not just while fanned: toggling it
+            // changed the section's height by FAN_RESERVE on every stack/
+            // spread, shoving every section below up and down.
+            style={{ paddingBottom: isDesktop ? FAN_RESERVE : 0 }}
             // While fanned the whole deck is one "spread" target; once spread,
             // clicks belong to the individual cards and closing is explicit.
             onClick={fanned ? () => setDeckOpen(true) : undefined}
