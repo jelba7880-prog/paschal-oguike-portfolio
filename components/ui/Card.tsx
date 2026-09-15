@@ -9,16 +9,33 @@ interface CardProps {
   /** Overrides the default border/background, e.g. for a resting-state
    * border+shadow that must apply without a hover. */
   style?: CSSProperties;
+  /** box-shadow applied on hover for interactive cards. Passed in as a CSS
+   * custom property (rather than baked into the Tailwind class) so callers
+   * can share one shadow constant between this native :hover trigger and
+   * their own resting-state inline shadow, instead of two values drifting
+   * apart over time. */
+  hoverShadow?: string;
 }
 
 /** Shared surface for the project grid and similar boxed content. */
-export function Card({ children, interactive = false, href, onClick, className = "", style: styleOverride }: CardProps) {
+export function Card({
+  children,
+  interactive = false,
+  href,
+  onClick,
+  className = "",
+  style: styleOverride,
+  hoverShadow,
+}: CardProps) {
   const classes = `flex flex-col border p-[22px] transition-all duration-300 ${
-    interactive
-      ? "cursor-pointer hover:-translate-y-1.5 hover:border-[var(--ink)] hover:shadow-[0_22px_44px_-26px_rgba(23,19,16,0.5)]"
-      : ""
+    interactive ? "cursor-pointer hover:-translate-y-1.5 hover:border-[var(--ink)] hover:shadow-[var(--card-hover-shadow)]" : ""
   } ${className}`;
-  const style = { background: "var(--card)", borderColor: "var(--rule)", ...styleOverride };
+  const style = {
+    background: "var(--card)",
+    borderColor: "var(--rule)",
+    ...(hoverShadow ? ({ "--card-hover-shadow": hoverShadow } as CSSProperties) : {}),
+    ...styleOverride,
+  };
 
   if (href) {
     return (

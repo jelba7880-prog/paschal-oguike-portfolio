@@ -31,14 +31,16 @@ const FAN_ARC = 6;
 const FAN_ROTATE_STEP = 2;
 /** Room under the row for the arc plus the rotated cards' lower corners. */
 const FAN_RESERVE = 28;
-const FAN_SHADOW = "0px 22px 44px -26px rgba(23,19,16,0.5)";
-const NO_SHADOW = "0px 0px 0px 0px rgba(23,19,16,0)";
-/** Resting-state shadow for a collapsed mobile accordion row — lighter than
- * FAN_SHADOW's hover-only lift, since this one has to read at rest. Paired
- * with --accordion-border (globals.css), which is themed separately since a
- * flat rgba(255,255,255,0.1) reads fine on the dark --card but disappears
+/** Single shared shadow for every card surface — the desktop fan lift, its
+ * hover state, and the mobile resting/expanded rows — so color and spread
+ * move together instead of three near-duplicate values drifting apart.
+ * Warm --accent rather than a neutral rgba, with a tight spread so it reads
+ * as a soft lift rather than a wide glow. Paired on collapsed mobile rows
+ * with --accordion-border (globals.css), themed separately since a flat
+ * rgba(255,255,255,0.1) reads fine on the dark --card but disappears
  * against the light theme's near-white one. */
-const ACCORDION_SHADOW = "0px 14px 28px -20px rgba(23,19,16,0.4)";
+const CARD_SHADOW = "0px 16px 32px -30px var(--accent)";
+const NO_SHADOW = "0px 0px 0px 0px rgba(23,19,16,0)";
 
 /** useLayoutEffect during SSR/static prerendering warns ("does nothing on
  * the server") since there's no DOM to lay out — fall back to useEffect
@@ -83,11 +85,13 @@ function ProjectCard({
   onOpen,
   flat,
   expanded = true,
+  isDesktop,
 }: {
   project: Project;
   onOpen?: () => void;
   flat: boolean;
   expanded?: boolean;
+  isDesktop: boolean;
 }) {
   const icon = project.techIcons[0];
 
@@ -96,7 +100,11 @@ function ProjectCard({
       interactive={Boolean(onOpen)}
       onClick={onOpen}
       className="h-full"
-      style={!expanded ? { borderColor: "var(--accordion-border)", boxShadow: ACCORDION_SHADOW } : undefined}
+      hoverShadow={CARD_SHADOW}
+      style={{
+        ...(!isDesktop ? { background: "transparent", boxShadow: CARD_SHADOW } : {}),
+        ...(!expanded ? { borderColor: "var(--accordion-border)" } : {}),
+      }}
     >
       <div className="flex items-center justify-between gap-3">
         <span className="flex min-w-0 flex-1 items-center gap-2.5">
@@ -296,7 +304,7 @@ export function Projects() {
                           x: `${fromCenter * FAN_X_STEP}%`,
                           y: fromCenter * fromCenter * FAN_ARC,
                           rotate: fromCenter * FAN_ROTATE_STEP,
-                          boxShadow: FAN_SHADOW,
+                          boxShadow: CARD_SHADOW,
                         }
                       : { x: "0%", y: 0, rotate: 0, boxShadow: NO_SHADOW }
                   }
@@ -317,6 +325,7 @@ export function Projects() {
                     }
                     flat={flat}
                     expanded={isDesktop || mobileExpanded}
+                    isDesktop={isDesktop}
                   />
                 </motion.div>
               );
