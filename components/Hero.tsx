@@ -56,12 +56,12 @@ export function Hero() {
           own lg:row-start-2 below) so the two columns don't align into an
           even, symmetrical pair; the text leads, the photo trails and lands
           lower, which is the asymmetry this layout is going for. */}
-      <div className="flex flex-col gap-y-7 lg:col-start-7 lg:col-span-6 lg:row-start-1 lg:row-span-2 lg:self-start">
+      <div className="flex flex-col gap-y-7 lg:col-start-6 lg:col-span-6 lg:row-start-1 lg:row-span-2 lg:self-start">
         <p className="font-signature m-0 text-[13px] tracking-[0.08em]" style={{ color: "var(--body)" }}>
           Hi, my name is Paschal
         </p>
 
-        <h1 className="font-display m-0 text-[clamp(34px,4.6vw,72px)] leading-[1.08] font-medium tracking-[-0.015em] text-balance">
+        <h1 className="font-display m-0 text-center text-[clamp(34px,4.6vw,72px)] leading-[1.08] font-medium tracking-[-0.015em] text-balance lg:text-left">
           I build web applications that handle <FlipWord words={HANDLES} colors={HANDLE_COLORS} /> end to end.
         </h1>
 
@@ -83,7 +83,7 @@ export function Hero() {
           above. Wider than the old 4-col version (5 of 12) since it's now
           the left column's sole visual anchor rather than a small aside
           squeezed under the section label. */}
-      <div className="mx-auto w-full max-w-[280px] sm:max-w-[340px] lg:mx-0 lg:max-w-[360px] lg:col-start-1 lg:col-span-5 lg:row-start-2 lg:mt-[clamp(28px,4vw,64px)]">
+      <div className="mx-auto w-full max-w-[280px] sm:max-w-[340px] lg:mx-auto lg:max-w-[360px] lg:col-start-1 lg:col-span-5 lg:row-start-2 lg:mt-[clamp(28px,4vw,64px)]">
         <div className="relative aspect-[4/5] w-full overflow-hidden">
           <Image
             src="/images/hero-portrait-4.png"
