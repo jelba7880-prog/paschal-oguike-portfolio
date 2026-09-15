@@ -49,7 +49,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
-          className="fixed inset-0 z-40 flex items-start justify-center overflow-y-auto p-[clamp(16px,4vh,56px)_clamp(12px,3vw,40px)]"
+          className="fixed inset-0 z-40 flex items-start justify-center overflow-y-auto p-[clamp(16px,4vh,56px)_clamp(24px,3vw,40px)]"
           style={{ background: "rgba(23,19,16,0.42)", backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
         >
           <motion.div
@@ -64,6 +64,19 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
             className="relative w-full max-w-[920px]"
             style={{ background: "var(--card)", border: "1px solid var(--rule)", boxShadow: "0 40px 90px -40px rgba(23,19,16,0.6)" }}
           >
+            {/* Anchored to the card itself (not the image wrapper) and
+                translated half its own size past the corner, so it visibly
+                hangs off the card boundary — a clearer "this closes this
+                card" affordance than a button sitting flush inside it. */}
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close"
+              className="absolute top-0 right-0 z-10 flex h-9 w-9 -translate-y-1/2 translate-x-1/2 items-center justify-center rounded-full border border-white/15 text-[15px] text-white backdrop-blur-md transition-colors duration-300 bg-[rgba(23,19,16,0.55)] hover:bg-[rgba(23,19,16,0.8)]"
+            >
+              ✕
+            </button>
+
             <div className="relative border-b" style={{ borderColor: "var(--rule)" }}>
               <div className="relative aspect-video w-full overflow-hidden" style={{ background: "var(--wash)" }}>
                 {project.image && (
@@ -76,15 +89,6 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                   />
                 )}
               </div>
-              <button
-                type="button"
-                onClick={onClose}
-                aria-label="Close"
-                className="absolute top-3.5 right-3.5 flex h-[34px] w-[34px] items-center justify-center border text-[14px] transition-colors duration-300 hover:bg-[var(--ink)] hover:text-[var(--card)]"
-                style={{ background: "var(--card)", borderColor: "var(--rule)", color: "var(--ink)" }}
-              >
-                ✕
-              </button>
             </div>
 
             <div className="p-[clamp(24px,3.4vw,44px)]">
