@@ -86,7 +86,7 @@ export function Hero() {
       <div className="mx-auto w-full max-w-[280px] sm:max-w-[340px] lg:mx-0 lg:max-w-[360px] lg:col-start-1 lg:col-span-5 lg:row-start-2 lg:mt-[clamp(28px,4vw,64px)]">
         <div className="relative aspect-[4/5] w-full overflow-hidden">
           <Image
-            src="/images/hero-portrait-3.png"
+            src="/images/hero-portrait-4.png"
             alt="Portrait photo"
             fill
             priority
