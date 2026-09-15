@@ -25,6 +25,15 @@ interface FlipWordProps {
  * against it directly, with no padding in between — the chip's own padding
  * lives one level up, outside the clipped/sized box, so it can't throw the
  * inset-0 match off).
+ *
+ * The sizer (and the word spans layered on it) are capped at `max-width:
+ * 100%` and allowed to wrap: at the hero's larger display sizes, the longest
+ * word ("Vendor & Supply Portals") is wider than a narrow phone viewport, and
+ * an unbreakable nowrap line would rather overflow the page horizontally
+ * than shrink. Wrapping keeps the sizer in flow — still reserving real
+ * space, just across up to two lines — instead of taking it out of flow
+ * entirely, which would collapse the slot to zero width and defeat the
+ * whole point of measuring against the longest word.
  */
 export function FlipWord({ words, intervalMs = 2200, colors }: FlipWordProps) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -51,15 +60,15 @@ export function FlipWord({ words, intervalMs = 2200, colors }: FlipWordProps) {
 
   return (
     <span className="inline-flex align-baseline" style={{ padding: "0 0.18em" }}>
-      <span className="relative inline-block overflow-hidden">
+      <span className="relative inline-block max-w-full overflow-hidden">
         {/* Sizer: real text, invisible, reserves the slot's width/height via
             normal layout so it can never change when the active word does. */}
-        <span aria-hidden className="invisible whitespace-nowrap">
+        <span aria-hidden className="invisible block max-w-full text-center break-words">
           {longestWord}
         </span>
 
         {reducedMotion ? (
-          <span className="absolute inset-0 flex items-center justify-center whitespace-nowrap" style={{ color }}>
+          <span className="absolute inset-0 flex items-center justify-center text-center break-words" style={{ color }}>
             {word}
           </span>
         ) : (
@@ -70,7 +79,7 @@ export function FlipWord({ words, intervalMs = 2200, colors }: FlipWordProps) {
               animate={{ y: "0%", opacity: 1 }}
               exit={{ y: "-100%", opacity: 0 }}
               transition={{ duration: 0.5, ease: cubicBezier(0.4, 0, 0.2, 1) }}
-              className="absolute inset-0 flex items-center justify-center whitespace-nowrap"
+              className="absolute inset-0 flex items-center justify-center text-center break-words"
               style={{ color }}
             >
               {word}

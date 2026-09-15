@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { Suspense, useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, MotionConfig, motion, useReducedMotion } from "framer-motion";
 import { Badge } from "@/components/ui/Badge";
@@ -11,9 +11,12 @@ import { TechIconRow } from "@/components/ui/TechIconRow";
 import { ProjectModal } from "@/components/ProjectModal";
 import { PROJECTS, type Project } from "@/lib/projects-data";
 
-/** Tailwind's `lg` — tablet and above. At this size the grid is already a
- * single 4-up row, which is exactly the layout the deck spreads out into. */
-const DECK_MEDIA_QUERY = "(min-width: 64rem)";
+/** Tailwind's `xl` — matches the grid's own `xl:grid-cols-4` below (the fan
+ * math assumes a single 4-up row, so this must always match whatever
+ * breakpoint actually produces one). Previously `lg`/64rem, which fanned the
+ * deck a full 128px before the grid had 4 columns, spreading cards across a
+ * still-2-column grid in between. */
+const DECK_MEDIA_QUERY = "(min-width: 80rem)";
 /** Same overdamped feel as CursorField's dock flight, a touch quicker since
  * the distances here are a card width rather than the whole viewport. */
 const DECK_TRANSITION = { type: "spring", stiffness: 140, damping: 24, mass: 1 } as const;
@@ -36,6 +39,14 @@ const NO_SHADOW = "0px 0px 0px 0px rgba(23,19,16,0)";
  * flat rgba(255,255,255,0.1) reads fine on the dark --card but disappears
  * against the light theme's near-white one. */
 const ACCORDION_SHADOW = "0px 14px 28px -20px rgba(23,19,16,0.4)";
+
+/** useLayoutEffect during SSR/static prerendering warns ("does nothing on
+ * the server") since there's no DOM to lay out — fall back to useEffect
+ * there, where it's inert anyway. In the browser this runs synchronously
+ * before paint, so a desktop visitor's correct isDesktop value lands in the
+ * very first frame instead of flashing the mobile accordion for one frame
+ * and then snapping to the fan-deck. */
+const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 /**
  * Reads the ?project= query param and resolves the open modal from it.
@@ -166,10 +177,13 @@ export function Projects() {
   const [hasToggled, setHasToggled] = useState(false);
   const prefersReducedMotion = useReducedMotion();
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const query = window.matchMedia(DECK_MEDIA_QUERY);
     // matchMedia is only available client-side, so whether the deck fans at
     // all can only be decided once mounted — same pattern as CursorField.
+    // Runs as a layout effect (not a plain effect) specifically so this
+    // resolves before the browser paints, instead of flashing the mobile
+    // accordion for one frame on desktop.
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setIsDesktop(query.matches);
 
