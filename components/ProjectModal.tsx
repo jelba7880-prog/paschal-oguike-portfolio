@@ -98,7 +98,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                 <span className="h-px flex-1" style={{ background: "var(--rule)" }} />
               </div>
 
-              <h3 className="font-display mt-3.5 mb-5 text-[clamp(28px,3.4vw,44px)] leading-[1.1] font-normal tracking-[-0.015em]">
+              <h3 className="font-display mt-3.5 mb-5 text-center text-[clamp(28px,3.4vw,44px)] leading-[1.1] font-normal tracking-[-0.015em]">
                 {project.title}
               </h3>
 
