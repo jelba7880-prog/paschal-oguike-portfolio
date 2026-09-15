@@ -12,8 +12,8 @@ const NAV_LINKS = [
 export function Nav() {
   return (
     <header
-      className="relative z-30 flex items-center justify-between gap-4 border-b px-[clamp(24px,4.5vw,64px)] py-[26px]"
-      style={{ borderColor: "var(--rule)", background: "var(--paper)" }}
+      className="relative z-30 flex items-center justify-between gap-4 px-[clamp(24px,4.5vw,64px)] py-[26px]"
+      style={{ background: "var(--paper)" }}
     >
       <a href="#top" className="font-display text-xl font-medium italic tracking-[0.01em]">
         Paschal

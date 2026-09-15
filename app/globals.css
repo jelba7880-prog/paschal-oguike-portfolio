@@ -135,3 +135,7 @@ a {
 .font-display {
   font-family: var(--font-serif), Georgia, "Times New Roman", serif;
 }
+
+.font-signature {
+  font-family: var(--font-mono), ui-monospace, "SFMono-Regular", monospace;
+}

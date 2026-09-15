@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { Badge } from "@/components/ui/Badge";
 import { FlipWord } from "@/components/FlipWord";
 
 const HANDLES = [
@@ -58,9 +57,9 @@ export function Hero() {
           even, symmetrical pair; the text leads, the photo trails and lands
           lower, which is the asymmetry this layout is going for. */}
       <div className="flex flex-col gap-y-7 lg:col-start-7 lg:col-span-6 lg:row-start-1 lg:row-span-2 lg:self-start">
-        <Badge href="#work" dot size="md" className="w-fit">
-          Currently building — PZ Autos
-        </Badge>
+        <p className="font-signature m-0 text-[13px] tracking-[0.08em]" style={{ color: "var(--body)" }}>
+          Hi, my name is Paschal
+        </p>
 
         <h1 className="font-display m-0 text-[clamp(34px,4.6vw,72px)] leading-[1.08] font-medium tracking-[-0.015em] text-balance">
           I build web applications that handle <FlipWord words={HANDLES} colors={HANDLE_COLORS} /> end to end.
@@ -84,15 +83,19 @@ export function Hero() {
           above. Wider than the old 4-col version (5 of 12) since it's now
           the left column's sole visual anchor rather than a small aside
           squeezed under the section label. */}
-      <div className="mx-auto w-full max-w-[280px] sm:max-w-[340px] lg:mx-0 lg:max-w-none lg:col-start-1 lg:col-span-5 lg:row-start-2 lg:mt-[clamp(28px,4vw,64px)]">
+      <div className="mx-auto w-full max-w-[280px] sm:max-w-[340px] lg:mx-0 lg:max-w-[360px] lg:col-start-1 lg:col-span-5 lg:row-start-2 lg:mt-[clamp(28px,4vw,64px)]">
         <div className="relative aspect-[4/5] w-full overflow-hidden">
           <Image
             src="/images/hero-portrait-3.png"
             alt="Portrait photo"
             fill
             priority
-            sizes="(max-width: 1024px) 340px, 33vw"
+            sizes="(max-width: 1024px) 340px, 360px"
             className="object-cover object-top"
+          />
+          <div
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3"
+            style={{ background: "linear-gradient(to bottom, transparent, var(--paper))" }}
           />
         </div>
         <div className="mt-2.5 text-[10px] uppercase tracking-[0.16em]" style={{ color: "var(--faint)" }}>

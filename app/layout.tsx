@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Archivo, Bodoni_Moda } from "next/font/google";
+import { Archivo, Bodoni_Moda, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
 import { CursorField } from "@/components/CursorField";
 import { Nav } from "@/components/Nav";
@@ -17,6 +17,12 @@ const archivo = Archivo({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
   variable: "--font-sans",
+});
+
+const jetBrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-mono",
 });
 
 export const metadata: Metadata = {
@@ -43,7 +49,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${bodoniModa.variable} ${archivo.variable}`}
+      className={`${bodoniModa.variable} ${archivo.variable} ${jetBrainsMono.variable}`}
       // The beforeInteractive script below sets data-theme before hydration
       // to avoid a flash of the wrong theme; that intentionally differs from
       // the server-rendered markup, which doesn't know the client's theme.
