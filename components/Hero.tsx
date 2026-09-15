@@ -39,7 +39,7 @@ function ResumeButton({ visibility }: { visibility: string }) {
       className={`${visibility} w-fit items-center gap-3 border px-3.5 py-[7px] text-[11px] font-medium uppercase tracking-[0.12em] transition-opacity duration-300 hover:opacity-85`}
       style={{ background: "var(--accent)", borderColor: "var(--accent)", color: "var(--paper)" }}
     >
-      Download Résumé ↓
+      Download Résumé
     </a>
   );
 }

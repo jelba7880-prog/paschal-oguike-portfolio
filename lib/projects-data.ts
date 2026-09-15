@@ -103,7 +103,7 @@ export const PROJECTS: Project[] = [
     description: "Inventory and CRM built around how the team already works.",
     tags: ["React", "Node", "WhatsApp API"],
     tagline:
-      "A mobile-first operations hub for a Lagos luxury car dealership, built as an embedded part of the team rather than a freelance project. Inventory tracking, a CRM built around WhatsApp, and deal sheets generated automatically.",
+      "A mobile-first operations hub built on spec for a Lagos luxury car dealership designed, built and pitched entirely on my own initiative, with no brief and no contract. It was never adopted, but it was worth the shot. Inventory tracking, a CRM built around WhatsApp, and deal sheets generated automatically.",
     problem:
       "The dealership's real workflow lived in WhatsApp threads and paper deal sheets. Software that ignored that would just sit unused.",
     whatBroke: [
