@@ -22,6 +22,9 @@ export interface Project {
   decisions: string[];
   techIcons: ProjectTechIcon[];
   liveSiteHref: string;
+  /** 16:9 screenshot filling the modal's header. Omitted projects keep the
+   * blank placeholder until a photo is added. */
+  image?: { src: string; alt: string };
 }
 
 const ICONS = "https://cdn.simpleicons.org";
@@ -56,6 +59,10 @@ export const PROJECTS: Project[] = [
       { label: "Vercel", src: `${ICONS}/vercel`, mono: true },
     ],
     liveSiteHref: "#",
+    image: {
+      src: "/images/projects/sterling-capital-v2.jpeg",
+      alt: "Sterling Capital Exchange homepage with a live BTC/USD trading terminal",
+    },
   },
   {
     id: "freight",
@@ -116,6 +123,10 @@ export const PROJECTS: Project[] = [
       { label: "WhatsApp API", src: `${ICONS}/whatsapp` },
     ],
     liveSiteHref: "#",
+    image: {
+      src: "/images/projects/polanco-ops-hub.jpeg",
+      alt: "Polanco Ops Hub inventory screen showing vehicle cards with availability status",
+    },
   },
   {
     id: "stonebridge",
@@ -142,5 +153,9 @@ export const PROJECTS: Project[] = [
       { label: "Netlify", src: `${ICONS}/netlify` },
     ],
     liveSiteHref: "#",
+    image: {
+      src: "/images/projects/stonebridge.jpeg",
+      alt: "Stonebridge Builders homepage hero reading “Building with Integrity. Crafted to Last.”",
+    },
   },
 ];

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Image from "next/image";
 import { AnimatePresence, cubicBezier, motion } from "framer-motion";
 import type { Project } from "@/lib/projects-data";
 
@@ -64,7 +65,17 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
             style={{ background: "var(--card)", border: "1px solid var(--rule)", boxShadow: "0 40px 90px -40px rgba(23,19,16,0.6)" }}
           >
             <div className="relative border-b" style={{ borderColor: "var(--rule)" }}>
-              <div className="aspect-video w-full" style={{ background: "var(--wash)" }} aria-hidden />
+              <div className="relative aspect-video w-full overflow-hidden" style={{ background: "var(--wash)" }}>
+                {project.image && (
+                  <Image
+                    src={project.image.src}
+                    alt={project.image.alt}
+                    fill
+                    sizes="(min-width: 1000px) 920px, 100vw"
+                    className="object-cover object-top"
+                  />
+                )}
+              </div>
               <button
                 type="button"
                 onClick={onClose}
