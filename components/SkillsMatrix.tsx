@@ -5,10 +5,7 @@ import { SKILL_CATEGORIES, type Skill } from "@/lib/skills";
 
 function SkillCell({ skill }: { skill: Skill }) {
   return (
-    <div
-      className="flex flex-col items-center gap-2.5 border p-[14px_6px] text-center"
-      style={{ borderColor: "var(--rule)" }}
-    >
+    <div className="flex flex-col items-center gap-2.5 p-[14px_6px] text-center">
       {/* Empty dock slot: CursorField portals the one and only copy of this
           icon in here once it flies home, so nothing is rendered inside it by
           default — see components/CursorField.tsx. The img below is purely the
