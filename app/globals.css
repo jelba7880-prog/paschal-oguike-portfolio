@@ -14,6 +14,14 @@
   --card: #fbf9f4;
   --accordion-border: rgba(23, 19, 16, 0.14);
 
+  /* Cursor glare on spread project cards (components/Projects.tsx). A white
+     glare blended with soft-light reads well against the dark theme's --card
+     but is invisible against this one's near-white --card, so light mode
+     tints the glare with --accent and composites it normally instead. */
+  --glare-core: rgba(194, 64, 26, 0.16);
+  --glare-edge: rgba(194, 64, 26, 0);
+  --glare-blend: normal;
+
   /* One accent per word in the hero's FlipWord cycle (components/FlipWord.tsx,
      components/Hero.tsx) — distinct hues, each tuned dark enough to read on
      --paper in light mode (see the [data-theme="dark"] block below for the
@@ -51,6 +59,12 @@
   --accent: #e4653c;
   --card: #191512;
   --accordion-border: rgba(255, 255, 255, 0.14);
+
+  /* Light-mode counterparts above; white soft-light is the treatment this
+     theme's dark --card was tuned for. */
+  --glare-core: rgba(255, 255, 255, 0.55);
+  --glare-edge: rgba(255, 255, 255, 0);
+  --glare-blend: soft-light;
 
   /* Lightened counterparts of the light-mode --flip-* hues above, tuned to
      read on --paper in dark mode. */
@@ -140,4 +154,11 @@ a {
 
 .font-signature {
   font-family: var(--font-mono), ui-monospace, "SFMono-Regular", monospace;
+}
+
+/* Blend mode for the project-card cursor glare (components/Projects.tsx).
+   Lives here rather than inline so it can follow --glare-blend per theme,
+   which an inline mixBlendMode string can't do. */
+.card-glare {
+  mix-blend-mode: var(--glare-blend);
 }

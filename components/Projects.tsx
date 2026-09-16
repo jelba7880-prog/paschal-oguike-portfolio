@@ -157,7 +157,10 @@ function ProjectCard({
   const glareOpacity = useSpring(hover, GLARE_SPRING);
   const glareX = useTransform(pointerX, [0, 1], [0, 100]);
   const glareY = useTransform(pointerY, [0, 1], [0, 100]);
-  const glare = useMotionTemplate`radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.55), rgba(255,255,255,0) 60%)`;
+  // Colour and blend mode come from --glare-* (globals.css), which the
+  // data-theme attribute on <html> already switches per theme — same
+  // mechanism every other themed value in the app uses.
+  const glare = useMotionTemplate`radial-gradient(circle at ${glareX}% ${glareY}%, var(--glare-core), var(--glare-edge) 60%)`;
 
   function resetTilt() {
     pointerX.set(0.5);
@@ -269,8 +272,8 @@ function ProjectCard({
         {tiltEnabled && (
           <motion.div
             aria-hidden
-            className="pointer-events-none absolute inset-0"
-            style={{ background: glare, opacity: glareOpacity, mixBlendMode: "soft-light" }}
+            className="card-glare pointer-events-none absolute inset-0"
+            style={{ background: glare, opacity: glareOpacity }}
           />
         )}
       </Card>
