@@ -1,3 +1,5 @@
+import { SectionLabel } from "@/components/ui/SectionLabel";
+
 const EMAIL = "paschaloguike@gmail.com";
 
 export function Contact() {
@@ -9,6 +11,13 @@ export function Contact() {
       style={{ background: "var(--paper)", color: "var(--ink)" }}
     >
       <div>
+        {/* Same header row as every other section (Projects, About me,
+            Technical skills) — SectionLabel picks up the inverted --muted
+            from this section's own data-inverse palette. */}
+        <div className="mb-[clamp(40px,5vw,64px)] grid grid-cols-1 gap-x-6 gap-y-3 lg:grid-cols-12">
+          <SectionLabel className="lg:col-span-2 lg:col-start-1">Lets talk</SectionLabel>
+        </div>
+
         <div className="mt-6 flex flex-col items-end text-right">
           <p
             className="m-0 mb-7 max-w-[34em] text-[clamp(20px,1.8vw,24px)] leading-[1.5] text-pretty"
