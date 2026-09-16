@@ -1,3 +1,5 @@
+import { ORIGINAL_ICON_SRC } from "@/lib/skills";
+
 export interface ProjectTechIcon {
   label: string;
   src: string;
@@ -37,7 +39,7 @@ export const PROJECTS: Project[] = [
     tone: "accent",
     title: "Sterling Capital Exchange",
     description: "A simulated trading platform built to actually hold up.",
-    tags: ["Next.js", "Supabase", "Vercel"],
+    tags: ["Next.js", "Supabase", "Sentry", "Cloudflare", "TypeScript", "Railway"],
     tagline:
       "Spot, forex, and binary options, all simulated but functioning like the real thing. The interface was the easy part. Getting price feeds, order matching, and multi-currency wallets to behave correctly under load took most of the work.",
     problem:
@@ -56,7 +58,10 @@ export const PROJECTS: Project[] = [
     techIcons: [
       { label: "Next.js", src: `${ICONS}/nextdotjs`, mono: true },
       { label: "Supabase", src: `${ICONS}/supabase` },
-      { label: "Vercel", src: `${ICONS}/vercel`, mono: true },
+      { label: "Sentry", src: `${ICONS}/sentry` },
+      { label: "Cloudflare", src: `${ICONS}/cloudflare` },
+      { label: "TypeScript", src: `${ICONS}/typescript` },
+      { label: "Railway", src: `${ICONS}/railway`, mono: true },
     ],
     liveSiteHref: "#",
     image: {
@@ -71,7 +76,7 @@ export const PROJECTS: Project[] = [
     tone: "muted",
     title: "Meridian Freight",
     description: "Three apps, one shared backend, kept in sync.",
-    tags: ["Turborepo", "Next.js", "Postgres"],
+    tags: ["Next.js", "TypeScript", "Neon Postgres", "Drizzle ORM", "Auth.js v5", "Turborepo"],
     tagline:
       "A freight-forwarding platform built from scratch, modeled on enterprise players in the space. Split into a public marketing site, a customer portal, and an internal admin app, all sharing one monorepo and one data layer.",
     problem:
@@ -88,9 +93,12 @@ export const PROJECTS: Project[] = [
       "Architecture reviewed before implementation each time, rather than worked out live in the codebase.",
     ],
     techIcons: [
-      { label: "Turborepo", src: `${ICONS}/turborepo` },
       { label: "Next.js", src: `${ICONS}/nextdotjs`, mono: true },
-      { label: "Postgres", src: `${ICONS}/postgresql` },
+      { label: "TypeScript", src: `${ICONS}/typescript` },
+      { label: "Neon Postgres", src: `${ICONS}/neon` },
+      { label: "Drizzle ORM", src: `${ICONS}/drizzle` },
+      { label: "Auth.js v5", src: ORIGINAL_ICON_SRC.authJs, mono: true },
+      { label: "Turborepo", src: `${ICONS}/turborepo` },
     ],
     liveSiteHref: "#",
   },
@@ -101,7 +109,7 @@ export const PROJECTS: Project[] = [
     tone: "accent",
     title: "Polanco Ops Hub",
     description: "Inventory and CRM built around how the team already works.",
-    tags: ["React", "Node", "WhatsApp API"],
+    tags: ["React", "Node.js", "WhatsApp API", "Tailwind", "Supabase"],
     tagline:
       "A mobile-first operations hub built on spec for a Lagos luxury car dealership designed, built and pitched entirely on my own initiative, with no brief and no contract. It was never adopted, but it was worth the shot. Inventory tracking, a CRM built around WhatsApp, and deal sheets generated automatically.",
     problem:
@@ -119,8 +127,10 @@ export const PROJECTS: Project[] = [
     ],
     techIcons: [
       { label: "React", src: `${ICONS}/react` },
-      { label: "Node", src: `${ICONS}/nodedotjs` },
+      { label: "Node.js", src: `${ICONS}/nodedotjs` },
       { label: "WhatsApp API", src: `${ICONS}/whatsapp` },
+      { label: "Tailwind", src: `${ICONS}/tailwindcss` },
+      { label: "Supabase", src: `${ICONS}/supabase` },
     ],
     liveSiteHref: "#",
     image: {
@@ -135,7 +145,7 @@ export const PROJECTS: Project[] = [
     tone: "accent",
     title: "Stonebridge Builders",
     description: "A CMS that lives in git, not a subscription.",
-    tags: ["Next.js", "Markdown", "Netlify"],
+    tags: ["Cloudinary", "CSS", "Netlify", "Git"],
     tagline:
       "Marketing site, recruiting pipeline, and content management for a general contracting company operating across Pennsylvania, North Carolina, and Illinois. Content lives in the repo, with no database and no monthly CMS cost.",
     problem: "A small contracting company editing a few pages a month doesn't need a headless CMS subscription to do it.",
@@ -148,9 +158,10 @@ export const PROJECTS: Project[] = [
       "Recruiting and hiring documents pull from the same content pipeline, keeping job postings and the site in sync.",
     ],
     techIcons: [
-      { label: "Next.js", src: `${ICONS}/nextdotjs`, mono: true },
-      { label: "Markdown", src: `${ICONS}/markdown`, mono: true },
+      { label: "Cloudinary", src: `${ICONS}/cloudinary` },
+      { label: "CSS", src: `${ICONS}/css` },
       { label: "Netlify", src: `${ICONS}/netlify` },
+      { label: "Git", src: `${ICONS}/git` },
     ],
     liveSiteHref: "#",
     image: {

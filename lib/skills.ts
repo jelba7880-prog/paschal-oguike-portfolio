@@ -20,38 +20,37 @@ export interface SkillCategory {
 
 const ICONS = "https://cdn.simpleicons.org";
 
-/** Original glyphs for tools with no official brand icon available. */
+/**
+ * Icons that can't come from cdn.simpleicons.org.
+ *
+ * `authJs`: used only by the Meridian Freight card in lib/projects-data.ts
+ * (Auth.js is no longer listed as a skill). Simple Icons still has no
+ * `authjs` entry (404) and authjs.dev ships no SVG of its mark, so this
+ * stays a generic shield-and-keyhole line glyph — same 24x24 viewBox / 1.6
+ * stroke / round-cap convention as Footer's PinIcon.
+ *
+ * `openAi`: Simple Icons has neither `openai` nor `chatgpt` (both still 404),
+ * so this is the real OpenAI mark taken from Bootstrap Icons 1.13.1
+ * (icons.getbootstrap.com/icons/openai), MIT licensed, © 2019-2024 The
+ * Bootstrap Authors. Its own 16x16 viewBox is kept so the path still fits;
+ * `currentColor` is swapped for the #111111 the mono-inversion rule expects.
+ */
 const ORIGINAL_ICONS = {
   serwist: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#111111" d="M11 2h2v9h4l-5 6-5-6h4V2Z M4 20h16v2H4Z"/></svg>`,
-  openExchangeRates: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#111111" d="M2 6h14V4l6 3-6 3v-2H2z M22 18h-14v2l-6-3 6-3v2h14z"/></svg>`,
-  reactPdf: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#111111" fill-rule="evenodd" d="M5 2h9l5 5v15H5z M8 12h8v1.5H8z M8 15h8v1.5H8z M8 18h5v1.5H8z"/></svg>`,
-  twilio: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="#111111" d="M3 4h18v13H9l-4 4v-4H3z"/></svg>`,
-};
-
-/**
- * Original monochrome line glyphs for the Hobbies row — generic concepts
- * only, deliberately not the real logos/marks they evoke (no Mercedes
- * tri-star, PlayStation mark, God of War emblem, Rockstar "R"/GTA wordmark,
- * Google's pin, or TikTok note), since this portfolio can't ship copyrighted
- * or trademarked brand art. Same 24x24 viewBox / 1.6 stroke / round caps
- * convention as Footer's PinIcon, so the row reads as one consistent set —
- * the "local guide" glyph below is that same pin path reused directly.
- */
-const HOBBY_ICONS = {
-  car: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 16h-1a1 1 0 0 1-1-1v-2.3c0-.5.3-.9.7-1.1l2.6-1.3 1.8-2.7A2 2 0 0 1 8.3 6.6h5.7c.8 0 1.5.4 1.9 1.1l1.7 2.6 2.6 1.3c.4.2.7.6.7 1.1V15a1 1 0 0 1-1 1h-1"/><path d="M7 16h10"/><circle cx="7" cy="16.3" r="1.6"/><circle cx="17" cy="16.3" r="1.6"/></svg>`,
-  gamepad: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 8.5h10a4 4 0 0 1 4 4.3l-.4 2.6a2.3 2.3 0 0 1-4.2 1L15 15H9l-1.4 1.4a2.3 2.3 0 0 1-4.2-1L3 12.8a4 4 0 0 1 4-4.3Z"/><path d="M7.3 11v3M5.8 12.5h3"/><circle cx="17" cy="11.5" r="0.9" fill="#111111" stroke="none"/><circle cx="14.7" cy="13.5" r="0.9" fill="#111111" stroke="none"/></svg>`,
-  axe: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 3v17.5"/><path d="M11.5 4c3.2-2.2 7.5-1 8.3 2.4.8 3.4-2.3 6.6-6.3 6.4-1-.1-1.7-.4-2-.7"/></svg>`,
-  chess: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2v3M10.4 4.7h3.2"/><path d="M9 9.3c0-1.8 1.3-3.2 3-3.2s3 1.4 3 3.2l1.1 6.2H7.9L9 9.3Z"/><path d="M7.3 18.5h9.4"/><path d="M7.8 15.5h8.4"/></svg>`,
-  football: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8.2 15 10.4l-1.1 3.6h-3.8L9 10.4 12 8.2Z"/><path d="M12 8.2V5M15 10.4l2.9-1.1M13.9 14l1.6 2.7M10.1 14l-1.6 2.7M9 10.4l-2.9-1.1"/></svg>`,
-  star: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.7 14.3 8.7 19.8 9.4 15.8 13.2 16.9 18.6 12 15.9 7.1 18.6 8.2 13.2 4.2 9.4 9.7 8.7 12 3.7Z"/></svg>`,
-  pin: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.4"/></svg>`,
-  playFrame: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M10 8.3v7.4l6.2-3.7L10 8.3Z" fill="#111111" stroke="none"/></svg>`,
-  steeringWheel: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2.3"/><path d="M12 6.3v3.4M7.5 15.2l3-1.6M16.5 15.2l-3-1.6"/></svg>`,
+  authJs: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.8 19.5 6v6.1c0 4.2-3 7.4-7.5 9.1-4.5-1.7-7.5-4.9-7.5-9.1V6L12 2.8Z"/><circle cx="12" cy="11" r="2"/><path d="M12 13v3.2"/></svg>`,
+  openAi: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="#111111"><path d="M14.949 6.547a3.94 3.94 0 0 0-.348-3.273 4.11 4.11 0 0 0-4.4-1.934A4.1 4.1 0 0 0 8.423.2 4.15 4.15 0 0 0 6.305.086a4.1 4.1 0 0 0-1.891.948 4.04 4.04 0 0 0-1.158 1.753 4.1 4.1 0 0 0-1.563.679A4 4 0 0 0 .554 4.72a3.99 3.99 0 0 0 .502 4.731 3.94 3.94 0 0 0 .346 3.274 4.11 4.11 0 0 0 4.402 1.933c.382.425.852.764 1.377.995.526.231 1.095.35 1.67.346 1.78.002 3.358-1.132 3.901-2.804a4.1 4.1 0 0 0 1.563-.68 4 4 0 0 0 1.14-1.253 3.99 3.99 0 0 0-.506-4.716m-6.097 8.406a3.05 3.05 0 0 1-1.945-.694l.096-.054 3.23-1.838a.53.53 0 0 0 .265-.455v-4.49l1.366.778q.02.011.025.035v3.722c-.003 1.653-1.361 2.992-3.037 2.996m-6.53-2.75a2.95 2.95 0 0 1-.36-2.01l.095.057L5.29 12.09a.53.53 0 0 0 .527 0l3.949-2.246v1.555a.05.05 0 0 1-.022.041L6.473 13.3c-1.454.826-3.311.335-4.15-1.098m-.85-6.94A3.02 3.02 0 0 1 3.07 3.949v3.785a.51.51 0 0 0 .262.451l3.93 2.237-1.366.779a.05.05 0 0 1-.048 0L2.585 9.342a2.98 2.98 0 0 1-1.113-4.094zm11.216 2.571L8.747 5.576l1.362-.776a.05.05 0 0 1 .048 0l3.265 1.86a3 3 0 0 1 1.173 1.207 2.96 2.96 0 0 1-.27 3.2 3.05 3.05 0 0 1-1.36.997V8.279a.52.52 0 0 0-.276-.445m1.36-2.015-.097-.057-3.226-1.855a.53.53 0 0 0-.53 0L6.249 6.153V4.598a.04.04 0 0 1 .019-.04L9.533 2.7a3.07 3.07 0 0 1 3.257.139c.474.325.843.778 1.066 1.303.223.526.289 1.103.191 1.664zM5.503 8.575 4.139 7.8a.05.05 0 0 1-.026-.037V4.049c0-.57.166-1.127.476-1.607s.752-.864 1.275-1.105a3.08 3.08 0 0 1 3.234.41l-.096.054-3.23 1.838a.53.53 0 0 0-.265.455zm.742-1.577 1.758-1 1.762 1v2l-1.755 1-1.762-1z"/></svg>`,
 };
 
 function svgDataUri(svg: string): string {
   return `data:image/svg+xml,${encodeURIComponent(svg)}`;
 }
+
+/** Shared so project cards (lib/projects-data.ts) can reuse the same
+ * hand-drawn marks instead of defining a second copy that drifts. */
+export const ORIGINAL_ICON_SRC = {
+  authJs: svgDataUri(ORIGINAL_ICONS.authJs),
+  openAi: svgDataUri(ORIGINAL_ICONS.openAi),
+};
 
 export const SKILL_CATEGORIES: SkillCategory[] = [
   {
@@ -64,19 +63,7 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
     ],
   },
   {
-    title: "Frontend",
-    items: [
-      { id: "react", label: "React", src: `${ICONS}/react`, size: 52, depth: 0.78, x: 0.085, y: 0.295 },
-      { id: "next", label: "Next.js", src: `${ICONS}/nextdotjs`, mono: true, size: 30, depth: 0.2, x: 0.205, y: 0.32 },
-      { id: "tailwind", label: "Tailwind", src: `${ICONS}/tailwindcss`, size: 38, depth: 0.44, x: 0.335, y: 0.28 },
-      { id: "css", label: "CSS", src: `${ICONS}/css`, size: 27, depth: 0.13, x: 0.935, y: 0.315 },
-      { id: "zod", label: "Zod", src: `${ICONS}/zod`, size: 26, depth: 0.12, x: 0.265, y: 0.205 },
-      { id: "react-hook-form", label: "react-hook-form", src: `${ICONS}/reacthookform`, size: 36, depth: 0.34, x: 0.665, y: 0.3 },
-      { id: "react-query", label: "TanStack React Query", src: `${ICONS}/reactquery`, size: 44, depth: 0.58, x: 0.8, y: 0.255 },
-    ],
-  },
-  {
-    title: "Database & cloud",
+    title: "Database & Cloud",
     items: [
       { id: "postgresql", label: "Postgres", src: `${ICONS}/postgresql`, size: 50, depth: 0.72, x: 0.06, y: 0.6 },
       { id: "mongodb", label: "MongoDB", src: `${ICONS}/mongodb`, size: 33, depth: 0.3, x: 0.165, y: 0.645 },
@@ -86,7 +73,7 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
     ],
   },
   {
-    title: "DevOps & tools",
+    title: "Devops & Tools",
     items: [
       { id: "node", label: "Node.js", src: `${ICONS}/nodedotjs`, size: 42, depth: 0.5, x: 0.115, y: 0.355 },
       { id: "git", label: "Git", src: `${ICONS}/git`, size: 31, depth: 0.24, x: 0.22, y: 0.72 },
@@ -94,136 +81,35 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
       { id: "vercel", label: "Vercel", src: `${ICONS}/vercel`, mono: true, size: 39, depth: 0.46, x: 0.65, y: 0.785 },
       { id: "vscode", label: "VS Code", src: "/icons/vscode.svg", size: 36, depth: 0.36, x: 0.045, y: 0.9 },
       { id: "turborepo", label: "Turborepo", src: `${ICONS}/turborepo`, size: 44, depth: 0.55, x: 0.09, y: 0.76 },
+      { id: "railway", label: "Railway", src: `${ICONS}/railway`, mono: true, size: 37, depth: 0.42, x: 0.5, y: 0.86 },
+    ],
+  },
+  {
+    title: "AI and Core",
+    items: [
+      { id: "react", label: "React", src: `${ICONS}/react`, size: 52, depth: 0.78, x: 0.085, y: 0.295 },
+      { id: "next", label: "Next.js", src: `${ICONS}/nextdotjs`, mono: true, size: 30, depth: 0.2, x: 0.205, y: 0.32 },
+      { id: "tailwind", label: "Tailwind", src: `${ICONS}/tailwindcss`, size: 38, depth: 0.44, x: 0.335, y: 0.28 },
+      // Simple Icons retired `css3`; `css` is the only slug and its official
+      // fill is now #663399, so the classic CSS blue comes from the CDN's
+      // /<slug>/<hex> colour form rather than a dead slug.
+      { id: "css", label: "CSS", src: `${ICONS}/css/1572B6`, size: 27, depth: 0.13, x: 0.935, y: 0.315 },
+      { id: "zod", label: "Zod", src: `${ICONS}/zod`, size: 26, depth: 0.12, x: 0.265, y: 0.205 },
+      // Keeps id "twilio" so its existing skill-slot-twilio dock stays valid;
+      // only the mark and label change, to the WhatsApp integration this
+      // entry actually stands for (same slug as the Polanco project card).
+      { id: "twilio", label: "WhatsApp API", src: `${ICONS}/whatsapp`, size: 40, depth: 0.5, x: 0.51, y: 0.73 },
       { id: "claude", label: "Claude", src: `${ICONS}/claude`, size: 33, depth: 0.28, x: 0.765, y: 0.94 },
-    ],
-  },
-  {
-    title: "Integrations",
-    items: [
+      { id: "gemini", label: "Gemini", src: `${ICONS}/googlegemini`, size: 41, depth: 0.52, x: 0.57, y: 0.61 },
       {
-        id: "twilio",
-        label: "Twilio",
-        src: svgDataUri(ORIGINAL_ICONS.twilio),
+        id: "chatgpt",
+        label: "ChatGPT",
+        src: ORIGINAL_ICON_SRC.openAi,
         mono: true,
-        size: 40,
-        depth: 0.5,
-        x: 0.51,
-        y: 0.73,
-      },
-      {
-        id: "open-exchange-rates",
-        label: "Open Exchange Rates",
-        src: svgDataUri(ORIGINAL_ICONS.openExchangeRates),
-        mono: true,
-        size: 34,
-        depth: 0.34,
-        x: 0.325,
-        y: 0.89,
-      },
-      {
-        id: "react-pdf",
-        label: "@react-pdf/renderer",
-        src: svgDataUri(ORIGINAL_ICONS.reactPdf),
-        mono: true,
-        size: 42,
-        depth: 0.56,
-        x: 0.62,
-        y: 0.885,
-      },
-    ],
-  },
-  {
-    title: "Hobbies",
-    items: [
-      {
-        id: "mercedes",
-        label: "Mercedes",
-        src: svgDataUri(HOBBY_ICONS.car),
-        mono: true,
-        size: 40,
-        depth: 0.4,
-        x: 0.06,
-        y: 0.5,
-      },
-      {
-        id: "gaming",
-        label: "Gaming",
-        src: svgDataUri(HOBBY_ICONS.gamepad),
-        mono: true,
-        size: 42,
-        depth: 0.52,
-        x: 0.94,
-        y: 0.44,
-      },
-      {
-        id: "god-of-war",
-        label: "God of War",
-        src: svgDataUri(HOBBY_ICONS.axe),
-        mono: true,
-        size: 36,
-        depth: 0.3,
-        x: 0.5,
-        y: 0.05,
-      },
-      {
-        id: "chess",
-        label: "Chess",
-        src: svgDataUri(HOBBY_ICONS.chess),
-        mono: true,
-        size: 34,
-        depth: 0.26,
+        size: 29,
+        depth: 0.18,
         x: 0.88,
-        y: 0.85,
-      },
-      {
-        id: "football",
-        label: "Football",
-        src: svgDataUri(HOBBY_ICONS.football),
-        mono: true,
-        size: 38,
-        depth: 0.36,
-        x: 0.12,
-        y: 0.06,
-      },
-      {
-        id: "gta",
-        label: "GTA",
-        src: svgDataUri(HOBBY_ICONS.star),
-        mono: true,
-        size: 32,
-        depth: 0.22,
-        x: 0.42,
-        y: 0.96,
-      },
-      {
-        id: "local-guide",
-        label: "Local Guide",
-        src: svgDataUri(HOBBY_ICONS.pin),
-        mono: true,
-        size: 36,
-        depth: 0.32,
-        x: 0.72,
-        y: 0.06,
-      },
-      {
-        id: "tiktok",
-        label: "TikTok",
-        src: svgDataUri(HOBBY_ICONS.playFrame),
-        mono: true,
-        size: 34,
-        depth: 0.28,
-        x: 0.03,
-        y: 0.78,
-      },
-      {
-        id: "car-culture",
-        label: "Car Culture",
-        src: svgDataUri(HOBBY_ICONS.steeringWheel),
-        mono: true,
-        size: 40,
-        depth: 0.46,
-        x: 0.58,
-        y: 0.5,
+        y: 0.44,
       },
     ],
   },
