@@ -75,6 +75,9 @@ const TILT_PERSPECTIVE = 900;
 const HOVER_LIFT_SCALE = 1.02;
 const TILT_SPRING = { stiffness: 220, damping: 22, mass: 0.6 };
 const GLARE_SPRING = { stiffness: 200, damping: 30 };
+/** Hover-revealed detail layer: px it rises by, and its fade/rise spring. */
+const DETAIL_RISE = 10;
+const DETAIL_SPRING = { stiffness: 260, damping: 32 };
 /** isDesktop is width-only, and touch laptops/tablets can be that wide —
  * the tilt also needs a real hovering, fine pointer to make sense. */
 const HOVER_MEDIA_QUERY = "(hover: hover) and (pointer: fine)";
@@ -146,6 +149,14 @@ function ProjectCard({
   // Only a fully spread desktop card tilts — never the fanned deck (its own
   // x/y/rotate animation lives on the parent) or the mobile accordion.
   const tiltEnabled = isDesktop && flat && canHover && !prefersReducedMotion;
+  // Same hover-capable-pointer check the tilt uses, minus the reduced-motion
+  // condition: the extra detail is content, so it still reveals for those
+  // users — it just fades in place instead of sliding up.
+  const hoverDetail = isDesktop && flat && canHover;
+  // Desktop spread cards carry the fuller baseline; the mobile accordion's
+  // expanded row deliberately keeps the leaner one it has today.
+  const richBaseline = isDesktop && flat;
+  const pointerTracking = tiltEnabled || hoverDetail;
 
   // Cursor position within the card, 0–1 on each axis; 0.5/0.5 is neutral.
   const pointerX = useMotionValue(0.5);
@@ -161,6 +172,8 @@ function ProjectCard({
   // data-theme attribute on <html> already switches per theme — same
   // mechanism every other themed value in the app uses.
   const glare = useMotionTemplate`radial-gradient(circle at ${glareX}% ${glareY}%, var(--glare-core), var(--glare-edge) 60%)`;
+  const detailOpacity = useSpring(hover, DETAIL_SPRING);
+  const detailY = useSpring(useTransform(hover, [0, 1], [DETAIL_RISE, 0]), DETAIL_SPRING);
 
   function resetTilt() {
     pointerX.set(0.5);
@@ -171,11 +184,11 @@ function ProjectCard({
   // Restacking the deck (or crossing the breakpoint) mid-hover disables the
   // tilt without a mouseleave ever firing — settle back to neutral.
   useEffect(() => {
-    if (tiltEnabled) return;
+    if (pointerTracking) return;
     pointerX.set(0.5);
     pointerY.set(0.5);
     hover.set(0);
-  }, [tiltEnabled, pointerX, pointerY, hover]);
+  }, [pointerTracking, pointerX, pointerY, hover]);
 
   function handleMouseMove(e: MouseEvent<HTMLDivElement>) {
     // Measure the untransformed grid slot rather than this tilting, scaling
@@ -189,8 +202,12 @@ function ProjectCard({
   return (
     <motion.div
       className="h-full"
-      onMouseMove={tiltEnabled ? handleMouseMove : undefined}
-      onMouseLeave={tiltEnabled ? resetTilt : undefined}
+      onMouseMove={pointerTracking ? handleMouseMove : undefined}
+      onMouseLeave={pointerTracking ? resetTilt : undefined}
+      // Keyboard users tab through these cards — give focus the same reveal
+      // a hover gets, rather than leaving the detail mouse-only.
+      onFocus={hoverDetail ? () => hover.set(1) : undefined}
+      onBlur={hoverDetail ? resetTilt : undefined}
       style={tiltEnabled ? { rotateX, rotateY, scale, transformPerspective: TILT_PERSPECTIVE } : undefined}
     >
       <Card
@@ -260,14 +277,46 @@ function ProjectCard({
               </div>
 
               <div
-                className="border-t pt-3.5 text-[10px] uppercase tracking-[0.16em]"
+                className="flex items-center justify-between gap-3 border-t pt-3.5 text-[10px] uppercase tracking-[0.16em]"
                 style={{ borderColor: "var(--rule)", color: "var(--accent)" }}
               >
-                Read →
+                <span className="whitespace-nowrap">Read →</span>
+                {/* Shares the row rather than adding one: a second line would
+                    make a spread card taller than a fanned one, which moves
+                    every section below it on stack/spread. */}
+                {richBaseline && (
+                  <span className="truncate whitespace-nowrap" style={{ color: "var(--faint)" }}>
+                    {project.whatBroke.length} broke · {project.decisions.length}{" "}
+                    {project.decisions.length === 1 ? "decision" : "decisions"}
+                  </span>
+                )}
               </div>
             </motion.div>
           )}
         </AnimatePresence>
+
+        {hoverDetail && (
+          <motion.div
+            className="pointer-events-none absolute inset-x-[22px] bottom-[22px] pt-8"
+            style={{
+              opacity: detailOpacity,
+              y: prefersReducedMotion ? 0 : detailY,
+              // Fades into the card's own surface so the tagline stays
+              // legible over the baseline content it covers.
+              background: "linear-gradient(to top, var(--card) 72%, rgba(0,0,0,0))",
+            }}
+          >
+            <p className="m-0 line-clamp-4 text-[12.5px] leading-[1.5] text-pretty" style={{ color: "var(--body)" }}>
+              {project.tagline}
+            </p>
+            <div
+              className="mt-3 border-t pt-3 text-[10px] uppercase tracking-[0.16em]"
+              style={{ borderColor: "var(--rule)", color: "var(--accent)" }}
+            >
+              Read the detail →
+            </div>
+          </motion.div>
+        )}
 
         {tiltEnabled && (
           <motion.div
