@@ -9,12 +9,15 @@ interface SectionLabelProps {
   as?: ElementType;
 }
 
-/** The recurring uppercase marker at the top of every section. */
+/** The recurring uppercase marker at the top of every section. Set in the
+ * display serif (Bodoni Moda) at its bold weight rather than the body sans,
+ * so section headers read as editorial type distinct from every other line
+ * of text on the page. */
 export function SectionLabel({ children, className = "", as: Tag = "h2" }: SectionLabelProps) {
   return (
     <Tag
-      className={`m-0 text-[11px] font-normal uppercase tracking-[0.18em] ${className}`}
-      style={{ color: "var(--muted)" }}
+      className={`font-display m-0 text-[clamp(13px,1.1vw,15px)] font-bold uppercase tracking-[0.14em] ${className}`}
+      style={{ color: "var(--body)" }}
     >
       {children}
     </Tag>

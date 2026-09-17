@@ -37,7 +37,7 @@ export function Notes() {
     <section
       id="notes"
       data-inverse
-      className="px-[clamp(24px,4.5vw,64px)] pt-[clamp(40px,5vw,64px)] pb-[clamp(56px,6vw,88px)]"
+      className="px-[clamp(24px,4.5vw,64px)] pt-[clamp(40px,6.5vw,96px)] pb-[clamp(56px,8vw,128px)]"
       style={{ background: "var(--paper)", color: "var(--ink)" }}
     >
       <div className="mb-[clamp(40px,5vw,64px)] grid grid-cols-1 gap-x-6 gap-y-3 lg:grid-cols-12">

@@ -8,7 +8,10 @@ import "./globals.css";
 
 const bodoniModa = Bodoni_Moda({
   subsets: ["latin"],
-  weight: ["400", "500"],
+  // 700 is here for SectionLabel: Bodoni is a high-contrast Didone whose
+  // hairlines all but vanish at the small uppercase size those markers use,
+  // so they need a genuinely bold cut rather than 500.
+  weight: ["400", "500", "700"],
   style: ["normal", "italic"],
   variable: "--font-serif",
 });

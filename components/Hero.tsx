@@ -48,7 +48,7 @@ export function Hero() {
   return (
     <section
       id="top"
-      className="grid grid-cols-1 gap-y-10 lg:grid-cols-12 lg:gap-x-6 lg:gap-y-0 px-[clamp(24px,4.5vw,64px)] pt-[clamp(64px,10vw,128px)] pb-[clamp(64px,9.5vw,136px)]"
+      className="grid grid-cols-1 gap-y-10 lg:grid-cols-12 lg:gap-x-6 lg:gap-y-0 px-[clamp(24px,4.5vw,64px)] pt-[clamp(64px,10vw,128px)] pb-[clamp(64px,11vw,176px)]"
     >
       {/* Heading column: on desktop this is the right-hand block (photo takes
           the left), starting at the top row and running tall enough to sit

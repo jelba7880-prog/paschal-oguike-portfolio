@@ -10,7 +10,7 @@ const PARAGRAPHS = [
 
 export function About() {
   return (
-    <section id="about" className="relative overflow-hidden px-[clamp(24px,4.5vw,64px)] py-[clamp(56px,6vw,88px)]">
+    <section id="about" className="relative overflow-hidden px-[clamp(24px,4.5vw,64px)] py-[clamp(56px,8vw,128px)]">
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <Image
           src="/images/kratos-thor-hero-bg.png"

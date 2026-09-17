@@ -391,7 +391,7 @@ export function Projects() {
   return (
     <section
       id="work"
-      className="px-[clamp(24px,4.5vw,64px)] pt-[clamp(56px,6vw,88px)] pb-[clamp(56px,6vw,88px)]"
+      className="px-[clamp(24px,4.5vw,64px)] pt-[clamp(56px,8vw,128px)] pb-[clamp(56px,8vw,128px)]"
     >
       <div className="mb-[clamp(40px,5vw,64px)] grid grid-cols-1 gap-x-6 gap-y-3 lg:grid-cols-12">
         <SectionLabel className="lg:col-span-2 lg:col-start-1">
