@@ -2,25 +2,21 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 
 interface Note {
   title: string;
-  description: string;
-  date: string;
+  dateWritten: string;
 }
 
 const NOTES: Note[] = [
   {
-    title: "Specs are the new source code",
-    description: "If an agent can't build it from the doc, the doc was never finished.",
-    date: "Oct 1, 2025",
+    title: "You can't control outcomes, only choices. Control is an illusion.",
+    dateWritten: "Oct 1, 2025",
   },
   {
-    title: "Row-level security is a design decision",
-    description: "Why I model Supabase permissions before I model screens.",
-    date: "Aug 2, 2025",
+    title: "Detach from the results, attach to the routine.",
+    dateWritten: "Aug 2, 2025",
   },
   {
-    title: "Building and Griefing happen the same days",
-    description: "",
-    date: "Sept 4, 2026",
+    title: "Building and grieving happen the same days.",
+    dateWritten: "Sept 4, 2026",
   },
 ];
 
@@ -49,17 +45,11 @@ export function Notes() {
             <span className="text-[11px] lg:col-start-1 lg:col-span-1" style={{ color: "var(--accent)" }}>
               —
             </span>
-            <span className="text-[clamp(20px,1.9vw,26px)] leading-[1.25] font-normal lg:col-start-2 lg:col-span-6">
+            <span className="text-[clamp(20px,1.9vw,26px)] leading-[1.25] font-normal lg:col-start-2 lg:col-span-9">
               {note.title}
             </span>
-            <span
-              className="text-[15px] leading-[1.55] text-pretty lg:col-start-8 lg:col-span-4"
-              style={{ color: "var(--muted)" }}
-            >
-              {note.description}
-            </span>
             <span className="text-[11px] lg:col-start-12 lg:col-span-1 lg:text-right" style={{ color: "var(--faint)" }}>
-              {note.date}
+              {note.dateWritten}
             </span>
           </a>
         ))}
