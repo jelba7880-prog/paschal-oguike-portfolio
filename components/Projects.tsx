@@ -282,7 +282,6 @@ function ProjectCard({
                 className="flex items-center justify-between gap-3 border-t pt-3.5 text-[10px] uppercase tracking-[0.16em]"
                 style={{ borderColor: "var(--rule)", color: "var(--accent)" }}
               >
-                <span className="whitespace-nowrap">Read →</span>
                 {/* Shares the row rather than adding one: a second line would
                     make a spread card taller than a fanned one, which moves
                     every section below it on stack/spread. */}
@@ -292,6 +291,9 @@ function ProjectCard({
                     {project.decisions.length === 1 ? "decision" : "decisions"}
                   </span>
                 )}
+                {/* Purely decorative — the whole card is already the click
+                    target (see onOpen above), this is just the hint. */}
+                <span className="ml-auto whitespace-nowrap">Tap to read →</span>
               </div>
             </motion.div>
           )}
