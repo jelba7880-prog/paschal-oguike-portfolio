@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Image from "next/image";
 import { AnimatePresence, cubicBezier, motion } from "framer-motion";
 import type { Project } from "@/lib/projects-data";
+import { lockBodyScroll } from "@/lib/scrollLock";
 
 interface ProjectModalProps {
   project: Project | null;
@@ -24,19 +25,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
 
   useEffect(() => {
     if (!project) return;
-
-    // Compensate for the scrollbar disappearing so locking scroll doesn't
-    // shift the layout width.
-    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-    const previousOverflow = document.body.style.overflow;
-    const previousPaddingRight = document.body.style.paddingRight;
-    document.body.style.overflow = "hidden";
-    if (scrollbarWidth > 0) document.body.style.paddingRight = `${scrollbarWidth}px`;
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      document.body.style.paddingRight = previousPaddingRight;
-    };
+    return lockBodyScroll();
   }, [project]);
 
   return (
@@ -53,6 +42,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
           style={{ background: "rgba(23,19,16,0.42)", backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
         >
           <motion.div
+            key={project.id}
             role="dialog"
             aria-modal="true"
             aria-label={project.title}
@@ -73,6 +63,15 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
               onClick={onClose}
               aria-label="Close"
               className="absolute top-0 right-0 z-10 flex h-9 w-9 -translate-y-1/2 translate-x-1/2 items-center justify-center rounded-full border border-white/15 text-[15px] text-white backdrop-blur-md transition-colors duration-300 bg-[rgba(23,19,16,0.55)] hover:bg-[rgba(23,19,16,0.8)]"
+            >
+              ✕
+            </button>
+
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close"
+              className="absolute bottom-0 right-0 z-10 flex h-9 w-9 translate-y-1/2 translate-x-1/2 items-center justify-center rounded-full border border-white/15 text-[15px] text-white backdrop-blur-md transition-colors duration-300 bg-[rgba(23,19,16,0.55)] hover:bg-[rgba(23,19,16,0.8)] lg:hidden"
             >
               ✕
             </button>

@@ -60,6 +60,12 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
       { id: "python", label: "Python", src: `${ICONS}/python`, size: 32, depth: 0.22, x: 0.33, y: 0.185 },
       { id: "typescript", label: "TypeScript", src: `${ICONS}/typescript`, size: 48, depth: 0.7, x: 0.755, y: 0.19 },
       { id: "html5", label: "HTML5", src: `${ICONS}/html5`, size: 34, depth: 0.3, x: 0.905, y: 0.225 },
+      { id: "react", label: "React", src: `${ICONS}/react`, size: 52, depth: 0.78, x: 0.085, y: 0.295 },
+      { id: "tailwind", label: "Tailwind", src: `${ICONS}/tailwindcss`, size: 38, depth: 0.44, x: 0.335, y: 0.28 },
+      // Simple Icons retired `css3`; `css` is the only slug and its official
+      // fill is now #663399, so the classic CSS blue comes from the CDN's
+      // /<slug>/<hex> colour form rather than a dead slug.
+      { id: "css", label: "CSS", src: `${ICONS}/css/1572B6`, size: 27, depth: 0.13, x: 0.935, y: 0.315 },
     ],
   },
   {
@@ -87,13 +93,7 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
   {
     title: "AI and Core",
     items: [
-      { id: "react", label: "React", src: `${ICONS}/react`, size: 52, depth: 0.78, x: 0.085, y: 0.295 },
       { id: "next", label: "Next.js", src: `${ICONS}/nextdotjs`, mono: true, size: 30, depth: 0.2, x: 0.205, y: 0.32 },
-      { id: "tailwind", label: "Tailwind", src: `${ICONS}/tailwindcss`, size: 38, depth: 0.44, x: 0.335, y: 0.28 },
-      // Simple Icons retired `css3`; `css` is the only slug and its official
-      // fill is now #663399, so the classic CSS blue comes from the CDN's
-      // /<slug>/<hex> colour form rather than a dead slug.
-      { id: "css", label: "CSS", src: `${ICONS}/css/1572B6`, size: 27, depth: 0.13, x: 0.935, y: 0.315 },
       { id: "zod", label: "Zod", src: `${ICONS}/zod`, size: 26, depth: 0.12, x: 0.265, y: 0.205 },
       // Keeps id "twilio" so its existing skill-slot-twilio dock stays valid;
       // only the mark and label change, to the WhatsApp integration this

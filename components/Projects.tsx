@@ -241,7 +241,9 @@ function ProjectCard({
               )
             )}
           </span>
-          <Badge tone={project.tone}>{project.status}</Badge>
+          <Badge tone={project.tone} border={project.status !== "Live"}>
+            {project.status}
+          </Badge>
         </div>
 
         <h3

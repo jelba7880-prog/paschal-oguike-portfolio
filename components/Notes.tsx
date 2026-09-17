@@ -1,34 +1,26 @@
 import { SectionLabel } from "@/components/ui/SectionLabel";
 
 interface Note {
-  number: string;
   title: string;
   description: string;
-  meta: string;
-  readTime: string;
+  date: string;
 }
 
 const NOTES: Note[] = [
   {
-    number: "01",
     title: "Specs are the new source code",
     description: "If an agent can't build it from the doc, the doc was never finished.",
-    meta: "Aug 2026 · own site",
-    readTime: "4 min",
+    date: "Oct 1, 2025",
   },
   {
-    number: "02",
     title: "Row-level security is a design decision",
     description: "Why I model Supabase permissions before I model screens.",
-    meta: "Jun 2026 · own site",
-    readTime: "6 min",
+    date: "Aug 2, 2025",
   },
   {
-    number: "03",
-    title: "Reviewing code you didn't type",
-    description: "The reading discipline that keeps generated work honest.",
-    meta: "Apr 2026 · GitHub",
-    readTime: "3 min",
+    title: "Building and Griefing happen the same days",
+    description: "",
+    date: "Sept 4, 2026",
   },
 ];
 
@@ -49,7 +41,7 @@ export function Notes() {
       <div className="flex flex-col">
         {NOTES.map((note) => (
           <a
-            key={note.number}
+            key={note.title}
             href="#notes"
             className="grid grid-cols-1 items-baseline gap-x-6 gap-y-2 border-t py-6 transition-colors duration-300 hover:bg-[var(--wash)] lg:grid-cols-12"
             style={{ borderColor: "var(--rule)" }}
@@ -66,14 +58,8 @@ export function Notes() {
             >
               {note.description}
             </span>
-            <span
-              className="text-[11px] lg:col-start-12 lg:col-span-1 lg:text-right"
-              style={{ color: "var(--muted)" }}
-            >
-              <span className="block" style={{ color: "var(--faint)" }}>
-                {note.meta}
-              </span>
-              {note.readTime}
+            <span className="text-[11px] lg:col-start-12 lg:col-span-1 lg:text-right" style={{ color: "var(--faint)" }}>
+              {note.date}
             </span>
           </a>
         ))}

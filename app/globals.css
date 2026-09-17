@@ -45,6 +45,10 @@
   --inv-chip: #3a342d;
   --inv-wash: #221d19;
   --inv-accent: #e4653c;
+
+  /* Mobile nav takeover (components/MobileMenu.tsx). Light mode drops the
+     dark scrim for an opaque panel matching --paper exactly. */
+  --nav-scrim: var(--paper);
 }
 
 [data-theme="dark"] {
@@ -87,6 +91,10 @@
   --inv-chip: #3d3730;
   --inv-wash: #262019;
   --inv-accent: #e4653c;
+
+  /* Unchanged from before the light-mode redesign: dark mode keeps the
+     literal dark scrim (not var(--ink), which is a light color here). */
+  --nav-scrim: rgba(23, 19, 16, 0.94);
 }
 
 /* Sections that sit on the dark "inverse" surface (e.g. Notes, Contact in

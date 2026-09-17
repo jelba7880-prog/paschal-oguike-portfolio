@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { AnimatePresence, cubicBezier, motion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { AnimatePresence, cubicBezier, motion, useReducedMotion } from "framer-motion";
 import { Clock } from "@/components/Clock";
+import { lockBodyScroll } from "@/lib/scrollLock";
 
 interface NavLink {
   href: string;
@@ -24,14 +26,19 @@ function MenuIcon({ open }: { open: boolean }) {
   );
 }
 
+/** Shared by the reduced-motion crossfade and the scrim-adjacent bits of the
+ * reveal — same duration/ease the old dropdown used for its fade. */
 const OVERLAY_TRANSITION = { duration: 0.25, ease: cubicBezier(0.4, 0, 0.2, 1) } as const;
+/** The radial reveal itself: slower than a fade so the clip-path sweep from
+ * the trigger's corner actually reads as motion instead of a flash. */
+const REVEAL_TRANSITION = { duration: 0.5, ease: cubicBezier(0.4, 0, 0.2, 1) } as const;
 
-/** Drives the cascade: each row (clock, then one per link) is a step behind
- * the one above it via staggerChildren, so they come down like stairs
- * instead of all appearing at once. */
+/** Drives the cascade: each row (link, then the clock) is a step behind the
+ * one above it via staggerChildren, so they come in like stairs instead of
+ * all appearing at once. */
 const LIST_VARIANTS = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.06, delayChildren: 0.05 } },
+  visible: { transition: { staggerChildren: 0.06, delayChildren: 0.15 } },
 };
 
 const ITEM_VARIANTS = {
@@ -39,31 +46,85 @@ const ITEM_VARIANTS = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: cubicBezier(0.4, 0, 0.2, 1) } },
 };
 
+/** Radial reveal from the hamburger's corner (top-right). 150% comfortably
+ * covers the viewport from a corner without diagonal math. */
+const CLIP_VARIANTS = {
+  hidden: { clipPath: "circle(0% at 100% 0%)" },
+  visible: { clipPath: "circle(150% at 100% 0%)" },
+};
+
+/** prefers-reduced-motion fallback: no clip-path sweep, just a crossfade. */
+const FADE_VARIANTS = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 },
+};
+
 /**
- * Hamburger button + dropdown panel for the nav links, shown only below the
+ * Hamburger button + full-screen takeover nav, shown only below the
  * breakpoint where Nav hides its inline link row. The clock moves in here
  * too — see Nav.tsx — since the collapsed header has no room for it.
  */
 export function MobileMenu({ links }: { links: NavLink[] }) {
   const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const firstLinkRef = useRef<HTMLAnchorElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const reducedMotion = useReducedMotion();
+
+  function close() {
+    setOpen(false);
+  }
 
   useEffect(() => {
     if (!open) return;
 
     function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") close();
     }
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [open]);
 
+  useEffect(() => {
+    if (!open) return;
+
+    const unlockScroll = lockBodyScroll();
+    const trigger = triggerRef.current;
+
+    // `inert` rather than hand-rolled Tab cycling: everything outside the
+    // takeover panel is excluded from the tab order and from assistive tech
+    // natively, and it's undone in one pass on close. The panel itself is
+    // portalled straight onto <body>, so this only ever has to skip that one
+    // sibling instead of reasoning about where it sits in Nav's tree.
+    const inerted: HTMLElement[] = [];
+    for (const child of Array.from(document.body.children)) {
+      if (!(child instanceof HTMLElement) || child === panelRef.current) continue;
+      child.setAttribute("inert", "");
+      inerted.push(child);
+    }
+
+    firstLinkRef.current?.focus();
+
+    return () => {
+      unlockScroll();
+      for (const el of inerted) el.removeAttribute("inert");
+      // Only after the trigger's subtree is un-inerted can it actually
+      // accept focus again — doing this from `close()` itself fires before
+      // this cleanup has run, while the header is still inert, so the
+      // .focus() call silently no-ops and focus falls back to <body>.
+      trigger?.focus();
+    };
+  }, [open]);
+
   return (
-    <div className="relative">
+    <>
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-label={open ? "Close menu" : "Open menu"}
+        aria-haspopup="dialog"
         aria-expanded={open}
         className="flex h-[34px] w-[34px] items-center justify-center transition-colors duration-300 hover:text-[var(--ink)]"
         style={{ color: "var(--muted)" }}
@@ -71,47 +132,73 @@ export function MobileMenu({ links }: { links: NavLink[] }) {
         <MenuIcon open={open} />
       </button>
 
-      <AnimatePresence>
-        {open && (
-          <>
-            <motion.div
-              key="overlay"
-              aria-hidden
-              onClick={() => setOpen(false)}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={OVERLAY_TRANSITION}
-              className="fixed inset-0 z-40"
-              style={{ background: "color-mix(in srgb, var(--ink) 25%, transparent)" }}
-            />
-            <motion.div
-              key="panel"
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
-              variants={LIST_VARIANTS}
-              className="absolute top-[calc(100%+18px)] right-0 z-50 flex w-[min(80vw,260px)] flex-col gap-5 border p-6"
-              style={{ borderColor: "var(--rule)", background: "var(--paper)" }}
-            >
-              <motion.div variants={ITEM_VARIANTS} className="text-[11px] uppercase tracking-[0.12em]">
-                <Clock />
-              </motion.div>
-              {links.map((link) => (
-                <motion.a
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setOpen(false)}
+      {/* Portalled onto <body> instead of left inside Nav's header: the
+          takeover is a page-level overlay, and it also has to sit outside
+          the subtree that gets skipped by the inert loop above. */}
+      {typeof document !== "undefined" &&
+        createPortal(
+          <AnimatePresence>
+            {open && (
+              <motion.div
+                key="menu"
+                ref={panelRef}
+                role="dialog"
+                aria-modal="true"
+                aria-label="Site navigation"
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+                variants={reducedMotion ? FADE_VARIANTS : CLIP_VARIANTS}
+                transition={reducedMotion ? OVERLAY_TRANSITION : REVEAL_TRANSITION}
+                className="fixed inset-0 z-50 flex flex-col"
+                style={{ background: "var(--nav-scrim)" }}
+              >
+                <div className="flex justify-end px-[clamp(24px,4.5vw,64px)] py-[26px]">
+                  <button
+                    type="button"
+                    onClick={close}
+                    aria-label="Close menu"
+                    className="flex h-[34px] w-[34px] items-center justify-center text-[var(--ink)] transition-colors duration-300 hover:text-[var(--accent)]"
+                  >
+                    <MenuIcon open />
+                  </button>
+                </div>
+
+                <nav className="flex flex-1 flex-col items-center justify-center px-8">
+                  <motion.ul
+                    initial="hidden"
+                    animate="visible"
+                    variants={LIST_VARIANTS}
+                    className="flex flex-col items-center gap-6 text-center"
+                  >
+                    {links.map((link, i) => (
+                      <motion.li key={link.href} variants={ITEM_VARIANTS}>
+                        <a
+                          ref={i === 0 ? firstLinkRef : undefined}
+                          href={link.href}
+                          onClick={close}
+                          className="font-display text-[clamp(36px,9vw,64px)] leading-[1.1] font-normal tracking-[-0.01em] text-[var(--ink)] transition-colors duration-300 hover:text-[var(--accent)] focus-visible:text-[var(--accent)]"
+                        >
+                          {link.label}
+                        </a>
+                      </motion.li>
+                    ))}
+                  </motion.ul>
+                </nav>
+
+                <motion.div
                   variants={ITEM_VARIANTS}
-                  className="text-[11px] uppercase tracking-[0.16em] transition-colors duration-300 hover:text-[var(--accent)]"
+                  initial="hidden"
+                  animate="visible"
+                  className="flex justify-center pb-9 text-[11px] uppercase tracking-[0.12em] text-[var(--ink)]"
                 >
-                  {link.label}
-                </motion.a>
-              ))}
-            </motion.div>
-          </>
+                  <Clock />
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>,
+          document.body,
         )}
-      </AnimatePresence>
-    </div>
+    </>
   );
 }

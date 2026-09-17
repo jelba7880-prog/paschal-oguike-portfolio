@@ -28,7 +28,9 @@ export function Card({
   hoverShadow,
 }: CardProps) {
   const classes = `flex flex-col border p-[22px] transition-all duration-300 ${
-    interactive ? "cursor-pointer hover:-translate-y-1.5 hover:border-[var(--ink)] hover:shadow-[var(--card-hover-shadow)]" : ""
+    interactive
+      ? "cursor-pointer [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-1.5 [@media(hover:hover)_and_(pointer:fine)]:hover:border-[var(--ink)] [@media(hover:hover)_and_(pointer:fine)]:hover:shadow-[var(--card-hover-shadow)]"
+      : ""
   } ${className}`;
   const style = {
     background: "var(--card)",

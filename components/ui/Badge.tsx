@@ -15,6 +15,9 @@ interface BadgeProps {
   dot?: boolean;
   href?: string;
   className?: string;
+  /** Set false to omit the border entirely, e.g. a "Live" status pill that
+   * should read as a plain color chip. */
+  border?: boolean;
 }
 
 const TONE_STYLES: Record<BadgeTone, { border: string; color: string }> = {
@@ -43,14 +46,15 @@ export function Badge({
   dot = false,
   href,
   className = "",
+  border: showBorder = true,
 }: BadgeProps) {
   const isTag = variant === "tag";
   const { border, color } = isTag ? TAG_TONE : TONE_STYLES[tone];
   const sizing = isTag ? TAG_CLASSES : SIZE_CLASSES[size];
-  const classes = `inline-flex items-center border font-medium whitespace-nowrap transition-colors duration-300 ${sizing} ${
+  const classes = `inline-flex items-center ${showBorder ? "border" : ""} font-medium whitespace-nowrap transition-colors duration-300 ${sizing} ${
     href ? "hover:border-[var(--ink)] hover:bg-[var(--wash)] hover:text-[var(--ink)]" : ""
   } ${className}`;
-  const style = { borderColor: border, color };
+  const style = { ...(showBorder ? { borderColor: border } : {}), color };
 
   const content = (
     <>
