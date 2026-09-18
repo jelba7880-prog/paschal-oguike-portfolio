@@ -61,7 +61,7 @@ export function Hero() {
           Hi, my name is Paschal
         </p>
 
-        <h1 className="font-display m-0 text-center text-[clamp(34px,4.6vw,72px)] leading-[1.08] font-medium tracking-[-0.015em] text-balance lg:text-left">
+        <h1 className="font-display m-0 text-center text-[clamp(40px,6.5vw,108px)] leading-[1.03] font-medium tracking-[-0.015em] text-balance lg:text-left">
           I build web applications that handle <FlipWord words={HANDLES} colors={HANDLE_COLORS} /> end to end.
         </h1>
 

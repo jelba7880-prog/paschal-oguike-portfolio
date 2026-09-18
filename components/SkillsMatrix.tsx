@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { Card } from "@/components/ui/Card";
+import { SectionHeadline } from "@/components/ui/SectionHeadline";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { GlassScrim } from "@/components/ui/GlassScrim";
 import { SKILL_CATEGORIES, type Skill, type SkillCategory } from "@/lib/skills";
@@ -40,16 +41,18 @@ function SkillCell({ skill }: { skill: Skill }) {
  * so the two only ever differ in how they're sequenced, never in styling. */
 function CategoryCard({ category }: { category: SkillCategory }) {
   return (
-    <Card>
+    <Card style={{ background: "transparent" }}>
       <div
         className="border-b pb-3.5 text-[10px] uppercase tracking-[0.18em]"
         style={{ borderColor: "var(--rule)", color: "var(--accent)" }}
       >
         {category.title}
       </div>
-      <div className="mt-4 grid grid-cols-[repeat(auto-fill,minmax(76px,1fr))] gap-2.5">
+      <div className="mt-4 flex flex-wrap gap-2.5">
         {category.items.map((skill) => (
-          <SkillCell key={skill.id} skill={skill} />
+          <div key={skill.id} className="basis-[76px] grow">
+            <SkillCell skill={skill} />
+          </div>
         ))}
       </div>
     </Card>
@@ -127,6 +130,9 @@ export function SkillsMatrix() {
         <SectionLabel className="lg:col-span-2 lg:col-start-1">
           Technical skills
         </SectionLabel>
+        <SectionHeadline className="lg:col-start-3 lg:col-span-6 lg:self-end">
+          What I reach for, by default.
+        </SectionHeadline>
         <p
           className="text-[16px] leading-[1.6] text-pretty lg:col-start-10 lg:col-span-3 lg:self-end"
           style={{ color: "var(--muted)" }}

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { GlassScrim } from "@/components/ui/GlassScrim";
+import { SectionHeadline } from "@/components/ui/SectionHeadline";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 
 const PARAGRAPHS = [
@@ -23,6 +24,9 @@ export function About() {
 
       <div className="relative mb-[clamp(40px,5vw,64px)] grid grid-cols-1 gap-x-6 gap-y-3 lg:grid-cols-12">
         <SectionLabel className="lg:col-span-2 lg:col-start-1">About me</SectionLabel>
+        <SectionHeadline className="lg:col-start-3 lg:col-span-9 lg:self-end">
+          I build the systems businesses run on.
+        </SectionHeadline>
       </div>
 
       <div className="relative z-[21] mx-auto max-w-[80ch] p-[18px]">

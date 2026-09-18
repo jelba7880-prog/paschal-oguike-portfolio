@@ -24,6 +24,7 @@ import {
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { GlassScrim } from "@/components/ui/GlassScrim";
+import { SectionHeadline } from "@/components/ui/SectionHeadline";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { TechIconRow } from "@/components/ui/TechIconRow";
 import { ProjectModal } from "@/components/ProjectModal";
@@ -401,6 +402,9 @@ export function Projects() {
         <SectionLabel className="lg:col-span-2 lg:col-start-1">
           Projects
         </SectionLabel>
+        <SectionHeadline className="lg:col-start-3 lg:col-span-6 lg:self-end">
+          Shipped products, not tutorials.
+        </SectionHeadline>
         <p
           className="text-[16px] leading-[1.6] text-pretty lg:col-start-10 lg:col-span-3 lg:self-end"
           style={{ color: "var(--muted)" }}

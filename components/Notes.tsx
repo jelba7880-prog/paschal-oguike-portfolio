@@ -1,3 +1,4 @@
+import { SectionHeadline } from "@/components/ui/SectionHeadline";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 
 interface Note {
@@ -32,6 +33,9 @@ export function Notes() {
         <SectionLabel className="lg:col-span-2 lg:col-start-1">
           Notes
         </SectionLabel>
+        <SectionHeadline className="lg:col-start-3 lg:col-span-9 lg:self-end">
+          Short thoughts, written down before I lose them.
+        </SectionHeadline>
       </div>
 
       <div className="flex flex-col">

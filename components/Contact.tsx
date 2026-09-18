@@ -1,3 +1,4 @@
+import { SectionHeadline } from "@/components/ui/SectionHeadline";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 
 const EMAIL = "paschaloguike@gmail.com";
@@ -19,6 +20,10 @@ export function Contact() {
         </div>
 
         <div className="mt-6 flex flex-col items-end text-right">
+          <SectionHeadline className="mb-6" italic>
+            Let&apos;s build something that has to work.
+          </SectionHeadline>
+
           <p
             className="m-0 mb-7 max-w-[34em] text-[clamp(20px,1.8vw,24px)] leading-[1.5] text-pretty"
             style={{ color: "var(--body)" }}
